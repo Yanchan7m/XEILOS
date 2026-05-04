@@ -1,7 +1,7 @@
 type Reply = { match: RegExp; answer: string };
 
 /**
- * Alex est le tuteur IA du Master Xeilos.
+ * Yan est le tuteur IA du Master Xeilos.
  * Il connaît les modules réels du Master : Stratégie d'entreprise,
  * Diagnostic de performance, Fonctions économiques, Parties prenantes,
  * Optimisation des processus, Planification, KPI, Structure & organigramme.

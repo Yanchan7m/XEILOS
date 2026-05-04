@@ -296,7 +296,7 @@ export default function Home() {
                 </h2>
                 <p className="mt-3 text-base text-[var(--muted-strong)]">
                   Un QCM réel sur les modules du Master (avec graphique
-                  chandeliers japonais sur la Q3), Alex le tuteur IA, et
+                  chandeliers japonais sur la Q3), Yan le tuteur IA, et
                   7 cartes flip de vocabulaire stratégie.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">

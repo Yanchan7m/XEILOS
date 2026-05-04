@@ -22,7 +22,7 @@ export default function Chat() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const intro =
-    "Salut 👋 Je suis Alex, le tuteur IA du Master Xeilos. Je connais tous les modules : stratégie, KPI, parties prenantes, optimisation des processus… Demande-moi une explication, une révision ou un QCM.";
+    "Salut 👋 Je suis Yan, le tuteur IA du Master Xeilos. Je connais tous les modules : stratégie, KPI, parties prenantes, optimisation des processus… Demande-moi une explication, une révision ou un QCM.";
 
   const suggestions = SUGGESTIONS;
 
@@ -84,7 +84,7 @@ export default function Chat() {
           <div className="agent-ring h-11 w-11 overflow-hidden rounded-full ring-2 ring-[var(--accent)]/40">
             <Image
               src="/agent-face.png"
-              alt="Alex, tuteur IA du Master Trading Xeilos"
+              alt="Yan, tuteur IA du Master Trading Xeilos"
               width={64}
               height={64}
               className="h-full w-full object-cover"
@@ -94,7 +94,7 @@ export default function Chat() {
           <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-[var(--surface)] bg-[var(--success)]" />
         </div>
         <div>
-          <div className="text-sm font-semibold">Alex</div>
+          <div className="text-sm font-semibold">Yan</div>
           <div className="text-xs text-[var(--muted)]">Tuteur IA · Master Xeilos</div>
         </div>
         <div className="ml-auto rounded-full bg-[var(--surface-2)] px-3 py-1 text-[10px] uppercase tracking-widest text-[var(--muted)]">
@@ -147,7 +147,7 @@ export default function Chat() {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKey}
           rows={1}
-          placeholder="Pose ta question à Alex…"
+          placeholder="Pose ta question à Yan…"
           className="scrollbar-thin max-h-32 flex-1 resize-none rounded-2xl border border-[var(--border)] bg-[var(--surface-2)] px-4 py-3 text-sm outline-none transition focus:border-[var(--accent)]"
         />
         <button

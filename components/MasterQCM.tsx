@@ -90,8 +90,8 @@ export default function MasterQCM() {
           {pct === 100
             ? "Parfait. Toutes les notions sont ancrées. L'IA programmera quand même un rappel J+30 pour conserver l'acquis."
             : pct >= 60
-              ? "Bon score. Les questions ratées seront resservies dans 3 jours via le rappel adaptatif d'Alex."
-              : "À retravailler. Alex va te générer une session ciblée sur les modules les moins maîtrisés."}
+              ? "Bon score. Les questions ratées seront resservies dans 3 jours via le rappel adaptatif de Yan."
+              : "À retravailler. Yan va te générer une session ciblée sur les modules les moins maîtrisés."}
         </div>
 
         <button

@@ -70,7 +70,7 @@ export default function DemoPage() {
             <MasterQCM />
           </div>
           <div className="lg:sticky lg:top-24 lg:self-start">
-            <DemoLabel n="2" title="Tuteur IA · Alex" />
+            <DemoLabel n="2" title="Tuteur IA · Yan" />
             <Chat />
           </div>
         </section>
