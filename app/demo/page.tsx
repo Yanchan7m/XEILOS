@@ -143,7 +143,7 @@ export default function DemoPage() {
               height={20}
               className="rounded-full"
             />
-            Démonstration interne, Xeilos × Ask Amélie.
+            Xeilos × Ask Amélie.
           </div>
           <div>© {new Date().getFullYear()} Xeilos Trading Academy</div>
         </footer>

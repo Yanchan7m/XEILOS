@@ -246,7 +246,7 @@ export default function MasterQCM() {
         </div>
       )}
 
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+      <div className="mt-6 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
         <div className="text-xs text-[var(--muted)]">
           Score en cours : <strong>{state.score}</strong> / {state.step + (state.validated ? 1 : 0)}
         </div>
@@ -254,14 +254,14 @@ export default function MasterQCM() {
           <button
             onClick={validate}
             disabled={state.selected.length === 0}
-            className="rounded-full bg-[var(--accent)] px-5 py-2 text-sm font-medium text-white transition hover:bg-[var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-40"
+            className="w-full rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-medium text-white transition hover:bg-[var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto sm:py-2"
           >
             Valider
           </button>
         ) : (
           <button
             onClick={next}
-            className="rounded-full bg-[var(--ink)] px-5 py-2 text-sm font-medium text-white transition hover:bg-[var(--accent)]"
+            className="w-full rounded-full bg-[var(--ink)] px-5 py-3 text-sm font-medium text-white transition hover:bg-[var(--accent)] sm:w-auto sm:py-2"
           >
             {state.step + 1 < total ? "Question suivante →" : "Voir le résultat"}
           </button>

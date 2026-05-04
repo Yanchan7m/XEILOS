@@ -24,9 +24,6 @@ export default function Home() {
               <div className="text-sm font-semibold tracking-wide text-[var(--ink)]">
                 Xeilos × Ask Amélie
               </div>
-              <div className="text-[10px] uppercase tracking-[0.25em] text-[var(--muted)]">
-                Démonstration interne
-              </div>
             </div>
           </div>
           <div className="flex items-center gap-4 text-xs">
@@ -339,7 +336,7 @@ export default function Home() {
               height={20}
               className="rounded-full"
             />
-            Démonstration interne, Xeilos × Ask Amélie.
+            Xeilos × Ask Amélie.
           </div>
           <div>© {new Date().getFullYear()} Xeilos Trading Academy</div>
         </footer>
