@@ -296,15 +296,54 @@ export default function Home() {
               Essaie la mécanique en live
             </h2>
             <p className="mt-3 text-base text-[var(--muted)]">
-              Un mini-quiz "Quel type de trader es-tu ?" + un chat avec Alex, le
-              coach IA Xeilos. Réponses scriptées pour cette démonstration.
+              Trois briques de la pédagogie Ask Amélie appliquées au trading :
+              QCM, chat IA et cartes flip.
             </p>
           </div>
 
+          {/* Bloc 1 + 2 : Quiz + Chat */}
           <div className="mt-10 grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:gap-8">
-            <Quiz onResult={setArchetype} />
+            <div>
+              <DemoLabel n="1" title="QCM personnalisé" />
+              <Quiz onResult={setArchetype} />
+            </div>
             <div className="lg:sticky lg:top-24 lg:self-start">
+              <DemoLabel n="2" title="Chat avec le coach IA" />
               <Chat archetype={archetype} />
+            </div>
+          </div>
+
+          {/* Bloc 3 : Cartes flip */}
+          <div className="mt-12">
+            <DemoLabel n="3" title="Cartes flip · révision active" />
+            <div className="rounded-3xl border border-[var(--border)] bg-white p-6 shadow-sm sm:p-8">
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-[var(--muted)]">
+                  Clique sur une carte pour révéler la réponse. L’IA programme
+                  ensuite le bon intervalle de rappel selon ta performance.
+                </p>
+                <span className="hidden rounded-full bg-[var(--surface)] px-3 py-1 text-[10px] uppercase tracking-widest text-[var(--muted)] sm:inline">
+                  Vocabulaire trading · niveau 1
+                </span>
+              </div>
+              <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <FlipCard
+                  question="Qu’est-ce qu’un drawdown ?"
+                  answer="La plus grande perte cumulée subie par un compte, mesurée du plus haut au plus bas avant un nouveau record."
+                />
+                <FlipCard
+                  question="Que signifie R/R en trading ?"
+                  answer="Risk/Reward : ratio entre la perte potentielle et le gain potentiel d’un trade. Un bon setup vise au moins 1:2."
+                />
+                <FlipCard
+                  question="Qu’est-ce qu’une prop firm ?"
+                  answer="Une société qui prête son capital aux traders ayant validé un challenge, en échange d’un partage des profits."
+                />
+                <FlipCard
+                  question="Différence spot vs futures ?"
+                  answer="Le spot : achat/vente immédiate de l’actif. Les futures : contrat à terme, avec effet de levier et date d’échéance."
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -381,6 +420,17 @@ function SciCard({ title, text }: { title: string; text: string }) {
     <div className="rounded-2xl border border-[var(--border)] bg-white p-5">
       <div className="text-sm font-semibold text-[var(--ink)]">{title}</div>
       <div className="mt-2 text-sm text-[var(--muted)]">{text}</div>
+    </div>
+  );
+}
+
+function DemoLabel({ n, title }: { n: string; title: string }) {
+  return (
+    <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--muted)]">
+      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--accent)] text-[10px] text-white">
+        {n}
+      </span>
+      <span>{title}</span>
     </div>
   );
 }
