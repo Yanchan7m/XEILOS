@@ -1,16 +1,10 @@
-"use client";
-
 import Image from "next/image";
-import { useState } from "react";
-import Quiz from "@/components/Quiz";
+import MasterQCM from "@/components/MasterQCM";
 import Chat from "@/components/Chat";
 import TestingEffectChart from "@/components/TestingEffectChart";
 import FlipCard from "@/components/FlipCard";
-import type { Archetype } from "@/lib/quiz";
 
 export default function Home() {
-  const [archetype, setArchetype] = useState<Archetype | null>(null);
-
   return (
     <div className="flex flex-1 flex-col">
       {/* NAV */}
@@ -70,8 +64,8 @@ export default function Home() {
             <br className="hidden sm:block" />à la pédagogie Xeilos ?
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-base text-[var(--muted)] sm:text-lg">
-            Un coach IA conversationnel + des QCM dynamiques générés depuis
-            les contenus Xeilos, pour appliquer l’<strong>effet de test</strong>,
+            Un tuteur IA conversationnel + des QCM dynamiques générés depuis
+            les contenus du Master, pour appliquer l’<strong>effet de test</strong>,
             la méthode d’apprentissage la mieux validée par les neurosciences.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -135,8 +129,8 @@ export default function Home() {
               </ul>
               <p className="mt-6 text-sm text-[var(--muted)]">
                 Aujourd’hui utilisé surtout dans l’hôtellerie et les services.
-                On peut transposer cette mécanique <strong>tel quel</strong> au
-                trading.
+                On peut transposer cette mécanique <strong>tel quel</strong> sur
+                les modules du Master Xeilos.
               </p>
             </div>
 
@@ -150,7 +144,7 @@ export default function Home() {
                     <div className="h-2 w-2 rounded-full bg-yellow-400" />
                     <div className="h-2 w-2 rounded-full bg-green-400" />
                     <div className="ml-3 text-[10px] uppercase tracking-widest text-[var(--muted)]">
-                      Conversation apprenant ↔ IA
+                      Conversation apprenant ↔ tuteur IA
                     </div>
                   </div>
                   <div className="mt-4 space-y-3 text-sm">
@@ -160,13 +154,16 @@ export default function Home() {
                     </MiniBubble>
                     <MiniBubble side="right">Go.</MiniBubble>
                     <MiniBubble side="left" highlight>
-                      Q, Quel est le risque max recommandé par trade ?
+                      Q. Quel outil analyse les facteurs internes ET externes
+                      d’une stratégie ?
                       <br />
-                      <span className="opacity-70">A) 5 % &nbsp; B) 1-2 % &nbsp; C) 10 %</span>
+                      <span className="opacity-70">
+                        A) PESTEL &nbsp; B) SWOT &nbsp; C) 5 Forces de Porter
+                      </span>
                     </MiniBubble>
                     <MiniBubble side="right">B</MiniBubble>
                     <MiniBubble side="left">
-                      ✅ Cette fois c’est ancré. Prochain rappel dans 7 jours.
+                      ✅ Bonne réponse cette fois. Prochain rappel dans 7 jours.
                     </MiniBubble>
                   </div>
                 </div>
@@ -175,11 +172,11 @@ export default function Home() {
               <div>
                 <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-widest text-[var(--muted)]">
                   <span>Carte flip · clique pour révéler</span>
-                  <span>1 / 12</span>
+                  <span>1 / 24</span>
                 </div>
                 <FlipCard
-                  question="Qu’est-ce qu’un drawdown maximal ?"
-                  answer="La plus grande perte cumulée subie par un compte, mesurée du plus haut au plus bas avant un nouveau record."
+                  question="Que signifie SWOT ?"
+                  answer="Strengths, Weaknesses, Opportunities, Threats. Outil d’analyse stratégique qui croise facteurs internes (Forces, Faiblesses) et externes (Opportunités, Menaces)."
                 />
               </div>
             </div>
@@ -215,7 +212,7 @@ export default function Home() {
             />
             <SciCard
               title="Spacing effect"
-              text="Espacer les rappels dans le temps multiplie la rétention long terme, Ebbinghaus, 1885 → confirmé en 2020."
+              text="Espacer les rappels dans le temps multiplie la rétention long terme. Ebbinghaus, 1885, confirmé en 2020."
             />
             <SciCard
               title="Feedback immédiat"
@@ -236,15 +233,16 @@ export default function Home() {
               </h2>
               <p className="mt-4 text-base leading-relaxed text-[var(--muted-strong)]">
                 L’idée initiale : équiper tous les élèves du{" "}
-                <strong>Master Trading Xeilos</strong> d’un coach IA + d’un
-                système de QCM dynamique pour entretenir leurs acquis entre
-                deux modules.
+                <strong>Master Xeilos</strong> d’un tuteur IA + d’un système
+                de QCM dynamique pour entretenir leurs acquis entre deux
+                modules (Stratégie d’entreprise, KPI, parties prenantes,
+                optimisation des processus, planification…).
               </p>
               <p className="mt-3 text-base leading-relaxed text-[var(--muted-strong)]">
                 Mais la mécanique est <strong>générique</strong> : même flux
-                pour le MBA, le programme Crypto/DeFi, l’Investissement long
-                terme, voire les soft-skills. Une fois le moteur en place, on
-                ajoute n’importe quel cours en quelques clics.
+                pour le MBA Trading, le programme Crypto/DeFi, l’Investissement
+                long terme, voire les soft-skills. Une fois le moteur en place,
+                on ajoute n’importe quel cours en quelques clics.
               </p>
 
               <div className="mt-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
@@ -262,14 +260,14 @@ export default function Home() {
 
             <div className="grid gap-3">
               <FormationCard
-                title="Master Trading (cible initiale)"
-                desc="Quiz hebdo sur chaque module, coach IA pour les questions de méthode et de gestion du risque."
+                title="Master Xeilos (cible initiale)"
+                desc="QCM hebdo sur chaque module (stratégie, KPI, parties prenantes…), tuteur IA pour l’explication des concepts et la révision."
                 tag="Phase 1"
                 primary
               />
               <FormationCard
                 title="MBA Trading"
-                desc="QCM par chapitre + simulateur conversationnel pour les setups day trading & prop firm."
+                desc="QCM par chapitre + tuteur IA pour les setups day trading, scalping et préparation prop firm."
                 tag="Phase 2"
               />
               <FormationCard
@@ -296,26 +294,27 @@ export default function Home() {
               Essaie la mécanique en live
             </h2>
             <p className="mt-3 text-base text-[var(--muted)]">
-              Trois briques de la pédagogie Ask Amélie appliquées au trading :
-              QCM, chat IA et cartes flip.
+              Trois briques de la pédagogie Ask Amélie appliquées au{" "}
+              <strong>Master Xeilos</strong> : QCM réel issu des modules,
+              tuteur IA, et cartes flip de vocabulaire stratégie.
             </p>
           </div>
 
-          {/* Bloc 1 + 2 : Quiz + Chat */}
+          {/* Bloc 1 + 2 : QCM + Chat */}
           <div className="mt-10 grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:gap-8">
             <div>
-              <DemoLabel n="1" title="QCM personnalisé" />
-              <Quiz onResult={setArchetype} />
+              <DemoLabel n="1" title="QCM réel · modules du Master" />
+              <MasterQCM />
             </div>
             <div className="lg:sticky lg:top-24 lg:self-start">
-              <DemoLabel n="2" title="Chat avec le coach IA" />
-              <Chat archetype={archetype} />
+              <DemoLabel n="2" title="Tuteur IA · Alex" />
+              <Chat />
             </div>
           </div>
 
           {/* Bloc 3 : Cartes flip */}
           <div className="mt-12">
-            <DemoLabel n="3" title="Cartes flip · révision active" />
+            <DemoLabel n="3" title="Cartes flip · vocabulaire stratégie" />
             <div className="rounded-3xl border border-[var(--border)] bg-white p-6 shadow-sm sm:p-8">
               <div className="flex items-center justify-between">
                 <p className="text-sm text-[var(--muted)]">
@@ -323,25 +322,25 @@ export default function Home() {
                   ensuite le bon intervalle de rappel selon ta performance.
                 </p>
                 <span className="hidden rounded-full bg-[var(--surface)] px-3 py-1 text-[10px] uppercase tracking-widest text-[var(--muted)] sm:inline">
-                  Vocabulaire trading · niveau 1
+                  Module Stratégie & KPI
                 </span>
               </div>
               <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <FlipCard
-                  question="Qu’est-ce qu’un drawdown ?"
-                  answer="La plus grande perte cumulée subie par un compte, mesurée du plus haut au plus bas avant un nouveau record."
+                  question="Que signifie SWOT ?"
+                  answer="Strengths, Weaknesses, Opportunities, Threats. Outil d’analyse stratégique croisant facteurs internes et externes."
                 />
                 <FlipCard
-                  question="Que signifie R/R en trading ?"
-                  answer="Risk/Reward : ratio entre la perte potentielle et le gain potentiel d’un trade. Un bon setup vise au moins 1:2."
+                  question="PESTEL, c’est quoi ?"
+                  answer="Politique, Économique, Social, Technologique, Environnemental, Légal. Analyse du macro-environnement externe."
                 />
                 <FlipCard
-                  question="Qu’est-ce qu’une prop firm ?"
-                  answer="Une société qui prête son capital aux traders ayant validé un challenge, en échange d’un partage des profits."
+                  question="Que veut dire DMAIC ?"
+                  answer="Define, Measure, Analyze, Improve, Control. Méthode structurante de Six Sigma pour optimiser un processus."
                 />
                 <FlipCard
-                  question="Différence spot vs futures ?"
-                  answer="Le spot : achat/vente immédiate de l’actif. Les futures : contrat à terme, avec effet de levier et date d’échéance."
+                  question="KPI : critères SMART ?"
+                  answer="Spécifique, Mesurable, Atteignable, Pertinent, Temporellement défini. Cadre de conception d’un bon indicateur."
                 />
               </div>
             </div>
@@ -357,7 +356,7 @@ export default function Home() {
               height={20}
               className="rounded-full"
             />
-            Démonstration interne, Xeilos × Ask Amélie. Pas un service financier.
+            Démonstration interne, Xeilos × Ask Amélie.
           </div>
           <div>© {new Date().getFullYear()} Xeilos Trading Academy</div>
         </footer>

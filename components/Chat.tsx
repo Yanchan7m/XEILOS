@@ -2,47 +2,18 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import type { Archetype } from "@/lib/quiz";
-import { PROFILES } from "@/lib/quiz";
 import { scriptedReply } from "@/lib/scripted-chat";
 
 type Message = { role: "user" | "assistant"; content: string };
 
-const SUGGESTIONS_DEFAULT = [
-  "Je débute totalement, par où commencer ?",
-  "Quelle formation est éligible CPF ?",
-  "Combien de temps pour devenir rentable ?",
-  "Différence entre scalping et swing ?",
+const SUGGESTIONS = [
+  "Explique-moi l'analyse SWOT",
+  "Différence entre PESTEL et 5 Forces de Porter ?",
+  "À quoi sert le Balanced Scorecard ?",
+  "Quels sont les modules du Master ?",
 ];
 
-const SUGGESTIONS_BY_ARCHETYPE: Record<Archetype, string[]> = {
-  scalper: [
-    "À quoi ressemble une journée de scalping ?",
-    "Quel matériel pour scalper sérieusement ?",
-    "Comment Xeilos forme aux prop firms ?",
-  ],
-  swing: [
-    "Comment construire un plan de trade swing ?",
-    "Quels indicateurs vous enseignez ?",
-    "Combien de temps par semaine pour le swing ?",
-  ],
-  investor: [
-    "Quelle stratégie ETF / dividendes ?",
-    "Comment diversifier mon portefeuille ?",
-    "Le programme Investissement, c’est pour qui ?",
-  ],
-  crypto: [
-    "Vous abordez la DeFi en formation ?",
-    "Comment sécuriser mes wallets ?",
-    "Cycle Bitcoin : ça se trade comment ?",
-  ],
-};
-
-type Props = {
-  archetype: Archetype | null;
-};
-
-export default function Chat({ archetype }: Props) {
+export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -50,13 +21,10 @@ export default function Chat({ archetype }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const intro = archetype
-    ? `Salut 👋 Je suis Alex, ton coach Xeilos. Top, tu es un profil ${PROFILES[archetype].name.toLowerCase()} ! On creuse ton plan d’apprentissage ?`
-    : "Salut 👋 Je suis Alex, ton coach IA chez Xeilos. Pose-moi tes questions sur le trading, les formations, ou commence par le quiz juste à gauche.";
+  const intro =
+    "Salut 👋 Je suis Alex, le tuteur IA du Master Xeilos. Je connais tous les modules : stratégie, KPI, parties prenantes, optimisation des processus… Demande-moi une explication, une révision ou un QCM.";
 
-  const suggestions = archetype
-    ? SUGGESTIONS_BY_ARCHETYPE[archetype]
-    : SUGGESTIONS_DEFAULT;
+  const suggestions = SUGGESTIONS;
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
@@ -79,7 +47,7 @@ export default function Chat({ archetype }: Props) {
     // Placeholder assistant message we'll stream into
     setMessages((m) => [...m, { role: "assistant", content: "" }]);
 
-    const reply = scriptedReply(trimmed, archetype, turnIndex);
+    const reply = scriptedReply(trimmed, turnIndex);
 
     // Simulate "thinking" delay
     await new Promise((r) => setTimeout(r, 450 + Math.random() * 350));
@@ -116,7 +84,7 @@ export default function Chat({ archetype }: Props) {
           <div className="agent-ring h-11 w-11 overflow-hidden rounded-full ring-2 ring-[var(--accent)]/40">
             <Image
               src="/agent-face.png"
-              alt="Alex, coach IA Xeilos"
+              alt="Alex, tuteur IA du Master Trading Xeilos"
               width={64}
               height={64}
               className="h-full w-full object-cover"
@@ -127,7 +95,7 @@ export default function Chat({ archetype }: Props) {
         </div>
         <div>
           <div className="text-sm font-semibold">Alex</div>
-          <div className="text-xs text-[var(--muted)]">Coach trading IA · Xeilos</div>
+          <div className="text-xs text-[var(--muted)]">Tuteur IA · Master Xeilos</div>
         </div>
         <div className="ml-auto rounded-full bg-[var(--surface-2)] px-3 py-1 text-[10px] uppercase tracking-widest text-[var(--muted)]">
           Live
