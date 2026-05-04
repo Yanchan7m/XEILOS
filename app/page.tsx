@@ -5,6 +5,7 @@ import { useState } from "react";
 import Quiz from "@/components/Quiz";
 import Chat from "@/components/Chat";
 import TestingEffectChart from "@/components/TestingEffectChart";
+import FlipCard from "@/components/FlipCard";
 import type { Archetype } from "@/lib/quiz";
 
 export default function Home() {
@@ -109,20 +110,27 @@ export default function Home() {
                   Ask Amélie
                 </a>{" "}
                 est une plateforme française qui transforme un contenu
-                pédagogique (cours, support, vidéo) en deux outils :
+                pédagogique (cours, support, vidéo) en plusieurs outils :
               </p>
               <ul className="mt-5 space-y-4">
                 <Bullet n="1" title="Un quiz progressif (QCM)">
                   Le contenu est découpé et reformulé en questions à choix
-                  multiples, accessibles sur mobile, avec correction immédiate.
+                  multiples, accessibles sur mobile, avec correction immédiate
+                  et <strong>cartes flip</strong> pour la mémorisation active.
                 </Bullet>
                 <Bullet n="2" title="Une IA tutrice conversationnelle">
                   L’apprenant peut discuter avec un agent IA qui connaît le
                   cours et répond 24/7, comme un mentor toujours disponible.
                 </Bullet>
-                <Bullet n="3" title="Un suivi temps réel">
+                <Bullet n="3" title="Un apprentissage adaptatif">
+                  La techno apprend de chaque apprenant : une question ratée
+                  est <strong>resservie 3 jours plus tard</strong>, puis une
+                  semaine, puis un mois (répétition espacée). Chaque parcours
+                  devient unique.
+                </Bullet>
+                <Bullet n="4" title="Un suivi temps réel">
                   Le formateur voit qui décroche, quelles questions reviennent,
-                  et où interviennent les blocages.
+                  et où interviennent les blocages — par élève et par cohorte.
                 </Bullet>
               </ul>
               <p className="mt-6 text-sm text-[var(--muted)]">
@@ -133,33 +141,46 @@ export default function Home() {
             </div>
 
             {/* mock interface preview */}
-            <div className="relative">
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[var(--accent-soft)] to-white" />
-              <div className="relative rounded-3xl border border-[var(--border)] bg-white p-5 shadow-sm">
-                <div className="flex items-center gap-2 border-b border-[var(--border)] pb-3">
-                  <div className="h-2 w-2 rounded-full bg-red-400" />
-                  <div className="h-2 w-2 rounded-full bg-yellow-400" />
-                  <div className="h-2 w-2 rounded-full bg-green-400" />
-                  <div className="ml-3 text-[10px] uppercase tracking-widest text-[var(--muted)]">
-                    Conversation apprenant ↔ IA
+            <div className="relative space-y-4">
+              <div className="relative">
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[var(--accent-soft)] to-white" />
+                <div className="relative rounded-3xl border border-[var(--border)] bg-white p-5 shadow-sm">
+                  <div className="flex items-center gap-2 border-b border-[var(--border)] pb-3">
+                    <div className="h-2 w-2 rounded-full bg-red-400" />
+                    <div className="h-2 w-2 rounded-full bg-yellow-400" />
+                    <div className="h-2 w-2 rounded-full bg-green-400" />
+                    <div className="ml-3 text-[10px] uppercase tracking-widest text-[var(--muted)]">
+                      Conversation apprenant ↔ IA
+                    </div>
+                  </div>
+                  <div className="mt-4 space-y-3 text-sm">
+                    <MiniBubble side="left">
+                      Bonjour Léa 👋 Petit rappel : tu avais raté cette
+                      question il y a <strong>3 jours</strong>. On la refait ?
+                    </MiniBubble>
+                    <MiniBubble side="right">Go.</MiniBubble>
+                    <MiniBubble side="left" highlight>
+                      Q — Quel est le risque max recommandé par trade ?
+                      <br />
+                      <span className="opacity-70">A) 5 % &nbsp; B) 1-2 % &nbsp; C) 10 %</span>
+                    </MiniBubble>
+                    <MiniBubble side="right">B</MiniBubble>
+                    <MiniBubble side="left">
+                      ✅ Cette fois c’est ancré. Prochain rappel dans 7 jours.
+                    </MiniBubble>
                   </div>
                 </div>
-                <div className="mt-4 space-y-3 text-sm">
-                  <MiniBubble side="left">
-                    Bonjour Léa 👋 Prêt·e pour le QCM du jour sur la
-                    <strong> gestion du risque</strong> ?
-                  </MiniBubble>
-                  <MiniBubble side="right">Allez, go !</MiniBubble>
-                  <MiniBubble side="left" highlight>
-                    Q1 — Quel est le risque max recommandé par trade ?
-                    <br />
-                    <span className="opacity-70">A) 5 % &nbsp; B) 1-2 % &nbsp; C) 10 %</span>
-                  </MiniBubble>
-                  <MiniBubble side="right">B</MiniBubble>
-                  <MiniBubble side="left">
-                    ✅ Exact. On consolide demain avec un cas pratique.
-                  </MiniBubble>
+              </div>
+
+              <div>
+                <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-widest text-[var(--muted)]">
+                  <span>Carte flip · clique pour révéler</span>
+                  <span>1 / 12</span>
                 </div>
+                <FlipCard
+                  question="Qu’est-ce qu’un drawdown maximal ?"
+                  answer="La plus grande perte cumulée subie par un compte, mesurée du plus haut au plus bas avant un nouveau record."
+                />
               </div>
             </div>
           </div>
