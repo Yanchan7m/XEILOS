@@ -122,6 +122,14 @@ export default function Home() {
                   Le formateur voit qui décroche, quelles questions reviennent,
                   et où interviennent les blocages, par élève et par cohorte.
                 </Bullet>
+                <Bullet n="5" title="Adapté à tous les profils d’apprentissage">
+                  L’app s’adapte au style cognitif de chaque élève : profil{" "}
+                  <strong>visuel</strong>, <strong>auditif</strong> ou mixte.
+                  Selon le cours, elle peut générer une{" "}
+                  <strong>vidéo pédagogique</strong> ou un{" "}
+                  <strong>podcast</strong>, pour que chacun apprenne dans le
+                  format qui lui parle vraiment.
+                </Bullet>
               </ul>
               <p className="mt-6 text-sm text-[var(--muted)]">
                 La technologie est déjà éprouvée dans des organismes de
