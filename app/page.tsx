@@ -127,11 +127,13 @@ export default function Home() {
                 </Bullet>
               </ul>
               <p className="mt-6 text-sm text-[var(--muted)]">
-                La technologie est déjà éprouvée chez d’autres clients (hôtellerie,
-                services à la personne). Le moteur est <strong>générique</strong> :
-                on lui injecte les contenus pédagogiques du Master Xeilos
-                (PDF, supports, vidéos) et il génère automatiquement les QCM,
-                les rappels espacés et les réponses du tuteur IA.
+                La technologie est déjà éprouvée dans des organismes de
+                <strong> formation</strong>, des écoles de
+                <strong> finance</strong> et de <strong>marketing</strong>. Le
+                moteur est générique : on lui injecte les contenus pédagogiques
+                du Master Xeilos (PDF, supports, vidéos) et il génère
+                automatiquement les QCM, les rappels espacés et les réponses
+                du tuteur IA.
               </p>
             </div>
 
