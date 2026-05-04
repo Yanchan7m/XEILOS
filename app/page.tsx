@@ -342,6 +342,18 @@ export default function Home() {
                   question="KPI : critères SMART ?"
                   answer="Spécifique, Mesurable, Atteignable, Pertinent, Temporellement défini. Cadre de conception d’un bon indicateur."
                 />
+                <FlipCard
+                  question="5 Forces de Porter ?"
+                  answer="Rivalité concurrents, pouvoir clients, pouvoir fournisseurs, menace nouveaux entrants, menace produits de substitution. Mesure l’intensité concurrentielle d’un secteur."
+                />
+                <FlipCard
+                  question="Balanced Scorecard ?"
+                  answer="Tableau de bord de Kaplan & Norton qui évalue la performance selon 4 perspectives : Financière, Clients, Processus internes, Apprentissage & croissance."
+                />
+                <FlipCard
+                  question="Cycle PDCA ?"
+                  answer="Plan, Do, Check, Act. Cycle d’amélioration continue (Lean / Kaizen) : planifier, exécuter, vérifier, ajuster, puis recommencer."
+                />
               </div>
             </div>
           </div>
