@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MASTER_QCM, type QcmQuestion } from "@/lib/master-qcm";
 import CandlestickChart from "@/components/CandlestickChart";
 import YanAnalysis from "@/components/YanAnalysis";
+import AskYanInline from "@/components/AskYanInline";
 
 type State = {
   step: number;
@@ -226,6 +227,7 @@ export default function MasterQCM() {
             Explication
           </div>
           <p className="mt-1 leading-relaxed">{q.explanation}</p>
+          <AskYanInline key={q.id} module={q.module} />
         </div>
       )}
 
