@@ -3,15 +3,23 @@
 import { useState } from "react";
 import { MASTER_QCM, type QcmQuestion } from "@/lib/master-qcm";
 import CandlestickChart from "@/components/CandlestickChart";
+import YanAnalysis from "@/components/YanAnalysis";
 
 type State = {
   step: number;
   selected: number[];
   validated: boolean;
   score: number;
+  wrongIds: string[];
 };
 
-const initial: State = { step: 0, selected: [], validated: false, score: 0 };
+const initial: State = {
+  step: 0,
+  selected: [],
+  validated: false,
+  score: 0,
+  wrongIds: [],
+};
 
 export default function MasterQCM() {
   const [state, setState] = useState<State>(initial);
@@ -49,6 +57,7 @@ export default function MasterQCM() {
       ...s,
       validated: true,
       score: s.score + (isCorrect ? 1 : 0),
+      wrongIds: isCorrect ? s.wrongIds : [...s.wrongIds, q.id],
     }));
   }
 
@@ -58,6 +67,7 @@ export default function MasterQCM() {
       selected: [],
       validated: false,
       score: s.score,
+      wrongIds: s.wrongIds,
     }));
   }
 
@@ -67,6 +77,14 @@ export default function MasterQCM() {
 
   if (finished) {
     const pct = Math.round((state.score / total) * 100);
+    const wrongModules = Array.from(
+      new Set(
+        state.wrongIds
+          .map((id) => MASTER_QCM.find((qq) => qq.id === id)?.module)
+          .filter((m): m is string => Boolean(m)),
+      ),
+    );
+
     return (
       <div className="rounded-3xl border border-[var(--border)] bg-white p-8 shadow-sm sm:p-10">
         <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
@@ -86,13 +104,11 @@ export default function MasterQCM() {
           />
         </div>
 
-        <div className="mt-6 rounded-2xl border border-[var(--accent)]/30 bg-[var(--accent-soft)] p-5 text-sm text-[var(--ink)]">
-          {pct === 100
-            ? "Parfait. Toutes les notions sont ancrées. L'IA programmera quand même un rappel J+30 pour conserver l'acquis."
-            : pct >= 60
-              ? "Bon score. Les questions ratées seront resservies dans 3 jours via le rappel adaptatif de Yan."
-              : "À retravailler. Yan va te générer une session ciblée sur les modules les moins maîtrisés."}
-        </div>
+        <YanAnalysis
+          wrongModules={wrongModules}
+          score={state.score}
+          total={total}
+        />
 
         <button
           onClick={reset}
