@@ -3,6 +3,15 @@ export type QcmOption = {
   correct: boolean;
 };
 
+export type Candle = { o: number; h: number; l: number; c: number };
+
+export type ChartSpec = {
+  data: Candle[];
+  support?: number;
+  resistance?: number;
+  caption?: string;
+};
+
 export type QcmQuestion = {
   id: string;
   module: string;
@@ -10,7 +19,31 @@ export type QcmQuestion = {
   multi: boolean;
   options: QcmOption[];
   explanation: string;
+  chart?: ChartSpec;
 };
+
+const CONSOLIDATION_CANDLES: Candle[] = [
+  { o: 105, h: 107, l: 103, c: 106 },
+  { o: 106, h: 108, l: 105, c: 104 },
+  { o: 104, h: 106, l: 103, c: 105 },
+  { o: 105, h: 107, l: 104, c: 107 },
+  { o: 107, h: 108, l: 105, c: 106 },
+  { o: 106, h: 106.5, l: 103, c: 104 },
+  { o: 104, h: 106, l: 102.5, c: 105 },
+  { o: 105, h: 107, l: 104, c: 106 },
+  { o: 106, h: 108, l: 105, c: 105 },
+  { o: 105, h: 105.5, l: 102.5, c: 103 },
+  { o: 103, h: 105, l: 102, c: 105 },
+  { o: 105, h: 107, l: 104, c: 106 },
+  { o: 106, h: 108, l: 105, c: 107 },
+  { o: 107, h: 108, l: 105, c: 106 },
+  { o: 106, h: 107, l: 103, c: 104 },
+  { o: 104, h: 105, l: 102, c: 103 },
+  { o: 103, h: 105, l: 102, c: 105 },
+  { o: 105, h: 107, l: 104, c: 106 },
+  { o: 106, h: 107.5, l: 105, c: 107 },
+  { o: 107, h: 108, l: 105, c: 106 },
+];
 
 /**
  * QCM extraits du contenu réel du Master Xeilos
@@ -47,6 +80,27 @@ export const MASTER_QCM: QcmQuestion[] = [
     ],
     explanation:
       "Les quatre premières sont les stratégies génériques étudiées dans le module : croissance (interne ou externe), différenciation, domination par les coûts et focalisation sur une niche. La « dilution » n'est pas une stratégie d'entreprise reconnue.",
+  },
+  {
+    id: "ta-consolidation",
+    module: "Analyse technique · Trading",
+    question:
+      "Sur ce graphique en chandeliers japonais, dans quelle phase est le prix ?",
+    multi: false,
+    options: [
+      { label: "Phase de consolidation (range)", correct: true },
+      { label: "Tendance haussière", correct: false },
+      { label: "Tendance baissière", correct: false },
+      { label: "Renversement de tendance", correct: false },
+    ],
+    explanation:
+      "Le prix oscille dans un range borné par un support (~102) et une résistance (~108) sans tendance directionnelle claire. C’est une phase de consolidation, typique d’une accumulation/distribution avant un breakout. Module : analyse technique du Master Trading & MBA Xeilos.",
+    chart: {
+      data: CONSOLIDATION_CANDLES,
+      support: 102,
+      resistance: 108,
+      caption: "Identifie la structure avant de prendre position.",
+    },
   },
   {
     id: "perf-dmaic",

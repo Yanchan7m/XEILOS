@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MASTER_QCM, type QcmQuestion } from "@/lib/master-qcm";
+import CandlestickChart from "@/components/CandlestickChart";
 
 type State = {
   step: number;
@@ -133,6 +134,17 @@ export default function MasterQCM() {
         <p className="mt-1 text-xs italic text-[var(--muted)]">
           Plusieurs réponses possibles.
         </p>
+      )}
+
+      {q.chart && (
+        <div className="fade-up mt-5">
+          <CandlestickChart
+            data={q.chart.data}
+            support={q.chart.support}
+            resistance={q.chart.resistance}
+            caption={q.chart.caption}
+          />
+        </div>
       )}
 
       <div className="mt-6 grid gap-2.5">
