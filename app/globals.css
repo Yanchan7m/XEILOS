@@ -83,6 +83,11 @@ body {
   to { transform: scaleY(1); }
 }
 
+@keyframes growBarX {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
 .grow-bar {
   transform-origin: bottom;
   animation: growBar 0.9s cubic-bezier(.2,.8,.2,1) both;

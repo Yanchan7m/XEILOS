@@ -77,13 +77,23 @@ export default function MasterQCM() {
 
   if (finished) {
     const pct = Math.round((state.score / total) * 100);
-    const wrongModules = Array.from(
-      new Set(
-        state.wrongIds
-          .map((id) => MASTER_QCM.find((qq) => qq.id === id)?.module)
-          .filter((m): m is string => Boolean(m)),
-      ),
-    );
+    const wrongSet = new Set(state.wrongIds);
+
+    // Stats par module
+    const moduleStatsMap = new Map<string, { correct: number; total: number }>();
+    for (const qq of MASTER_QCM) {
+      const cur = moduleStatsMap.get(qq.module) ?? { correct: 0, total: 0 };
+      cur.total += 1;
+      if (!wrongSet.has(qq.id)) cur.correct += 1;
+      moduleStatsMap.set(qq.module, cur);
+    }
+    const moduleStats = Array.from(moduleStatsMap.entries()).map(([m, s]) => ({
+      module: m,
+      ...s,
+      pct: Math.round((s.correct / s.total) * 100),
+    }));
+
+    const wrongModules = moduleStats.filter((m) => m.pct < 100).map((m) => m.module);
 
     return (
       <div className="rounded-3xl border border-[var(--border)] bg-white p-8 shadow-sm sm:p-10">
@@ -103,6 +113,8 @@ export default function MasterQCM() {
             style={{ width: `${pct}%` }}
           />
         </div>
+
+        <ModulePerformanceChart stats={moduleStats} />
 
         <YanAnalysis
           wrongModules={wrongModules}
@@ -239,5 +251,76 @@ export default function MasterQCM() {
         )}
       </div>
     </div>
+  );
+}
+
+type ModuleStat = {
+  module: string;
+  correct: number;
+  total: number;
+  pct: number;
+};
+
+function ModulePerformanceChart({ stats }: { stats: ModuleStat[] }) {
+  return (
+    <div className="mt-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
+      <div className="flex items-center justify-between">
+        <div className="text-[10px] font-semibold uppercase tracking-widest text-[var(--accent)]">
+          Performance par module
+        </div>
+        <div className="text-[10px] text-[var(--muted)]">% bonnes réponses</div>
+      </div>
+
+      <div className="mt-4 space-y-3">
+        {stats.map((s, i) => {
+          const color =
+            s.pct === 100 ? "#16a34a" : s.pct >= 50 ? "#f59e0b" : "#d92128";
+          const bgColor =
+            s.pct === 100
+              ? "bg-green-500"
+              : s.pct >= 50
+                ? "bg-amber-500"
+                : "bg-[var(--accent)]";
+          return (
+            <div key={s.module}>
+              <div className="mb-1 flex items-center justify-between text-xs">
+                <span className="truncate pr-2 text-[var(--ink)]">{s.module}</span>
+                <span className="shrink-0 font-semibold" style={{ color }}>
+                  {s.correct}/{s.total}
+                </span>
+              </div>
+              <div className="h-2 w-full overflow-hidden rounded-full bg-[var(--surface-2)]">
+                <div
+                  className={`h-full grow-bar rounded-full ${bgColor}`}
+                  style={{
+                    width: `${s.pct}%`,
+                    transformOrigin: "left",
+                    animation: `growBarX 0.9s cubic-bezier(.2,.8,.2,1) ${i * 0.12}s both`,
+                  }}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="mt-4 flex flex-wrap gap-3 text-[10px] text-[var(--muted)]">
+        <Legend color="#16a34a" label="Maîtrisé (100%)" />
+        <Legend color="#f59e0b" label="À consolider (≥50%)" />
+        <Legend color="#d92128" label="À retravailler (<50%)" />
+      </div>
+    </div>
+  );
+}
+
+function Legend({ color, label }: { color: string; label: string }) {
+  return (
+    <span className="inline-flex items-center gap-1.5">
+      <span
+        className="inline-block h-2 w-2 rounded-full"
+        style={{ background: color }}
+      />
+      {label}
+    </span>
   );
 }
