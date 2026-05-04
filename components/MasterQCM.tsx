@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { MASTER_QCM, type QcmQuestion } from "@/lib/master-qcm";
 import CandlestickChart from "@/components/CandlestickChart";
 import YanAnalysis from "@/components/YanAnalysis";
@@ -24,6 +24,13 @@ const initial: State = {
 
 export default function MasterQCM() {
   const [state, setState] = useState<State>(initial);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  function scrollToTop() {
+    requestAnimationFrame(() => {
+      cardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
 
   const total = MASTER_QCM.length;
   const finished = state.step >= total;
@@ -70,10 +77,12 @@ export default function MasterQCM() {
       score: s.score,
       wrongIds: s.wrongIds,
     }));
+    scrollToTop();
   }
 
   function reset() {
     setState(initial);
+    scrollToTop();
   }
 
   if (finished) {
@@ -97,7 +106,10 @@ export default function MasterQCM() {
     const wrongModules = moduleStats.filter((m) => m.pct < 100).map((m) => m.module);
 
     return (
-      <div className="rounded-3xl border border-[var(--border)] bg-white p-8 shadow-sm sm:p-10">
+      <div
+        ref={cardRef}
+        className="scroll-mt-24 rounded-3xl border border-[var(--border)] bg-white p-8 shadow-sm sm:p-10"
+      >
         <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
           Résultat du QCM
         </div>
@@ -140,7 +152,10 @@ export default function MasterQCM() {
   );
 
   return (
-    <div className="rounded-3xl border border-[var(--border)] bg-white p-6 shadow-sm sm:p-8">
+    <div
+      ref={cardRef}
+      className="scroll-mt-24 rounded-3xl border border-[var(--border)] bg-white p-6 shadow-sm sm:p-8"
+    >
       <div className="mb-4 flex items-center justify-between text-xs uppercase tracking-[0.2em] text-[var(--muted)]">
         <span>
           Question {state.step + 1} / {total}
