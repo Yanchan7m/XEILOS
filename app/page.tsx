@@ -61,11 +61,7 @@ export default function Home() {
       <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-12 sm:py-16">
         {/* HERO */}
         <section className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-1.5 text-xs uppercase tracking-widest text-[var(--muted)]">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--accent)]" />
-            Démonstration · Xeilos × Ask Amélie
-          </div>
-          <h1 className="mt-6 text-4xl font-semibold leading-[1.1] tracking-tight text-[var(--ink)] sm:text-5xl md:text-6xl">
+          <h1 className="text-4xl font-semibold leading-[1.1] tracking-tight text-[var(--ink)] sm:text-5xl md:text-6xl">
             Et si on adaptait{" "}
             <span className="bg-gradient-to-r from-[var(--accent)] to-[#7a0e12] bg-clip-text text-transparent">
               Ask Amélie
