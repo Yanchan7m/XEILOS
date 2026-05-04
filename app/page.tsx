@@ -71,8 +71,8 @@ export default function Home() {
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-base text-[var(--muted)] sm:text-lg">
             Un coach IA conversationnel + des QCM dynamiques générés depuis
-            les contenus Xeilos, pour appliquer l’<strong>effet de test</strong>{" "}
-            — la méthode d’apprentissage la mieux validée par les neurosciences.
+            les contenus Xeilos, pour appliquer l’<strong>effet de test</strong>,
+            la méthode d’apprentissage la mieux validée par les neurosciences.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <a
@@ -130,7 +130,7 @@ export default function Home() {
                 </Bullet>
                 <Bullet n="4" title="Un suivi temps réel">
                   Le formateur voit qui décroche, quelles questions reviennent,
-                  et où interviennent les blocages — par élève et par cohorte.
+                  et où interviennent les blocages, par élève et par cohorte.
                 </Bullet>
               </ul>
               <p className="mt-6 text-sm text-[var(--muted)]">
@@ -160,7 +160,7 @@ export default function Home() {
                     </MiniBubble>
                     <MiniBubble side="right">Go.</MiniBubble>
                     <MiniBubble side="left" highlight>
-                      Q — Quel est le risque max recommandé par trade ?
+                      Q, Quel est le risque max recommandé par trade ?
                       <br />
                       <span className="opacity-70">A) 5 % &nbsp; B) 1-2 % &nbsp; C) 10 %</span>
                     </MiniBubble>
@@ -196,7 +196,7 @@ export default function Home() {
               L’effet de test, validé par les neurosciences
             </h2>
             <p className="mt-4 text-base leading-relaxed text-[var(--muted-strong)]">
-              Se tester activement — via des QCM espacés dans le temps —
+              Se tester activement, via des QCM espacés dans le temps,
               ancre les connaissances <strong>bien plus profondément</strong>{" "}
               que la relecture passive. C’est le principe du{" "}
               <em>retrieval practice</em>, démontré par les travaux de Roediger
@@ -215,7 +215,7 @@ export default function Home() {
             />
             <SciCard
               title="Spacing effect"
-              text="Espacer les rappels dans le temps multiplie la rétention long terme — Ebbinghaus, 1885 → confirmé en 2020."
+              text="Espacer les rappels dans le temps multiplie la rétention long terme, Ebbinghaus, 1885 → confirmé en 2020."
             />
             <SciCard
               title="Feedback immédiat"
@@ -279,7 +279,7 @@ export default function Home() {
               />
               <FormationCard
                 title="Investissement long terme"
-                desc="QCM analyse fondamentale, ETF, dividendes — rythme mensuel."
+                desc="QCM analyse fondamentale, ETF, dividendes, rythme mensuel."
                 tag="Phase 3"
               />
             </div>
@@ -318,7 +318,7 @@ export default function Home() {
               height={20}
               className="rounded-full"
             />
-            Démonstration interne — Xeilos × Ask Amélie. Pas un service financier.
+            Démonstration interne, Xeilos × Ask Amélie. Pas un service financier.
           </div>
           <div>© {new Date().getFullYear()} Xeilos Trading Academy</div>
         </footer>

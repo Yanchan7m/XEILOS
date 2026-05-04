@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Effet de test — graphique de rétention.
+ * Effet de test, graphique de rétention.
  * Inspiré des travaux de Roediger & Karpicke (2006, 2008) sur le retrieval practice :
  * tester son savoir activement (QCM, rappel) renforce la mémoire bien plus
  * que de relire passivement un cours.

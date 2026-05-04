@@ -61,10 +61,10 @@ export const QUIZ: QuizQuestion[] = [
     id: "risk",
     question: "Ta tolérance au risque, en une phrase ?",
     options: [
-      { label: "Élevée — sans risque, pas de rendement", archetype: "scalper" },
-      { label: "Modérée — je veux du R/R favorable", archetype: "swing" },
-      { label: "Faible — je préfère la régularité", archetype: "investor" },
-      { label: "Très élevée — je vise des x10, j’assume les drawdowns", archetype: "crypto" },
+      { label: "Élevée, sans risque, pas de rendement", archetype: "scalper" },
+      { label: "Modérée, je veux du R/R favorable", archetype: "swing" },
+      { label: "Faible, je préfère la régularité", archetype: "investor" },
+      { label: "Très élevée, je vise des x10, j’assume les drawdowns", archetype: "crypto" },
     ],
   },
 ];
@@ -118,7 +118,7 @@ export const PROFILES: Record<Archetype, ArchetypeProfile> = {
     name: "Le Crypto-Native",
     tagline: "24/7, on-chain, conviction.",
     description:
-      "Tu vis dans le rythme des marchés crypto, tu suis les narratives, le on-chain et la DeFi. Volatilité élevée, opportunités fréquentes — il te faut un cadre.",
+      "Tu vis dans le rythme des marchés crypto, tu suis les narratives, le on-chain et la DeFi. Volatilité élevée, opportunités fréquentes, il te faut un cadre.",
     strengths: ["Adaptabilité", "Veille permanente", "Tolérance à la volatilité"],
     watchouts: ["FOMO", "Sécurité des wallets", "Cycles émotionnels"],
     recommendedFormation: "Formation Cryptomonnaies, Blockchain & DeFi",
