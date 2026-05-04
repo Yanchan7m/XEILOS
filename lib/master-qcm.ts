@@ -153,10 +153,10 @@ export const MASTER_QCM: QcmQuestion[] = [
       "Sur ce graphique en chandeliers japonais, dans quelle phase est le prix ?",
     multi: false,
     options: [
-      { label: "Phase de consolidation (range)", correct: true },
       { label: "Tendance haussière", correct: false },
-      { label: "Tendance baissière", correct: false },
       { label: "Renversement de tendance", correct: false },
+      { label: "Phase de consolidation (range)", correct: true },
+      { label: "Tendance baissière", correct: false },
     ],
     explanation:
       "Le prix oscille dans un range borné par un support (~102) et une résistance (~108) sans tendance directionnelle claire. C’est une phase de consolidation, typique d’une accumulation/distribution avant un breakout. Module : analyse technique du Master Trading & MBA Xeilos.",
@@ -174,10 +174,10 @@ export const MASTER_QCM: QcmQuestion[] = [
       "Quelle structure de marché reconnais-tu sur ce graphique ?",
     multi: false,
     options: [
-      { label: "Tendance haussière (higher highs + higher lows)", correct: true },
       { label: "Range étroit", correct: false },
       { label: "Tendance baissière", correct: false },
       { label: "Distribution avant retournement", correct: false },
+      { label: "Tendance haussière (higher highs + higher lows)", correct: true },
     ],
     explanation:
       "Chaque sommet est plus haut que le précédent, et chaque creux est plus haut que le précédent : c’est la définition académique d’une tendance haussière (higher highs + higher lows). Stratégie classique : chercher les pullbacks pour entrer dans le sens de la tendance.",
@@ -208,10 +208,10 @@ export const MASTER_QCM: QcmQuestion[] = [
       "Comment qualifierais-tu la dynamique du prix sur ce graphique ?",
     multi: false,
     options: [
-      { label: "Tendance baissière (lower highs + lower lows)", correct: true },
       { label: "Consolidation latérale", correct: false },
-      { label: "Tendance haussière", correct: false },
+      { label: "Tendance baissière (lower highs + lower lows)", correct: true },
       { label: "Pullback temporaire dans une tendance haussière", correct: false },
+      { label: "Tendance haussière", correct: false },
     ],
     explanation:
       "On voit clairement des sommets de plus en plus bas et des creux de plus en plus bas : c’est une tendance baissière. Approches possibles : vendre les rallies (short), ou rester à l’écart si tu ne shortes pas. Ne jamais « rattraper le couteau qui tombe ».",
@@ -242,10 +242,10 @@ export const MASTER_QCM: QcmQuestion[] = [
       "Que vient-il de se passer sur ce graphique ?",
     multi: false,
     options: [
-      { label: "Cassure de résistance après consolidation (breakout)", correct: true },
       { label: "Renversement baissier", correct: false },
-      { label: "Continuation d'une tendance baissière", correct: false },
       { label: "Faux signal en range étroit", correct: false },
+      { label: "Continuation d'une tendance baissière", correct: false },
+      { label: "Cassure de résistance après consolidation (breakout)", correct: true },
     ],
     explanation:
       "Les 10 premières bougies forment une consolidation serrée sous une résistance vers 104. La 11ᵉ bougie casse nettement cette résistance avec impulsion, suivie d'une continuation haussière : c'est un breakout classique. L'ancienne résistance devient souvent un nouveau support (retest).",

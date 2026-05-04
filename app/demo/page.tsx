@@ -48,11 +48,7 @@ export default function DemoPage() {
       <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-12 sm:py-16">
         {/* HERO DEMO */}
         <section className="mx-auto max-w-2xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-1.5 text-xs uppercase tracking-widest text-[var(--muted)]">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--accent)]" />
-            Démonstration en direct
-          </div>
-          <h1 className="mt-6 text-3xl font-semibold leading-tight tracking-tight text-[var(--ink)] sm:text-4xl md:text-5xl">
+          <h1 className="text-3xl font-semibold leading-tight tracking-tight text-[var(--ink)] sm:text-4xl md:text-5xl">
             Essaie la mécanique en live
           </h1>
           <p className="mt-4 text-base text-[var(--muted)]">
