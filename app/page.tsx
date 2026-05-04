@@ -14,13 +14,20 @@ export default function Home() {
       <header className="border-b border-[var(--border)]/60 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--accent)] to-[var(--gold)] font-bold text-[#04141d]">
-              X
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white p-1.5 ring-1 ring-[var(--border)]">
+              <Image
+                src="/xeilos-logo.jpeg"
+                alt="Xeilos Trading Academy"
+                width={64}
+                height={64}
+                className="h-full w-full object-contain"
+                priority
+              />
             </div>
             <div>
               <div className="text-sm font-semibold tracking-wide">XEILOS</div>
               <div className="text-[10px] uppercase tracking-[0.25em] text-[var(--muted)]">
-                Trading school · IA preview
+                Trading academy · IA preview
               </div>
             </div>
           </div>
