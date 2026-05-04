@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { Archetype } from "@/lib/quiz";
 import { PROFILES } from "@/lib/quiz";
+import { scriptedReply } from "@/lib/scripted-chat";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -69,47 +70,36 @@ export default function Chat({ archetype }: Props) {
     if (!trimmed || busy) return;
     setError(null);
 
+    const turnIndex = messages.filter((m) => m.role === "user").length;
     const next: Message[] = [...messages, { role: "user", content: trimmed }];
     setMessages(next);
     setInput("");
     setBusy(true);
 
-    // Add a placeholder assistant message we'll stream into
+    // Placeholder assistant message we'll stream into
     setMessages((m) => [...m, { role: "assistant", content: "" }]);
 
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: next, archetype }),
+    const reply = scriptedReply(trimmed, archetype, turnIndex);
+
+    // Simulate "thinking" delay
+    await new Promise((r) => setTimeout(r, 450 + Math.random() * 350));
+
+    // Typewriter streaming
+    let acc = "";
+    for (let i = 0; i < reply.length; i++) {
+      acc += reply[i];
+      setMessages((m) => {
+        const copy = [...m];
+        copy[copy.length - 1] = { role: "assistant", content: acc };
+        return copy;
       });
-
-      if (!res.ok || !res.body) {
-        const txt = await res.text().catch(() => "");
-        throw new Error(txt || `Erreur HTTP ${res.status}`);
-      }
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let acc = "";
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        acc += decoder.decode(value, { stream: true });
-        setMessages((m) => {
-          const copy = [...m];
-          copy[copy.length - 1] = { role: "assistant", content: acc };
-          return copy;
-        });
-      }
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : "Erreur inconnue.";
-      setError(msg);
-      setMessages((m) => m.slice(0, -1));
-    } finally {
-      setBusy(false);
-      setTimeout(() => inputRef.current?.focus(), 50);
+      // Speed varies a bit; faster on spaces
+      const delay = reply[i] === " " ? 8 : 14 + Math.random() * 12;
+      await new Promise((r) => setTimeout(r, delay));
     }
+
+    setBusy(false);
+    setTimeout(() => inputRef.current?.focus(), 50);
   }
 
   function handleKey(e: React.KeyboardEvent<HTMLTextAreaElement>) {
