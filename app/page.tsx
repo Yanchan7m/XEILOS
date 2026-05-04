@@ -1,6 +1,5 @@
 import Image from "next/image";
-import MasterQCM from "@/components/MasterQCM";
-import Chat from "@/components/Chat";
+import Link from "next/link";
 import TestingEffectChart from "@/components/TestingEffectChart";
 import FlipCard from "@/components/FlipCard";
 
@@ -44,7 +43,7 @@ export default function Home() {
               Effet de test
             </a>
             <a
-              href="#demo"
+              href="/demo"
               className="rounded-full bg-[var(--ink)] px-3 py-1.5 font-medium text-white transition hover:bg-[var(--accent)]"
             >
               Voir la démo
@@ -70,7 +69,7 @@ export default function Home() {
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <a
-              href="#demo"
+              href="/demo"
               className="rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-[var(--accent-strong)]"
             >
               Tester la démo
@@ -284,76 +283,44 @@ export default function Home() {
           </div>
         </section>
 
-        {/* DEMO */}
-        <section id="demo" className="mt-24 sm:mt-28">
-          <div className="mx-auto max-w-2xl text-center">
-            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-              Démo interactive
-            </div>
-            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[var(--ink)] sm:text-4xl">
-              Essaie la mécanique en live
-            </h2>
-            <p className="mt-3 text-base text-[var(--muted)]">
-              Trois briques de la pédagogie Ask Amélie appliquées au{" "}
-              <strong>Master Xeilos</strong> : QCM réel issu des modules,
-              tuteur IA, et cartes flip de vocabulaire stratégie.
-            </p>
-          </div>
-
-          {/* Bloc 1 + 2 : QCM + Chat */}
-          <div className="mt-10 grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:gap-8">
-            <div>
-              <DemoLabel n="1" title="QCM réel · modules du Master" />
-              <MasterQCM />
-            </div>
-            <div className="lg:sticky lg:top-24 lg:self-start">
-              <DemoLabel n="2" title="Tuteur IA · Alex" />
-              <Chat />
-            </div>
-          </div>
-
-          {/* Bloc 3 : Cartes flip */}
-          <div className="mt-12">
-            <DemoLabel n="3" title="Cartes flip · vocabulaire stratégie" />
-            <div className="rounded-3xl border border-[var(--border)] bg-white p-6 shadow-sm sm:p-8">
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-[var(--muted)]">
-                  Clique sur une carte pour révéler la réponse. L’IA programme
-                  ensuite le bon intervalle de rappel selon ta performance.
+        {/* CTA → /demo */}
+        <section className="mt-24 sm:mt-28">
+          <div className="overflow-hidden rounded-3xl border border-[var(--accent)]/30 bg-gradient-to-br from-[var(--accent-soft)] to-white p-8 shadow-sm sm:p-12">
+            <div className="grid gap-8 sm:grid-cols-[1.4fr_1fr] sm:items-center">
+              <div>
+                <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
+                  Place à la pratique
+                </div>
+                <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[var(--ink)] sm:text-4xl">
+                  Essaie la mécanique sur une page dédiée
+                </h2>
+                <p className="mt-3 text-base text-[var(--muted-strong)]">
+                  Un QCM réel sur les modules du Master (avec graphique
+                  chandeliers japonais sur la Q3), Alex le tuteur IA, et
+                  7 cartes flip de vocabulaire stratégie.
                 </p>
-                <span className="hidden rounded-full bg-[var(--surface)] px-3 py-1 text-[10px] uppercase tracking-widest text-[var(--muted)] sm:inline">
-                  Module Stratégie & KPI
-                </span>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <Link
+                    href="/demo"
+                    className="rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-[var(--accent-strong)]"
+                  >
+                    Lancer la démo →
+                  </Link>
+                  <a
+                    href="#concept"
+                    className="rounded-full border border-[var(--border)] bg-white px-5 py-2.5 text-sm font-medium text-[var(--ink)] transition hover:border-[var(--ink)]"
+                  >
+                    Revoir le concept
+                  </a>
+                </div>
               </div>
-              <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <FlipCard
-                  question="Que signifie SWOT ?"
-                  answer="Strengths, Weaknesses, Opportunities, Threats. Outil d’analyse stratégique croisant facteurs internes et externes."
-                />
-                <FlipCard
-                  question="PESTEL, c’est quoi ?"
-                  answer="Politique, Économique, Social, Technologique, Environnemental, Légal. Analyse du macro-environnement externe."
-                />
-                <FlipCard
-                  question="Que veut dire DMAIC ?"
-                  answer="Define, Measure, Analyze, Improve, Control. Méthode structurante de Six Sigma pour optimiser un processus."
-                />
-                <FlipCard
-                  question="KPI : critères SMART ?"
-                  answer="Spécifique, Mesurable, Atteignable, Pertinent, Temporellement défini. Cadre de conception d’un bon indicateur."
-                />
-                <FlipCard
-                  question="5 Forces de Porter ?"
-                  answer="Rivalité concurrents, pouvoir clients, pouvoir fournisseurs, menace nouveaux entrants, menace produits de substitution. Mesure l’intensité concurrentielle d’un secteur."
-                />
-                <FlipCard
-                  question="Balanced Scorecard ?"
-                  answer="Tableau de bord de Kaplan & Norton qui évalue la performance selon 4 perspectives : Financière, Clients, Processus internes, Apprentissage & croissance."
-                />
-                <FlipCard
-                  question="Cycle PDCA ?"
-                  answer="Plan, Do, Check, Act. Cycle d’amélioration continue (Lean / Kaizen) : planifier, exécuter, vérifier, ajuster, puis recommencer."
-                />
+              <div className="hidden sm:flex sm:items-center sm:justify-end">
+                <div className="grid w-full max-w-xs grid-cols-2 gap-3">
+                  <MiniTile label="QCM" value="6" sub="questions" />
+                  <MiniTile label="Tuteur IA" value="24/7" sub="réponses" />
+                  <MiniTile label="Cartes flip" value="7" sub="vocab strat" />
+                  <MiniTile label="Modules" value="8" sub="couverts" />
+                </div>
               </div>
             </div>
           </div>
@@ -435,13 +402,22 @@ function SciCard({ title, text }: { title: string; text: string }) {
   );
 }
 
-function DemoLabel({ n, title }: { n: string; title: string }) {
+function MiniTile({
+  label,
+  value,
+  sub,
+}: {
+  label: string;
+  value: string;
+  sub: string;
+}) {
   return (
-    <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--muted)]">
-      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--accent)] text-[10px] text-white">
-        {n}
-      </span>
-      <span>{title}</span>
+    <div className="rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm">
+      <div className="text-[10px] font-semibold uppercase tracking-widest text-[var(--muted)]">
+        {label}
+      </div>
+      <div className="mt-1 text-2xl font-bold text-[var(--accent)]">{value}</div>
+      <div className="text-[11px] text-[var(--muted)]">{sub}</div>
     </div>
   );
 }
