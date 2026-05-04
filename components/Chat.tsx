@@ -218,7 +218,7 @@ function Bubble({
       <div
         className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap ${
           isUser
-            ? "bg-[var(--accent)] text-[#04141d]"
+            ? "bg-[var(--accent)] text-white"
             : "bg-[var(--surface-2)] text-[var(--foreground)]/90 border border-[var(--border)]"
         }`}
       >

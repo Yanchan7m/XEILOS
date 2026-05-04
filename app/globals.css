@@ -1,17 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #050608;
-  --foreground: #f4f5f7;
-  --surface: #0d1015;
-  --surface-2: #141821;
-  --border: #1f2430;
-  --muted: #8b93a5;
-  --accent: #4cc9f0;
-  --accent-strong: #00b4d8;
-  --gold: #f5c45a;
-  --danger: #ef4458;
-  --success: #2ecc71;
+  --background: #ffffff;
+  --foreground: #0b1120;
+  --surface: #f8fafc;
+  --surface-2: #eef2f7;
+  --border: #e3e8ef;
+  --muted: #5b6472;
+  --muted-strong: #2b313c;
+  --accent: #d92128;
+  --accent-strong: #a91923;
+  --accent-soft: #fdecec;
+  --ink: #0b1120;
+  --gold: #c89a3a;
+  --success: #16a34a;
+  --info: #2563eb;
 }
 
 @theme inline {
@@ -24,6 +27,7 @@
   --color-accent: var(--accent);
   --color-accent-strong: var(--accent-strong);
   --color-gold: var(--gold);
+  --color-ink: var(--ink);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -37,14 +41,14 @@ body {
 body {
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   background-image:
-    radial-gradient(1200px 600px at 80% -10%, rgba(76, 201, 240, 0.08), transparent 60%),
-    radial-gradient(900px 500px at -10% 110%, rgba(245, 196, 90, 0.05), transparent 60%);
+    radial-gradient(900px 500px at 100% -10%, rgba(217, 33, 40, 0.06), transparent 60%),
+    radial-gradient(700px 400px at -10% 100%, rgba(37, 99, 235, 0.05), transparent 60%);
   background-attachment: fixed;
 }
 
 @keyframes pulseRing {
-  0% { box-shadow: 0 0 0 0 rgba(76, 201, 240, 0.45); }
-  100% { box-shadow: 0 0 0 14px rgba(76, 201, 240, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(217, 33, 40, 0.35); }
+  100% { box-shadow: 0 0 0 14px rgba(217, 33, 40, 0); }
 }
 
 .agent-ring {
@@ -60,9 +64,33 @@ body {
   animation: fadeUp 0.35s ease-out both;
 }
 
+@keyframes drawLine {
+  to { stroke-dashoffset: 0; }
+}
+
+.draw-line {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawLine 2.4s ease-out forwards;
+}
+
+.draw-line-delay {
+  animation-delay: 0.4s;
+}
+
+@keyframes growBar {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+.grow-bar {
+  transform-origin: bottom;
+  animation: growBar 0.9s cubic-bezier(.2,.8,.2,1) both;
+}
+
 .scrollbar-thin::-webkit-scrollbar { width: 8px; }
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: #1f2430;
+  background: #cbd2dc;
   border-radius: 999px;
 }
 .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }

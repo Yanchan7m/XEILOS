@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Quiz from "@/components/Quiz";
 import Chat from "@/components/Chat";
+import TestingEffectChart from "@/components/TestingEffectChart";
 import type { Archetype } from "@/lib/quiz";
 
 export default function Home() {
@@ -11,10 +12,11 @@ export default function Home() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <header className="border-b border-[var(--border)]/60 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+      {/* NAV */}
+      <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-white/85 backdrop-blur-md">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white p-1.5 ring-1 ring-[var(--border)]">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white p-1 ring-1 ring-[var(--border)]">
               <Image
                 src="/xeilos-logo.jpeg"
                 alt="Xeilos Trading Academy"
@@ -25,66 +27,272 @@ export default function Home() {
               />
             </div>
             <div>
-              <div className="text-sm font-semibold tracking-wide">XEILOS</div>
+              <div className="text-sm font-semibold tracking-wide text-[var(--ink)]">
+                Xeilos × Ask Amélie
+              </div>
               <div className="text-[10px] uppercase tracking-[0.25em] text-[var(--muted)]">
-                Trading academy · IA preview
+                Démonstration interne
               </div>
             </div>
           </div>
-          <a
-            href="https://xeilos.fr"
-            target="_blank"
-            rel="noreferrer"
-            className="text-xs text-[var(--muted)] transition hover:text-[var(--foreground)]"
-          >
-            xeilos.fr ↗
-          </a>
+          <div className="flex items-center gap-4 text-xs">
+            <a
+              href="#concept"
+              className="hidden text-[var(--muted)] transition hover:text-[var(--ink)] sm:inline"
+            >
+              Concept
+            </a>
+            <a
+              href="#science"
+              className="hidden text-[var(--muted)] transition hover:text-[var(--ink)] sm:inline"
+            >
+              Effet de test
+            </a>
+            <a
+              href="#demo"
+              className="rounded-full bg-[var(--ink)] px-3 py-1.5 font-medium text-white transition hover:bg-[var(--accent)]"
+            >
+              Voir la démo
+            </a>
+          </div>
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-12 sm:py-16">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-12 sm:py-16">
+        {/* HERO */}
         <section className="mx-auto max-w-3xl text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-1.5 text-xs uppercase tracking-widest text-[var(--muted)]">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--accent)]" />
-            Aperçu produit · IA &nbsp;×&nbsp; Pédagogie
+            Démonstration · Xeilos × Ask Amélie
           </div>
-          <h1 className="mt-6 text-4xl font-semibold leading-tight tracking-tight sm:text-5xl md:text-6xl">
-            Découvre quel{" "}
-            <span className="bg-gradient-to-r from-[var(--accent)] to-[var(--gold)] bg-clip-text text-transparent">
-              trader
+          <h1 className="mt-6 text-4xl font-semibold leading-[1.1] tracking-tight text-[var(--ink)] sm:text-5xl md:text-6xl">
+            Et si on adaptait{" "}
+            <span className="bg-gradient-to-r from-[var(--accent)] to-[#7a0e12] bg-clip-text text-transparent">
+              Ask Amélie
             </span>{" "}
-            tu es,
-            <br className="hidden sm:block" /> et trouve ta formation.
+            <br className="hidden sm:block" />à la pédagogie Xeilos ?
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-base text-[var(--muted)] sm:text-lg">
-            Réponds à 6 questions pour révéler ton profil, puis discute en direct
-            avec Alex, le coach IA de Xeilos, pour construire ton parcours.
+          <p className="mx-auto mt-5 max-w-2xl text-base text-[var(--muted)] sm:text-lg">
+            Un coach IA conversationnel + des QCM dynamiques générés depuis
+            les contenus Xeilos, pour appliquer l’<strong>effet de test</strong>{" "}
+            — la méthode d’apprentissage la mieux validée par les neurosciences.
           </p>
-        </section>
-
-        <section className="mt-14 grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:gap-8">
-          <Quiz onResult={setArchetype} />
-          <div className="lg:sticky lg:top-6 lg:self-start">
-            <Chat archetype={archetype} />
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href="#demo"
+              className="rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-[var(--accent-strong)]"
+            >
+              Tester la démo
+            </a>
+            <a
+              href="#concept"
+              className="rounded-full border border-[var(--border)] bg-white px-5 py-2.5 text-sm font-medium text-[var(--ink)] transition hover:border-[var(--ink)]"
+            >
+              Comprendre le concept
+            </a>
           </div>
         </section>
 
-        <section className="mt-20 grid gap-6 sm:grid-cols-3">
-          <Feature
-            title="Quiz personnalisé"
-            text="6 questions, 4 archétypes : scalpeur, swing, investisseur, crypto-native."
-          />
-          <Feature
-            title="Coach IA en continu"
-            text="Alex répond en temps réel, adapte ses réponses à ton profil et au catalogue Xeilos."
-          />
-          <Feature
-            title="Reconnu par l’État"
-            text="Toutes les formations Xeilos sont certifiantes, RNCP et finançables CPF."
-          />
+        {/* WHAT IS ASK AMELIE */}
+        <section id="concept" className="mt-24 sm:mt-28">
+          <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
+                Le concept
+              </div>
+              <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[var(--ink)] sm:text-4xl">
+                Ask Amélie, c’est quoi ?
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-[var(--muted-strong)]">
+                <a
+                  href="https://askamelie.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[var(--accent)] underline-offset-2 hover:underline"
+                >
+                  Ask Amélie
+                </a>{" "}
+                est une plateforme française qui transforme un contenu
+                pédagogique (cours, support, vidéo) en deux outils :
+              </p>
+              <ul className="mt-5 space-y-4">
+                <Bullet n="1" title="Un quiz progressif (QCM)">
+                  Le contenu est découpé et reformulé en questions à choix
+                  multiples, accessibles sur mobile, avec correction immédiate.
+                </Bullet>
+                <Bullet n="2" title="Une IA tutrice conversationnelle">
+                  L’apprenant peut discuter avec un agent IA qui connaît le
+                  cours et répond 24/7, comme un mentor toujours disponible.
+                </Bullet>
+                <Bullet n="3" title="Un suivi temps réel">
+                  Le formateur voit qui décroche, quelles questions reviennent,
+                  et où interviennent les blocages.
+                </Bullet>
+              </ul>
+              <p className="mt-6 text-sm text-[var(--muted)]">
+                Aujourd’hui utilisé surtout dans l’hôtellerie et les services.
+                On peut transposer cette mécanique <strong>tel quel</strong> au
+                trading.
+              </p>
+            </div>
+
+            {/* mock interface preview */}
+            <div className="relative">
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[var(--accent-soft)] to-white" />
+              <div className="relative rounded-3xl border border-[var(--border)] bg-white p-5 shadow-sm">
+                <div className="flex items-center gap-2 border-b border-[var(--border)] pb-3">
+                  <div className="h-2 w-2 rounded-full bg-red-400" />
+                  <div className="h-2 w-2 rounded-full bg-yellow-400" />
+                  <div className="h-2 w-2 rounded-full bg-green-400" />
+                  <div className="ml-3 text-[10px] uppercase tracking-widest text-[var(--muted)]">
+                    Conversation apprenant ↔ IA
+                  </div>
+                </div>
+                <div className="mt-4 space-y-3 text-sm">
+                  <MiniBubble side="left">
+                    Bonjour Léa 👋 Prêt·e pour le QCM du jour sur la
+                    <strong> gestion du risque</strong> ?
+                  </MiniBubble>
+                  <MiniBubble side="right">Allez, go !</MiniBubble>
+                  <MiniBubble side="left" highlight>
+                    Q1 — Quel est le risque max recommandé par trade ?
+                    <br />
+                    <span className="opacity-70">A) 5 % &nbsp; B) 1-2 % &nbsp; C) 10 %</span>
+                  </MiniBubble>
+                  <MiniBubble side="right">B</MiniBubble>
+                  <MiniBubble side="left">
+                    ✅ Exact. On consolide demain avec un cas pratique.
+                  </MiniBubble>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
-        <footer className="mt-16 flex flex-col items-center gap-2 border-t border-[var(--border)]/60 pt-8 text-xs text-[var(--muted)]">
+        {/* SCIENCE */}
+        <section id="science" className="mt-24 sm:mt-28">
+          <div className="mx-auto max-w-2xl text-center">
+            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
+              La science
+            </div>
+            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[var(--ink)] sm:text-4xl">
+              L’effet de test, validé par les neurosciences
+            </h2>
+            <p className="mt-4 text-base leading-relaxed text-[var(--muted-strong)]">
+              Se tester activement — via des QCM espacés dans le temps —
+              ancre les connaissances <strong>bien plus profondément</strong>{" "}
+              que la relecture passive. C’est le principe du{" "}
+              <em>retrieval practice</em>, démontré par les travaux de Roediger
+              & Karpicke (Université de Washington, 2006-2011).
+            </p>
+          </div>
+
+          <div className="mt-10">
+            <TestingEffectChart />
+          </div>
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-3">
+            <SciCard
+              title="Active recall"
+              text="Forcer le cerveau à récupérer une info crée un chemin neuronal plus solide qu’une simple relecture."
+            />
+            <SciCard
+              title="Spacing effect"
+              text="Espacer les rappels dans le temps multiplie la rétention long terme — Ebbinghaus, 1885 → confirmé en 2020."
+            />
+            <SciCard
+              title="Feedback immédiat"
+              text="Une correction donnée tout de suite après la réponse renforce l’apprentissage et corrige les fausses certitudes."
+            />
+          </div>
+        </section>
+
+        {/* APPLICATION XEILOS */}
+        <section className="mt-24 sm:mt-28">
+          <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
+                Application Xeilos
+              </div>
+              <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[var(--ink)] sm:text-4xl">
+                On démarre avec le Master, on étend ensuite à tout le catalogue
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-[var(--muted-strong)]">
+                L’idée initiale : équiper tous les élèves du{" "}
+                <strong>Master Trading Xeilos</strong> d’un coach IA + d’un
+                système de QCM dynamique pour entretenir leurs acquis entre
+                deux modules.
+              </p>
+              <p className="mt-3 text-base leading-relaxed text-[var(--muted-strong)]">
+                Mais la mécanique est <strong>générique</strong> : même flux
+                pour le MBA, le programme Crypto/DeFi, l’Investissement long
+                terme, voire les soft-skills. Une fois le moteur en place, on
+                ajoute n’importe quel cours en quelques clics.
+              </p>
+
+              <div className="mt-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
+                <div className="text-xs font-semibold uppercase tracking-widest text-[var(--muted)]">
+                  Bénéfices côté école
+                </div>
+                <ul className="mt-3 space-y-2 text-sm text-[var(--ink)]">
+                  <li>• Suivi temps réel des décrocheurs (taux d’abandon ↓)</li>
+                  <li>• Identification des modules les moins compris</li>
+                  <li>• Différenciateur sur les pages de vente formations</li>
+                  <li>• Argument éligibilité Qualiopi / suivi pédagogique</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="grid gap-3">
+              <FormationCard
+                title="Master Trading (cible initiale)"
+                desc="Quiz hebdo sur chaque module, coach IA pour les questions de méthode et de gestion du risque."
+                tag="Phase 1"
+                primary
+              />
+              <FormationCard
+                title="MBA Trading"
+                desc="QCM par chapitre + simulateur conversationnel pour les setups day trading & prop firm."
+                tag="Phase 2"
+              />
+              <FormationCard
+                title="Crypto, Blockchain & DeFi"
+                desc="Tests de vocabulaire on-chain, quiz sécurité wallets, veille narratives."
+                tag="Phase 2"
+              />
+              <FormationCard
+                title="Investissement long terme"
+                desc="QCM analyse fondamentale, ETF, dividendes — rythme mensuel."
+                tag="Phase 3"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* DEMO */}
+        <section id="demo" className="mt-24 sm:mt-28">
+          <div className="mx-auto max-w-2xl text-center">
+            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
+              Démo interactive
+            </div>
+            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[var(--ink)] sm:text-4xl">
+              Essaie la mécanique en live
+            </h2>
+            <p className="mt-3 text-base text-[var(--muted)]">
+              Un mini-quiz "Quel type de trader es-tu ?" + un chat avec Alex, le
+              coach IA Xeilos. Réponses scriptées pour cette démonstration.
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:gap-8">
+            <Quiz onResult={setArchetype} />
+            <div className="lg:sticky lg:top-24 lg:self-start">
+              <Chat archetype={archetype} />
+            </div>
+          </div>
+        </section>
+
+        <footer className="mt-24 flex flex-col items-center gap-2 border-t border-[var(--border)] pt-8 text-xs text-[var(--muted)]">
           <div className="flex items-center gap-2">
             <Image
               src="/agent-face.png"
@@ -93,20 +301,105 @@ export default function Home() {
               height={20}
               className="rounded-full"
             />
-            Aperçu interne — pas un service financier.
+            Démonstration interne — Xeilos × Ask Amélie. Pas un service financier.
           </div>
-          <div>© {new Date().getFullYear()} Xeilos · Mockup IA</div>
+          <div>© {new Date().getFullYear()} Xeilos Trading Academy</div>
         </footer>
       </main>
     </div>
   );
 }
 
-function Feature({ title, text }: { title: string; text: string }) {
+function Bullet({
+  n,
+  title,
+  children,
+}: {
+  n: string;
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
-      <div className="text-sm font-semibold">{title}</div>
+    <li className="flex gap-4">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-sm font-bold text-[var(--accent)]">
+        {n}
+      </div>
+      <div>
+        <div className="font-semibold text-[var(--ink)]">{title}</div>
+        <div className="mt-0.5 text-sm text-[var(--muted-strong)]">{children}</div>
+      </div>
+    </li>
+  );
+}
+
+function MiniBubble({
+  side,
+  children,
+  highlight,
+}: {
+  side: "left" | "right";
+  children: React.ReactNode;
+  highlight?: boolean;
+}) {
+  const isRight = side === "right";
+  return (
+    <div className={`flex ${isRight ? "justify-end" : "justify-start"}`}>
+      <div
+        className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-sm leading-snug ${
+          isRight
+            ? "bg-[var(--ink)] text-white"
+            : highlight
+              ? "border border-[var(--accent)]/30 bg-[var(--accent-soft)] text-[var(--ink)]"
+              : "border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)]"
+        }`}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function SciCard({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-2xl border border-[var(--border)] bg-white p-5">
+      <div className="text-sm font-semibold text-[var(--ink)]">{title}</div>
       <div className="mt-2 text-sm text-[var(--muted)]">{text}</div>
+    </div>
+  );
+}
+
+function FormationCard({
+  title,
+  desc,
+  tag,
+  primary,
+}: {
+  title: string;
+  desc: string;
+  tag: string;
+  primary?: boolean;
+}) {
+  return (
+    <div
+      className={`rounded-2xl border p-5 ${
+        primary
+          ? "border-[var(--accent)]/40 bg-[var(--accent-soft)]"
+          : "border-[var(--border)] bg-white"
+      }`}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div className="font-semibold text-[var(--ink)]">{title}</div>
+        <span
+          className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider ${
+            primary
+              ? "bg-[var(--accent)] text-white"
+              : "bg-[var(--surface-2)] text-[var(--muted)]"
+          }`}
+        >
+          {tag}
+        </span>
+      </div>
+      <div className="mt-1.5 text-sm text-[var(--muted-strong)]">{desc}</div>
     </div>
   );
 }
