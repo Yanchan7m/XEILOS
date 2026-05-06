@@ -111,7 +111,7 @@ const CONSOLIDATION_CANDLES: Candle[] = [
 ];
 
 /**
- * QCM extraits du contenu réel du Master Xeilos
+ * QCM extraits du contenu réel du Mastère
  * (modules : Stratégie d'entreprise, Diagnostic de performance,
  * Parties prenantes, Optimisation des processus, KPI).
  */
@@ -159,7 +159,7 @@ export const MASTER_QCM: QcmQuestion[] = [
       { label: "Tendance baissière", correct: false },
     ],
     explanation:
-      "Le prix oscille dans un range borné par un support (~102) et une résistance (~108) sans tendance directionnelle claire. C’est une phase de consolidation, typique d’une accumulation/distribution avant un breakout. Module : analyse technique du Master Trading & MBA Xeilos.",
+      "Le prix oscille dans un range borné par un support (~102) et une résistance (~108) sans tendance directionnelle claire. C’est une phase de consolidation, typique d’une accumulation/distribution avant un breakout. Module : analyse technique du Mastère.",
     chart: {
       data: CONSOLIDATION_CANDLES,
       support: 102,

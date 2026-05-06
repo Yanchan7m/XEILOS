@@ -61,7 +61,7 @@ export default function Home() {
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-base text-[var(--muted)] sm:text-lg">
             Un tuteur IA conversationnel + des QCM dynamiques générés depuis
-            les contenus du Master, pour appliquer l’<strong>effet de test</strong>,
+            les contenus du Mastère, pour appliquer l’<strong>effet de test</strong>,
             la méthode d’apprentissage la mieux validée par les neurosciences.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -136,7 +136,7 @@ export default function Home() {
                 <strong> formation</strong>, des écoles de
                 <strong> finance</strong> et de <strong>marketing</strong>. Le
                 moteur est générique : on lui injecte les contenus pédagogiques
-                du Master Xeilos (PDF, supports, vidéos) et il génère
+                du Mastère (PDF, supports, vidéos) et il génère
                 automatiquement les QCM, les rappels espacés et les réponses
                 du tuteur IA.
               </p>
@@ -237,11 +237,11 @@ export default function Home() {
                 Application Xeilos
               </div>
               <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[var(--ink)] sm:text-4xl">
-                On démarre avec le Master, on étend ensuite à tout le catalogue
+                On démarre avec le Mastère, on étend ensuite à tout le catalogue
               </h2>
               <p className="mt-4 text-base leading-relaxed text-[var(--muted-strong)]">
                 L’idée initiale : équiper tous les élèves du{" "}
-                <strong>Master Xeilos</strong> d’un tuteur IA + d’un système
+                <strong>Mastère</strong> d’un tuteur IA + d’un système
                 de QCM dynamique pour entretenir leurs acquis entre deux
                 modules (Stratégie d’entreprise, KPI, parties prenantes,
                 optimisation des processus, planification…).
@@ -268,7 +268,7 @@ export default function Home() {
 
             <div className="grid gap-3">
               <FormationCard
-                title="Master Xeilos (cible initiale)"
+                title="Mastère (cible initiale)"
                 desc="QCM hebdo sur chaque module (stratégie, KPI, parties prenantes…), tuteur IA pour l’explication des concepts et la révision."
                 tag="Phase 1"
                 primary
@@ -304,7 +304,7 @@ export default function Home() {
                   Essaie la mécanique sur une page dédiée
                 </h2>
                 <p className="mt-3 text-base text-[var(--muted-strong)]">
-                  Un QCM réel sur les modules du Master (avec graphique
+                  Un QCM réel sur les modules du Mastère (avec graphique
                   chandeliers japonais sur la Q3), Yan le tuteur IA, et
                   7 cartes flip de vocabulaire stratégie.
                 </p>

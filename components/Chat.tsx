@@ -10,7 +10,7 @@ const SUGGESTIONS = [
   "Explique-moi l'analyse SWOT",
   "Différence entre PESTEL et 5 Forces de Porter ?",
   "À quoi sert le Balanced Scorecard ?",
-  "Quels sont les modules du Master ?",
+  "Quels sont les modules du Mastère ?",
 ];
 
 export default function Chat() {
@@ -22,7 +22,7 @@ export default function Chat() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const intro =
-    "Salut 👋 Je suis Yan, le tuteur IA du Master Xeilos. Je connais tous les modules : stratégie, KPI, parties prenantes, optimisation des processus… Demande-moi une explication, une révision ou un QCM.";
+    "Salut 👋 Je suis Yan, le tuteur IA du Mastère. Je connais tous les modules : stratégie, KPI, parties prenantes, optimisation des processus… Demande-moi une explication, une révision ou un QCM.";
 
   const suggestions = SUGGESTIONS;
 
@@ -84,7 +84,7 @@ export default function Chat() {
           <div className="agent-ring h-11 w-11 overflow-hidden rounded-full ring-2 ring-[var(--accent)]/40">
             <Image
               src="/agent-face.png"
-              alt="Yan, tuteur IA du Master Trading Xeilos"
+              alt="Yan, tuteur IA du Mastère"
               width={64}
               height={64}
               className="h-full w-full object-cover"
@@ -95,7 +95,7 @@ export default function Chat() {
         </div>
         <div>
           <div className="text-sm font-semibold">Yan</div>
-          <div className="text-xs text-[var(--muted)]">Tuteur IA · Master Xeilos</div>
+          <div className="text-xs text-[var(--muted)]">Tuteur IA · Mastère</div>
         </div>
         <div className="ml-auto rounded-full bg-[var(--surface-2)] px-3 py-1 text-[10px] uppercase tracking-widest text-[var(--muted)]">
           Live

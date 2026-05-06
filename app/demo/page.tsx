@@ -7,7 +7,7 @@ import FlipCard from "@/components/FlipCard";
 export const metadata = {
   title: "Démo · Xeilos × Ask Amélie",
   description:
-    "QCM réel, tuteur IA et cartes flip : la pédagogie Ask Amélie appliquée au Master Xeilos.",
+    "QCM réel, tuteur IA et cartes flip : la pédagogie Ask Amélie appliquée au Mastère.",
 };
 
 export default function DemoPage() {
@@ -53,7 +53,7 @@ export default function DemoPage() {
           </h1>
           <p className="mt-4 text-base text-[var(--muted)]">
             Trois briques de la pédagogie Ask Amélie appliquées au{" "}
-            <strong>Master Xeilos</strong> : QCM réel issu des modules
+            <strong>Mastère</strong> : QCM réel issu des modules
             (avec graphique chandeliers japonais sur la Q3), tuteur IA, et
             cartes flip de vocabulaire stratégie.
           </p>
@@ -62,7 +62,7 @@ export default function DemoPage() {
         {/* Bloc 1 + 2 */}
         <section className="mt-12 grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:gap-8">
           <div>
-            <DemoLabel n="1" title="QCM réel · modules du Master" />
+            <DemoLabel n="1" title="QCM réel · modules du Mastère" />
             <MasterQCM />
           </div>
           <div className="lg:sticky lg:top-24 lg:self-start">

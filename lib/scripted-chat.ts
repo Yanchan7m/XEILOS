@@ -1,8 +1,8 @@
 type Reply = { match: RegExp; answer: string };
 
 /**
- * Yan est le tuteur IA du Master Xeilos.
- * Il connaît les modules réels du Master : Stratégie d'entreprise,
+ * Yan est le tuteur IA du Mastère.
+ * Il connaît les modules réels du Mastère : Stratégie d'entreprise,
  * Diagnostic de performance, Fonctions économiques, Parties prenantes,
  * Optimisation des processus, Planification, KPI, Structure & organigramme.
  */
@@ -85,12 +85,12 @@ const COMMON: Reply[] = [
   {
     match: /(module|programme|chapitre|cursus|catalogue|contenu)/i,
     answer:
-      "Le Master Xeilos couvre 8 grands modules : 1) Stratégie d'entreprise, 2) Diagnostic de performance, 3) Fonctions économiques, 4) Parties prenantes & gouvernance, 5) Optimisation des processus, 6) Planification, 7) KPI & pilotage, 8) Structure & organigramme. Sur lequel veux-tu travailler ?",
+      "Le Mastère couvre 8 grands modules : 1) Stratégie d'entreprise, 2) Diagnostic de performance, 3) Fonctions économiques, 4) Parties prenantes & gouvernance, 5) Optimisation des processus, 6) Planification, 7) KPI & pilotage, 8) Structure & organigramme. Sur lequel veux-tu travailler ?",
   },
   {
     match: /(planning|temps|combien.*temps|durée|rythme|finir|terminer)/i,
     answer:
-      "Le Master se boucle en moyenne en 4 à 6 mois à raison de 5-7h par semaine. Tu peux accélérer ou étaler. L'important c'est la régularité, pas la vitesse. Je peux te proposer un plan hebdo si tu me dis ton temps dispo.",
+      "Le Mastère se boucle en moyenne en 4 à 6 mois à raison de 5-7h par semaine. Tu peux accélérer ou étaler. L'important c'est la régularité, pas la vitesse. Je peux te proposer un plan hebdo si tu me dis ton temps dispo.",
   },
   {
     match: /(rappel|notif|spaced|espac|r[ée]p[ée]tition)/i,
@@ -100,12 +100,12 @@ const COMMON: Reply[] = [
   {
     match: /(cpf|finan(c|ç)e|prix|tarif|co[uû]t|rncp|qualiopi|certif)/i,
     answer:
-      "Le Master Xeilos est certifiant (RNCP, Qualiopi) et finançable CPF. Selon ton solde, le reste à charge peut être nul. Pour les détails tarifaires, un conseiller Xeilos te répond mieux que moi. Côté pédagogique, je suis là.",
+      "Le Mastère est certifiant (RNCP, Qualiopi) et finançable CPF. Selon ton solde, le reste à charge peut être nul. Pour les détails tarifaires, un conseiller Xeilos te répond mieux que moi. Côté pédagogique, je suis là.",
   },
   {
     match: /(coach|prof|formateur|qui enseigne|équipe|humain)/i,
     answer:
-      "Les formateurs du Master sont des praticiens du management et de la finance d'entreprise. Moi, je suis ton tuteur IA H24 pour les questions de méthode, les QCM et la révision. Pour les sessions live et le coaching humain, c'est l'équipe Xeilos via Discord.",
+      "Les formateurs du Mastère sont des praticiens du management et de la finance d'entreprise. Moi, je suis ton tuteur IA H24 pour les questions de méthode, les QCM et la révision. Pour les sessions live et le coaching humain, c'est l'équipe Xeilos via Discord.",
   },
   {
     match: /(merci|super|cool|parfait|ok|ça marche)/i,
@@ -115,12 +115,12 @@ const COMMON: Reply[] = [
   {
     match: /(salut|bonjour|hello|hey|coucou|hi)/i,
     answer:
-      "Salut 👋 Prêt·e à avancer sur le Master ? Tu peux me demander un QCM, une révision (SWOT, PESTEL, KPI...) ou de l'aide sur un concept précis.",
+      "Salut 👋 Prêt·e à avancer sur le Mastère ? Tu peux me demander un QCM, une révision (SWOT, PESTEL, KPI...) ou de l'aide sur un concept précis.",
   },
 ];
 
 const FALLBACKS = [
-  "Je suis spécialisé sur les modules du Master Xeilos : stratégie, diagnostic de performance, parties prenantes, KPI, optimisation des processus. Reformule dans ce cadre et je te réponds direct.",
+  "Je suis spécialisé sur les modules du Mastère : stratégie, diagnostic de performance, parties prenantes, KPI, optimisation des processus. Reformule dans ce cadre et je te réponds direct.",
   "Précise un peu : tu veux travailler un module, refaire un QCM, ou t'organiser un planning de révision ?",
   "Bonne question, mais je n'ai pas l'info sous la main. Je peux te générer un QCM ou te résumer un module si ça t'aide.",
 ];

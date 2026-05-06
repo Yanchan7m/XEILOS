@@ -117,7 +117,7 @@ export default function MasterQCM() {
           {state.score} / {total} bonnes réponses
         </h3>
         <p className="mt-1 text-base text-[var(--muted)]">
-          Soit {pct} % sur ce mini-test des modules du Master.
+          Soit {pct} % sur ce mini-test des modules du Mastère.
         </p>
 
         <div className="mt-6 h-2 w-full overflow-hidden rounded-full bg-[var(--surface-2)]">
