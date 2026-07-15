@@ -55,18 +55,18 @@ export default function DemoPage() {
           </h1>
           <p className="mt-4 text-base text-[var(--muted)]">
             Cinq briques de la pédagogie Xeilos appliquées au{" "}
-            <strong>Mastère</strong> : QCM réel issu des modules (avec graphique
-            chandeliers japonais), tuteur IA, un parcours de 6 exercices
-            interactifs (support/résistance, lecture de graphique et carnet
-            d’ordre), un QCM scalping sur vrais graphiques TradingView, et cartes
-            flip de vocabulaire stratégie.
+            <strong>trading</strong> : QCM réel de trading (gestion du risque,
+            structure de marché, scalping — avec graphique chandeliers japonais),
+            tuteur IA, un parcours de 6 exercices interactifs (support/résistance,
+            lecture de graphique et carnet d’ordre), un QCM scalping sur vrais
+            graphiques TradingView, et cartes flip de vocabulaire stratégie.
           </p>
         </section>
 
         {/* Bloc 1 + 2 */}
         <section className="mt-12 grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:gap-8">
           <div>
-            <DemoLabel n="1" title="QCM réel · modules du Mastère" />
+            <DemoLabel n="1" title="QCM réel · trading & scalping" />
             <MasterQCM />
           </div>
           <div className="lg:sticky lg:top-24 lg:self-start">
