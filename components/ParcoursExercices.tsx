@@ -2,7 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { EXERCISES, type LineExercise } from "@/lib/exercises";
-import { SCALPING_QCM, type ScalpingQuestion } from "@/lib/scalping-qcm";
+import {
+  SCALPING_QCM,
+  type ScalpingQuestion,
+  type ScalpStaticChart as ScalpStaticChartData,
+} from "@/lib/scalping-qcm";
 import {
   ORDERBOOK_EXOS,
   type WallExercise,
@@ -338,6 +342,244 @@ function TradingViewChart({
 }
 
 /* ------------------------------------------------------------------ */
+/*  Graphique statique dessiné (chandeliers + volume)                  */
+/*  Utilisé quand la question décrit une config précise (gap, range,   */
+/*  volume) qu'un flux TradingView live n'afficherait pas.             */
+/* ------------------------------------------------------------------ */
+
+function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
+  const { candles, rangeLow, rangeHigh, gapIndex, label } = chart;
+
+  const CW = 560;
+  const CH = 300;
+  const CPAD = { l: 46, r: 16, t: 16, b: 20 };
+  const VOL_H = 46; // hauteur du panneau de volume, en bas
+  const GAP = 10; // espace prix / volume
+  const priceH = CH - CPAD.t - CPAD.b - VOL_H - GAP;
+  const priceTop = CPAD.t;
+  const volTop = CPAD.t + priceH + GAP;
+
+  const highs = candles.map((d) => d.h);
+  const lows = candles.map((d) => d.l);
+  const pMax = Math.max(...highs, rangeHigh);
+  const pMin = Math.min(...lows, rangeLow);
+  const pMargin = (pMax - pMin) * 0.12 || 1;
+  const yMax = pMax + pMargin;
+  const yMin = pMin - pMargin;
+
+  const innerW = CW - CPAD.l - CPAD.r;
+  const slot = innerW / candles.length;
+  const candleW = Math.max(3, slot * 0.62);
+  const cx = (i: number) => CPAD.l + slot * (i + 0.5);
+  const py = (v: number) =>
+    priceTop + (1 - (v - yMin) / (yMax - yMin)) * priceH;
+
+  const vMax = Math.max(...candles.map((d) => d.v));
+  const vy = (v: number) => volTop + VOL_H - (v / vMax) * VOL_H;
+
+  const ticks = Array.from({ length: 5 }, (_, i) => {
+    const v = yMin + ((yMax - yMin) * i) / 4;
+    return Number(v.toFixed(0));
+  });
+
+  return (
+    <div className="rounded-2xl border border-[var(--border)] bg-[#0b1120] p-4 text-white shadow-sm">
+      <div className="mb-3 flex items-center justify-between text-[10px] uppercase tracking-widest text-white/60">
+        <span>{label}</span>
+        <span className="rounded-full bg-white/10 px-2 py-0.5">
+          Scénario · XEILOS
+        </span>
+      </div>
+      <svg
+        viewBox={`0 0 ${CW} ${CH}`}
+        width="100%"
+        role="img"
+        aria-label="Graphique en chandeliers avec volume illustrant un gap up suivi d'une consolidation à volume décroissant"
+      >
+        {/* gridlines + Y labels (prix) */}
+        {ticks.map((t) => (
+          <g key={t}>
+            <line
+              x1={CPAD.l}
+              x2={CW - CPAD.r}
+              y1={py(t)}
+              y2={py(t)}
+              stroke="#1f2a3d"
+              strokeDasharray="2 4"
+            />
+            <text
+              x={CPAD.l - 6}
+              y={py(t) + 3}
+              fontSize="9"
+              fill="#6b7689"
+              textAnchor="end"
+            >
+              {t}
+            </text>
+          </g>
+        ))}
+
+        {/* zone du range surlignée */}
+        <rect
+          x={CPAD.l}
+          y={py(rangeHigh)}
+          width={innerW}
+          height={py(rangeLow) - py(rangeHigh)}
+          fill="#38bdf8"
+          opacity="0.07"
+        />
+        {/* borne haute du range = résistance */}
+        <line
+          x1={CPAD.l}
+          x2={CW - CPAD.r}
+          y1={py(rangeHigh)}
+          y2={py(rangeHigh)}
+          stroke="#f87171"
+          strokeOpacity="0.75"
+          strokeDasharray="6 5"
+          strokeWidth="1.3"
+        />
+        <text
+          x={CW - CPAD.r - 4}
+          y={py(rangeHigh) - 4}
+          fontSize="9"
+          fill="#f87171"
+          textAnchor="end"
+        >
+          Haut du range {rangeHigh}
+        </text>
+        {/* borne basse du range = support */}
+        <line
+          x1={CPAD.l}
+          x2={CW - CPAD.r}
+          y1={py(rangeLow)}
+          y2={py(rangeLow)}
+          stroke="#22c55e"
+          strokeOpacity="0.7"
+          strokeDasharray="6 5"
+          strokeWidth="1.3"
+        />
+        <text
+          x={CW - CPAD.r - 4}
+          y={py(rangeLow) + 11}
+          fontSize="9"
+          fill="#22c55e"
+          textAnchor="end"
+        >
+          Bas du range {rangeLow}
+        </text>
+
+        {/* bougies (prix) */}
+        {candles.map((d, i) => {
+          const x = cx(i);
+          const isUp = d.c >= d.o;
+          const color = isUp ? "#22c55e" : "#ef4458";
+          const bodyTop = py(Math.max(d.o, d.c));
+          const bodyBottom = py(Math.min(d.o, d.c));
+          const bodyH = Math.max(1.5, bodyBottom - bodyTop);
+          return (
+            <g key={i}>
+              <line
+                x1={x}
+                x2={x}
+                y1={py(d.h)}
+                y2={py(d.l)}
+                stroke={color}
+                strokeWidth="1.2"
+              />
+              <rect
+                x={x - candleW / 2}
+                y={bodyTop}
+                width={candleW}
+                height={bodyH}
+                fill={color}
+                opacity={isUp ? 0.9 : 0.95}
+                rx="0.8"
+              />
+            </g>
+          );
+        })}
+
+        {/* annotation du gap */}
+        {gapIndex !== undefined && candles[gapIndex] && (
+          <g>
+            <line
+              x1={cx(gapIndex)}
+              x2={cx(gapIndex)}
+              y1={priceTop}
+              y2={volTop + VOL_H}
+              stroke="#facc15"
+              strokeOpacity="0.35"
+              strokeDasharray="3 3"
+            />
+            <text
+              x={cx(gapIndex)}
+              y={priceTop + 9}
+              fontSize="9"
+              fill="#facc15"
+              textAnchor="middle"
+            >
+              Gap up
+            </text>
+          </g>
+        )}
+
+        {/* barres de volume */}
+        {candles.map((d, i) => {
+          const x = cx(i);
+          const isUp = d.c >= d.o;
+          const barH = (d.v / vMax) * VOL_H;
+          return (
+            <rect
+              key={`v${i}`}
+              x={x - candleW / 2}
+              y={vy(d.v)}
+              width={candleW}
+              height={Math.max(1, barH)}
+              fill={isUp ? "#22c55e" : "#ef4458"}
+              opacity="0.4"
+              rx="0.6"
+            />
+          );
+        })}
+        {/* flèche « volume en baisse » sur la partie consolidation */}
+        {gapIndex !== undefined && (
+          <g>
+            <line
+              x1={cx(gapIndex + 1)}
+              y1={vy(candles[gapIndex + 1]?.v ?? vMax) - 4}
+              x2={cx(candles.length - 1)}
+              y2={vy(candles[candles.length - 1].v) - 4}
+              stroke="#94a3b8"
+              strokeWidth="1"
+              strokeDasharray="3 3"
+            />
+            <text
+              x={cx(candles.length - 1)}
+              y={volTop - 3}
+              fontSize="8.5"
+              fill="#94a3b8"
+              textAnchor="end"
+            >
+              Volume en baisse ↘
+            </text>
+          </g>
+        )}
+        <text
+          x={CPAD.l - 6}
+          y={volTop + VOL_H - 1}
+          fontSize="8"
+          fill="#6b7689"
+          textAnchor="end"
+        >
+          Vol
+        </text>
+      </svg>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /*  Carnet d'ordre (DOM)                                               */
 /* ------------------------------------------------------------------ */
 
@@ -650,11 +892,15 @@ export default function ParcoursExercices() {
 
         {current.type === "chart" && (
           <>
-            <TradingViewChart
-              symbol={current.q.symbol}
-              interval={current.q.interval}
-              id={current.q.id}
-            />
+            {current.q.staticChart ? (
+              <ScalpStaticChart chart={current.q.staticChart} />
+            ) : (
+              <TradingViewChart
+                symbol={current.q.symbol}
+                interval={current.q.interval}
+                id={current.q.id}
+              />
+            )}
             <p className="mt-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 text-xs leading-relaxed text-[var(--muted-strong)]">
               <span className="font-semibold text-[var(--ink)]">
                 Contexte :{" "}
