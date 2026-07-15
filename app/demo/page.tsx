@@ -1,8 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import MasterQCM from "@/components/MasterQCM";
-import InteractiveChartExercise from "@/components/InteractiveChartExercise";
-import ScalpingQCM from "@/components/ScalpingQCM";
+import ParcoursExercices from "@/components/ParcoursExercices";
 import Chat from "@/components/Chat";
 import FlipCard from "@/components/FlipCard";
 
@@ -54,11 +53,11 @@ export default function DemoPage() {
             Essaie la mécanique en live
           </h1>
           <p className="mt-4 text-base text-[var(--muted)]">
-            Cinq briques de la pédagogie Ask Amélie appliquées au{" "}
+            Quatre briques de la pédagogie Ask Amélie appliquées au{" "}
             <strong>Mastère</strong> : QCM réel issu des modules (avec graphique
-            chandeliers japonais), tuteur IA, exercices interactifs où l’on agit
-            directement sur le graphique, QCM scalping sur vrais graphiques
-            TradingView, et cartes flip de vocabulaire stratégie.
+            chandeliers japonais), tuteur IA, un parcours de 6 exercices
+            interactifs (support/résistance, lecture de graphique et carnet
+            d’ordre), et cartes flip de vocabulaire stratégie.
           </p>
         </section>
 
@@ -74,33 +73,25 @@ export default function DemoPage() {
           </div>
         </section>
 
-        {/* Bloc 3 — exercices interactifs sur graphique */}
+        {/* Bloc 3 — parcours d'exercices : que ferait-on dans cette situation ? */}
         <section className="mt-12">
-          <DemoLabel n="3" title="Exercices interactifs · lecture graphique" />
+          <DemoLabel
+            n="3"
+            title="Parcours d'exercices · que ferait-on dans cette situation ?"
+          />
           <div className="mb-4 max-w-2xl text-sm text-[var(--muted)]">
-            Ici l’apprenant ne choisit plus une réponse : il{" "}
-            <strong>agit directement sur le graphique</strong>. Fais glisser une
-            ligne de support / résistance, ou clique sur la bougie clé — l’app
-            corrige au pixel près et Yan analyse le résultat.
+            6 exercices interactifs : <strong>2 support / résistance</strong> à
+            placer sur le graphique, <strong>2 lectures de graphique</strong>{" "}
+            (décision de trade sur charts réels), et{" "}
+            <strong>2 sur le carnet d’ordre (DOM)</strong>. À la fin, Yan analyse
+            tes 6 décisions.
           </div>
-          <InteractiveChartExercise />
+          <ParcoursExercices />
         </section>
 
-        {/* Bloc 4 — QCM scalping sur graphiques TradingView réels */}
+        {/* Bloc 4 */}
         <section className="mt-12">
-          <DemoLabel n="4" title="QCM scalping · graphiques TradingView réels" />
-          <div className="mb-4 max-w-2xl text-sm text-[var(--muted)]">
-            10 setups de scalping (liquidités, breakout, sessions) sur les{" "}
-            <strong>vrais graphiques TradingView</strong> — Gold, NAS100, DAX,
-            BTC, EUR/USD. L’apprenant peut zoomer et naviguer, puis choisit la
-            bonne décision de trade.
-          </div>
-          <ScalpingQCM />
-        </section>
-
-        {/* Bloc 5 */}
-        <section className="mt-12">
-          <DemoLabel n="5" title="Cartes flip · vocabulaire stratégie" />
+          <DemoLabel n="4" title="Cartes flip · vocabulaire stratégie" />
           <div className="rounded-3xl border border-[var(--border)] bg-white p-6 shadow-sm sm:p-8">
             <div className="flex items-center justify-between">
               <p className="text-sm text-[var(--muted)]">
