@@ -7,9 +7,9 @@ import Chat from "@/components/Chat";
 import FlipCard from "@/components/FlipCard";
 
 export const metadata = {
-  title: "Démo · Xeilos × Ask Amélie",
+  title: "Démo · Xeilos",
   description:
-    "QCM réel, tuteur IA et cartes flip : la pédagogie Ask Amélie appliquée au Mastère.",
+    "QCM réel, tuteur IA et cartes flip : la pédagogie Xeilos appliquée au Mastère.",
 };
 
 export default function DemoPage() {
@@ -31,7 +31,7 @@ export default function DemoPage() {
             </div>
             <div>
               <div className="text-sm font-semibold tracking-wide text-[var(--ink)]">
-                Xeilos × Ask Amélie
+                Xeilos
               </div>
               <div className="text-[10px] uppercase tracking-[0.25em] text-[var(--muted)]">
                 Démo interactive
@@ -54,7 +54,7 @@ export default function DemoPage() {
             Essaie la mécanique en live
           </h1>
           <p className="mt-4 text-base text-[var(--muted)]">
-            Cinq briques de la pédagogie Ask Amélie appliquées au{" "}
+            Cinq briques de la pédagogie Xeilos appliquées au{" "}
             <strong>Mastère</strong> : QCM réel issu des modules (avec graphique
             chandeliers japonais), tuteur IA, un parcours de 6 exercices
             interactifs (support/résistance, lecture de graphique et carnet
@@ -154,7 +154,7 @@ export default function DemoPage() {
             Tu veux comprendre la méthode ?
           </div>
           <p className="max-w-md text-sm text-[var(--muted-strong)]">
-            Reviens à la présentation pour voir le concept Ask Amélie, l’étude
+            Reviens à la présentation pour voir le concept, l’étude
             scientifique sur l’effet de test et le plan de déploiement Xeilos.
           </p>
           <Link
@@ -174,7 +174,7 @@ export default function DemoPage() {
               height={20}
               className="rounded-full"
             />
-            Xeilos × Ask Amélie.
+            Xeilos.
           </div>
           <div>© {new Date().getFullYear()} Xeilos Trading Academy</div>
         </footer>

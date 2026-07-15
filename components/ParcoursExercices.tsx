@@ -87,7 +87,7 @@ function LinePlacer({
   const candleW = Math.max(3, slot * 0.62);
   const xFor = (i: number) => PAD.l + slot * (i + 0.5);
   const yFor = (v: number) => PAD.t + (1 - (v - yMin) / (yMax - yMin)) * INNER_H;
-  const targetColor = ex.lineType === "support" ? "#22c55e" : "#f87171";
+  const targetColor = ex.lineType === "support" ? "#16a34a" : "#dc2626";
 
   function priceFromClientY(clientY: number): number {
     const svg = svgRef.current;
@@ -103,13 +103,15 @@ function LinePlacer({
     onChange(Math.min(yMax, Math.max(yMin, round05(placed + d))));
   }
 
-  const lineC = validated ? (good ? "#22c55e" : "#f59e0b") : "#facc15";
+  const lineC = validated ? (good ? "#16a34a" : "#f59e0b") : "#ca8a04";
 
   return (
-    <div className="rounded-2xl border border-[var(--border)] bg-[#0b1120] p-4 text-white shadow-sm">
-      <div className="mb-3 flex items-center justify-between text-[10px] uppercase tracking-widest text-white/60">
+    <div className="rounded-2xl border border-[var(--border)] bg-white p-4 text-[var(--ink)] shadow-sm">
+      <div className="mb-3 flex items-center justify-between text-[10px] uppercase tracking-widest text-[var(--muted)]">
         <span>Fais glisser la ligne à la bonne hauteur</span>
-        <span className="rounded-full bg-white/10 px-2 py-0.5">XEILOS</span>
+        <span className="rounded-full bg-[var(--surface-2)] px-2 py-0.5 text-[var(--muted)]">
+          XEILOS
+        </span>
       </div>
       <svg
         ref={svgRef}
@@ -128,7 +130,7 @@ function LinePlacer({
                 x2={W - PAD.r}
                 y1={yFor(v)}
                 y2={yFor(v)}
-                stroke="#1f2a3d"
+                stroke="#e5e7eb"
                 strokeDasharray="2 4"
               />
               <text
@@ -147,7 +149,7 @@ function LinePlacer({
         {ex.data.map((d, i) => {
           const cx = xFor(i);
           const isUp = d.c >= d.o;
-          const color = isUp ? "#22c55e" : "#ef4458";
+          const color = isUp ? "#16a34a" : "#dc2626";
           const bodyTop = yFor(Math.max(d.o, d.c));
           const bodyBottom = yFor(Math.min(d.o, d.c));
           const bodyH = Math.max(1.5, bodyBottom - bodyTop);
@@ -179,7 +181,7 @@ function LinePlacer({
           x2={W - PAD.r}
           y1={H - PAD.b}
           y2={H - PAD.b}
-          stroke="#1f2a3d"
+          stroke="#e5e7eb"
         />
 
         {/* bonne réponse révélée */}
@@ -269,18 +271,18 @@ function LinePlacer({
       </svg>
 
       {!validated && (
-        <div className="mt-3 flex items-center justify-center gap-2 text-[11px] text-white/60">
+        <div className="mt-3 flex items-center justify-center gap-2 text-[11px] text-[var(--muted)]">
           <span>Réglage précis :</span>
           <button
             onClick={() => nudge(0.5)}
-            className="rounded-md border border-white/20 px-2 py-0.5 text-white/80 transition hover:bg-white/10"
+            className="rounded-md border border-[var(--border)] px-2 py-0.5 text-[var(--muted)] transition hover:bg-[var(--surface-2)]"
             aria-label="Monter la ligne"
           >
             ▲
           </button>
           <button
             onClick={() => nudge(-0.5)}
-            className="rounded-md border border-white/20 px-2 py-0.5 text-white/80 transition hover:bg-white/10"
+            className="rounded-md border border-[var(--border)] px-2 py-0.5 text-[var(--muted)] transition hover:bg-[var(--surface-2)]"
             aria-label="Descendre la ligne"
           >
             ▼
