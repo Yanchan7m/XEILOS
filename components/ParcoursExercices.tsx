@@ -6,6 +6,7 @@ import {
   SCALPING_QCM,
   type ScalpingQuestion,
   type ScalpStaticChart as ScalpStaticChartData,
+  type ScalpChartView,
 } from "@/lib/scalping-qcm";
 import {
   ORDERBOOK_EXOS,
@@ -342,73 +343,157 @@ function TradingViewChart({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Graphique statique dessiné (chandeliers + volume)                  */
-/*  Utilisé quand la question décrit une config précise (gap, range,   */
-/*  volume) qu'un flux TradingView live n'afficherait pas.             */
+/*  Graphique dessiné INTERACTIF (chandeliers + volume)                */
+/*  - pas de flux live : les bougies illustrent exactement l'énoncé    */
+/*  - on peut le faire glisser (pan) pour parcourir la séance          */
+/*  - bascule entre plusieurs timeframes : M5 / M15 / H1               */
 /* ------------------------------------------------------------------ */
 
+const SC = {
+  W: 560,
+  H: 300,
+  PAD: { l: 46, r: 16, t: 16, b: 20 },
+  VOL_H: 46, // hauteur du panneau de volume
+  GAPY: 10, // espace prix / volume
+};
+
+const tfLabel: Record<ScalpChartView["tf"], string> = {
+  M5: "5 min",
+  M15: "15 min",
+  H1: "1 h",
+};
+
 function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
-  const { candles, rangeLow, rangeHigh, gapIndex, label } = chart;
+  const [tfIdx, setTfIdx] = useState(0);
+  const view: ScalpChartView = chart.views[tfIdx];
+  const { candles, rangeLow, rangeHigh, gapIndex } = view;
 
-  const CW = 560;
-  const CH = 300;
-  const CPAD = { l: 46, r: 16, t: 16, b: 20 };
-  const VOL_H = 46; // hauteur du panneau de volume, en bas
-  const GAP = 10; // espace prix / volume
-  const priceH = CH - CPAD.t - CPAD.b - VOL_H - GAP;
-  const priceTop = CPAD.t;
-  const volTop = CPAD.t + priceH + GAP;
+  const len = candles.length;
+  const win = Math.min(view.window, len);
+  const maxOffset = Math.max(0, len - win);
+  const initOffset = Math.min(maxOffset, Math.max(0, (gapIndex ?? 0) - 4));
 
-  const highs = candles.map((d) => d.h);
-  const lows = candles.map((d) => d.l);
-  const pMax = Math.max(...highs, rangeHigh);
-  const pMin = Math.min(...lows, rangeLow);
+  const [offset, setOffset] = useState(initOffset);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const drag = useRef<{ x: number; off: number } | null>(null);
+
+  // À chaque changement de timeframe, on recadre sur le gap / la consolidation.
+  useEffect(() => {
+    setOffset(initOffset);
+  }, [tfIdx]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const priceH = SC.H - SC.PAD.t - SC.PAD.b - SC.VOL_H - SC.GAPY;
+  const priceTop = SC.PAD.t;
+  const volTop = SC.PAD.t + priceH + SC.GAPY;
+  const innerW = SC.W - SC.PAD.l - SC.PAD.r;
+  const slot = innerW / win;
+  const candleW = Math.max(3, slot * 0.62);
+
+  const clampOff = (o: number) => Math.min(maxOffset, Math.max(0, o));
+
+  // Échelle Y auto sur la fenêtre visible → sensation « live » au pan.
+  const vis0 = Math.floor(offset);
+  const vis1 = Math.min(len - 1, vis0 + win);
+  const visible = candles.slice(vis0, vis1 + 1);
+  const pMax = Math.max(...visible.map((d) => d.h), rangeHigh);
+  const pMin = Math.min(...visible.map((d) => d.l), rangeLow);
   const pMargin = (pMax - pMin) * 0.12 || 1;
   const yMax = pMax + pMargin;
   const yMin = pMin - pMargin;
+  const vMax = Math.max(...visible.map((d) => d.v), 1);
 
-  const innerW = CW - CPAD.l - CPAD.r;
-  const slot = innerW / candles.length;
-  const candleW = Math.max(3, slot * 0.62);
-  const cx = (i: number) => CPAD.l + slot * (i + 0.5);
+  const cx = (i: number) => SC.PAD.l + (i - offset) * slot + slot / 2;
   const py = (v: number) =>
     priceTop + (1 - (v - yMin) / (yMax - yMin)) * priceH;
+  const vy = (v: number) => volTop + SC.VOL_H - (v / vMax) * SC.VOL_H;
 
-  const vMax = Math.max(...candles.map((d) => d.v));
-  const vy = (v: number) => volTop + VOL_H - (v / vMax) * VOL_H;
+  const ticks = Array.from({ length: 5 }, (_, i) =>
+    Number((yMin + ((yMax - yMin) * i) / 4).toFixed(0)),
+  );
 
-  const ticks = Array.from({ length: 5 }, (_, i) => {
-    const v = yMin + ((yMax - yMin) * i) / 4;
-    return Number(v.toFixed(0));
-  });
+  function onPointerDown(e: React.PointerEvent<SVGRectElement>) {
+    if (maxOffset === 0) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    drag.current = { x: e.clientX, off: offset };
+  }
+  function onPointerMove(e: React.PointerEvent<SVGRectElement>) {
+    if (!drag.current || !svgRef.current) return;
+    const rect = svgRef.current.getBoundingClientRect();
+    const pxPerCandle = (rect.width / SC.W) * slot;
+    const dx = e.clientX - drag.current.x;
+    setOffset(clampOff(drag.current.off - dx / pxPerCandle));
+  }
+  function onPointerUp(e: React.PointerEvent<SVGRectElement>) {
+    drag.current = null;
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {}
+  }
+
+  const step = (d: number) => setOffset((o) => clampOff(o + d));
+  const clipId = `clip-${view.tf}`;
 
   return (
     <div className="rounded-2xl border border-[var(--border)] bg-[#0b1120] p-4 text-white shadow-sm">
-      <div className="mb-3 flex items-center justify-between text-[10px] uppercase tracking-widest text-white/60">
-        <span>{label}</span>
-        <span className="rounded-full bg-white/10 px-2 py-0.5">
-          Scénario · XEILOS
+      {/* En-tête : instrument + sélecteur de timeframe */}
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <span className="text-[10px] uppercase tracking-widest text-white/60">
+          {chart.label}
         </span>
+        <div
+          className="flex gap-1 rounded-full bg-white/5 p-0.5"
+          role="group"
+          aria-label="Choisir l'unité de temps"
+        >
+          {chart.views.map((v, i) => (
+            <button
+              key={v.tf}
+              onClick={() => setTfIdx(i)}
+              aria-pressed={i === tfIdx}
+              className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold transition ${
+                i === tfIdx
+                  ? "bg-[var(--accent)] text-white"
+                  : "text-white/60 hover:text-white"
+              }`}
+            >
+              {v.tf}
+            </button>
+          ))}
+        </div>
       </div>
+
       <svg
-        viewBox={`0 0 ${CW} ${CH}`}
+        ref={svgRef}
+        viewBox={`0 0 ${SC.W} ${SC.H}`}
         width="100%"
         role="img"
-        aria-label="Graphique en chandeliers avec volume illustrant un gap up suivi d'une consolidation à volume décroissant"
+        aria-label={`Graphique NAS100 ${tfLabel[view.tf]} interactif : gap up puis consolidation à volume décroissant`}
+        style={{ touchAction: "none" }}
       >
+        <defs>
+          <clipPath id={clipId}>
+            <rect
+              x={SC.PAD.l}
+              y={priceTop}
+              width={innerW}
+              height={volTop + SC.VOL_H - priceTop}
+            />
+          </clipPath>
+        </defs>
+
         {/* gridlines + Y labels (prix) */}
         {ticks.map((t) => (
           <g key={t}>
             <line
-              x1={CPAD.l}
-              x2={CW - CPAD.r}
+              x1={SC.PAD.l}
+              x2={SC.W - SC.PAD.r}
               y1={py(t)}
               y2={py(t)}
               stroke="#1f2a3d"
               strokeDasharray="2 4"
             />
             <text
-              x={CPAD.l - 6}
+              x={SC.PAD.l - 6}
               y={py(t) + 3}
               fontSize="9"
               fill="#6b7689"
@@ -419,19 +504,18 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
           </g>
         ))}
 
-        {/* zone du range surlignée */}
+        {/* zone du range surlignée + bornes support / résistance */}
         <rect
-          x={CPAD.l}
+          x={SC.PAD.l}
           y={py(rangeHigh)}
           width={innerW}
           height={py(rangeLow) - py(rangeHigh)}
           fill="#38bdf8"
           opacity="0.07"
         />
-        {/* borne haute du range = résistance */}
         <line
-          x1={CPAD.l}
-          x2={CW - CPAD.r}
+          x1={SC.PAD.l}
+          x2={SC.W - SC.PAD.r}
           y1={py(rangeHigh)}
           y2={py(rangeHigh)}
           stroke="#f87171"
@@ -440,7 +524,7 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
           strokeWidth="1.3"
         />
         <text
-          x={CW - CPAD.r - 4}
+          x={SC.W - SC.PAD.r - 4}
           y={py(rangeHigh) - 4}
           fontSize="9"
           fill="#f87171"
@@ -448,10 +532,9 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
         >
           Haut du range {rangeHigh}
         </text>
-        {/* borne basse du range = support */}
         <line
-          x1={CPAD.l}
-          x2={CW - CPAD.r}
+          x1={SC.PAD.l}
+          x2={SC.W - SC.PAD.r}
           y1={py(rangeLow)}
           y2={py(rangeLow)}
           stroke="#22c55e"
@@ -460,7 +543,7 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
           strokeWidth="1.3"
         />
         <text
-          x={CW - CPAD.r - 4}
+          x={SC.W - SC.PAD.r - 4}
           y={py(rangeLow) + 11}
           fontSize="9"
           fill="#22c55e"
@@ -469,112 +552,137 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
           Bas du range {rangeLow}
         </text>
 
-        {/* bougies (prix) */}
-        {candles.map((d, i) => {
-          const x = cx(i);
-          const isUp = d.c >= d.o;
-          const color = isUp ? "#22c55e" : "#ef4458";
-          const bodyTop = py(Math.max(d.o, d.c));
-          const bodyBottom = py(Math.min(d.o, d.c));
-          const bodyH = Math.max(1.5, bodyBottom - bodyTop);
-          return (
-            <g key={i}>
-              <line
-                x1={x}
-                x2={x}
-                y1={py(d.h)}
-                y2={py(d.l)}
-                stroke={color}
-                strokeWidth="1.2"
-              />
+        {/* contenu déplaçable (bougies, volume, gap), rogné à la zone de tracé */}
+        <g clipPath={`url(#${clipId})`}>
+          {/* annotation du gap (si visible) */}
+          {gapIndex !== undefined &&
+            gapIndex >= vis0 &&
+            gapIndex <= vis1 && (
+              <g>
+                <line
+                  x1={cx(gapIndex)}
+                  x2={cx(gapIndex)}
+                  y1={priceTop}
+                  y2={volTop + SC.VOL_H}
+                  stroke="#facc15"
+                  strokeOpacity="0.35"
+                  strokeDasharray="3 3"
+                />
+                <text
+                  x={cx(gapIndex)}
+                  y={priceTop + 9}
+                  fontSize="9"
+                  fill="#facc15"
+                  textAnchor="middle"
+                >
+                  Gap up
+                </text>
+              </g>
+            )}
+
+          {/* bougies (prix) */}
+          {candles.slice(vis0, vis1 + 1).map((d, k) => {
+            const i = vis0 + k;
+            const x = cx(i);
+            const isUp = d.c >= d.o;
+            const color = isUp ? "#22c55e" : "#ef4458";
+            const bodyTop = py(Math.max(d.o, d.c));
+            const bodyBottom = py(Math.min(d.o, d.c));
+            const bodyH = Math.max(1.5, bodyBottom - bodyTop);
+            return (
+              <g key={i}>
+                <line
+                  x1={x}
+                  x2={x}
+                  y1={py(d.h)}
+                  y2={py(d.l)}
+                  stroke={color}
+                  strokeWidth="1.2"
+                />
+                <rect
+                  x={x - candleW / 2}
+                  y={bodyTop}
+                  width={candleW}
+                  height={bodyH}
+                  fill={color}
+                  opacity={isUp ? 0.9 : 0.95}
+                  rx="0.8"
+                />
+              </g>
+            );
+          })}
+
+          {/* barres de volume */}
+          {candles.slice(vis0, vis1 + 1).map((d, k) => {
+            const i = vis0 + k;
+            const x = cx(i);
+            const isUp = d.c >= d.o;
+            const barH = (d.v / vMax) * SC.VOL_H;
+            return (
               <rect
+                key={`v${i}`}
                 x={x - candleW / 2}
-                y={bodyTop}
+                y={vy(d.v)}
                 width={candleW}
-                height={bodyH}
-                fill={color}
-                opacity={isUp ? 0.9 : 0.95}
-                rx="0.8"
+                height={Math.max(1, barH)}
+                fill={isUp ? "#22c55e" : "#ef4458"}
+                opacity="0.4"
+                rx="0.6"
               />
-            </g>
-          );
-        })}
+            );
+          })}
+        </g>
 
-        {/* annotation du gap */}
-        {gapIndex !== undefined && candles[gapIndex] && (
-          <g>
-            <line
-              x1={cx(gapIndex)}
-              x2={cx(gapIndex)}
-              y1={priceTop}
-              y2={volTop + VOL_H}
-              stroke="#facc15"
-              strokeOpacity="0.35"
-              strokeDasharray="3 3"
-            />
-            <text
-              x={cx(gapIndex)}
-              y={priceTop + 9}
-              fontSize="9"
-              fill="#facc15"
-              textAnchor="middle"
-            >
-              Gap up
-            </text>
-          </g>
-        )}
-
-        {/* barres de volume */}
-        {candles.map((d, i) => {
-          const x = cx(i);
-          const isUp = d.c >= d.o;
-          const barH = (d.v / vMax) * VOL_H;
-          return (
-            <rect
-              key={`v${i}`}
-              x={x - candleW / 2}
-              y={vy(d.v)}
-              width={candleW}
-              height={Math.max(1, barH)}
-              fill={isUp ? "#22c55e" : "#ef4458"}
-              opacity="0.4"
-              rx="0.6"
-            />
-          );
-        })}
-        {/* flèche « volume en baisse » sur la partie consolidation */}
-        {gapIndex !== undefined && (
-          <g>
-            <line
-              x1={cx(gapIndex + 1)}
-              y1={vy(candles[gapIndex + 1]?.v ?? vMax) - 4}
-              x2={cx(candles.length - 1)}
-              y2={vy(candles[candles.length - 1].v) - 4}
-              stroke="#94a3b8"
-              strokeWidth="1"
-              strokeDasharray="3 3"
-            />
-            <text
-              x={cx(candles.length - 1)}
-              y={volTop - 3}
-              fontSize="8.5"
-              fill="#94a3b8"
-              textAnchor="end"
-            >
-              Volume en baisse ↘
-            </text>
-          </g>
-        )}
         <text
-          x={CPAD.l - 6}
-          y={volTop + VOL_H - 1}
+          x={SC.PAD.l - 6}
+          y={volTop + SC.VOL_H - 1}
           fontSize="8"
           fill="#6b7689"
           textAnchor="end"
         >
           Vol
         </text>
+
+        {/* zone de capture du drag (pan) */}
+        <rect
+          x={SC.PAD.l}
+          y={priceTop}
+          width={innerW}
+          height={volTop + SC.VOL_H - priceTop}
+          fill="transparent"
+          style={{ cursor: maxOffset > 0 ? "grab" : "default" }}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+        />
       </svg>
+
+      {/* Contrôles de déplacement */}
+      <div className="mt-2 flex items-center justify-between text-[11px] text-white/55">
+        <span>
+          {maxOffset > 0
+            ? "Glisse le graphique pour te déplacer dans la séance"
+            : "Vue d'ensemble de la séance"}
+        </span>
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => step(-4)}
+            disabled={offset <= 0}
+            aria-label="Reculer dans le temps"
+            className="rounded-md border border-white/20 px-2 py-0.5 text-white/80 transition hover:bg-white/10 disabled:opacity-30"
+          >
+            ◀
+          </button>
+          <button
+            onClick={() => step(4)}
+            disabled={offset >= maxOffset}
+            aria-label="Avancer dans le temps"
+            className="rounded-md border border-white/20 px-2 py-0.5 text-white/80 transition hover:bg-white/10 disabled:opacity-30"
+          >
+            ▶
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

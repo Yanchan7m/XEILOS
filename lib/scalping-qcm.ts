@@ -13,12 +13,12 @@ export type ScalpCandle = {
   v: number;
 };
 
-/**
- * Scénario dessiné à la place d'un graphique live TradingView : le chart
- * illustre exactement la situation décrite dans la question (gap, range,
- * volume…), ce qu'un flux temps réel ne peut pas garantir.
- */
-export type ScalpStaticChart = {
+/** Unités de temps proposées sur le graphique interactif. */
+export type ScalpTimeframe = "M5" | "M15" | "H1";
+
+/** Une vue (un timeframe) du même scénario. */
+export type ScalpChartView = {
+  tf: ScalpTimeframe;
   candles: ScalpCandle[];
   /** Borne basse du range (ligne repère). */
   rangeLow: number;
@@ -26,8 +26,113 @@ export type ScalpStaticChart = {
   rangeHigh: number;
   /** Index de la bougie de gap à annoter (optionnel). */
   gapIndex?: number;
-  /** Libellé de l'instrument affiché en tête (ex. "NAS100 · 5min"). */
+  /** Nombre de bougies visibles par défaut (fenêtre de panoramique). */
+  window: number;
+};
+
+/**
+ * Scénario dessiné à la place d'un graphique live TradingView : le chart
+ * illustre exactement la situation décrite dans la question (gap, range,
+ * volume…), ce qu'un flux temps réel ne peut pas garantir. Interactif :
+ * on peut le faire glisser (pan) et basculer entre plusieurs timeframes.
+ */
+export type ScalpStaticChart = {
+  /** Libellé de l'instrument affiché en tête (ex. "NAS100 · Session NY"). */
   label: string;
+  /** Une entrée par timeframe (M5, M15, H1…). */
+  views: ScalpChartView[];
+};
+
+/* ------------------------------------------------------------------ */
+/*  Génération du scénario NAS100 (gap up → consolidation → cassure)   */
+/*  On dessine une série M5 déterministe puis on l'agrège en M15 / H1  */
+/*  pour garantir la cohérence entre les timeframes.                   */
+/* ------------------------------------------------------------------ */
+
+/** PRNG déterministe (pas de Math.random → même rendu SSR et client). */
+function lcg(seed: number) {
+  let s = seed >>> 0;
+  return () => {
+    s = (s * 1664525 + 1013904223) >>> 0;
+    return s / 4294967296;
+  };
+}
+
+function aggregateCandles(base: ScalpCandle[], n: number): ScalpCandle[] {
+  const out: ScalpCandle[] = [];
+  for (let i = 0; i < base.length; i += n) {
+    const g = base.slice(i, i + n);
+    out.push({
+      o: g[0].o,
+      c: g[g.length - 1].c,
+      h: Math.max(...g.map((x) => x.h)),
+      l: Math.min(...g.map((x) => x.l)),
+      v: g.reduce((s, x) => s + x.v, 0),
+    });
+  }
+  return out;
+}
+
+function buildNas100Views(): ScalpChartView[] {
+  const rnd = lcg(20260715);
+  const r1 = (v: number) => Math.round(v * 10) / 10;
+
+  // Trajectoire M5 : 12 bougies de pré-marché, le gap (idx 12), une
+  // consolidation à volume décroissant, la cassure (idx 36), puis la
+  // continuation haussière. Le gap est calé sur idx 12 pour tomber sur
+  // une frontière de bougie en M15 (×3) et H1 (×12).
+  const closes = [
+    18406, 18401, 18404, 18399, 18403, 18398, 18402, 18400, 18397, 18401,
+    18399, 18402, // pré-marché (0–11)
+    18476, // gap up (12)
+    18470, 18463, 18468, 18472, 18466, 18461, 18467, 18463, 18469, 18465,
+    18471, 18464, 18468, 18462, 18469, 18466, 18463, 18470, 18467, 18461,
+    18468, 18465, 18472, // consolidation (13–35)
+    18489, // cassure (36)
+    18496, 18505, 18500, 18512, 18519, 18514, 18526, 18533, 18528, 18538,
+    18545, 18540, 18549, 18543, 18551, 18547, 18556, 18550, 18559, 18554,
+    18562, 18557, 18565, // continuation (37–59)
+  ];
+  const GAP = 12;
+  const BREAK = 36;
+
+  const wickFor = (i: number) =>
+    i === GAP ? 7 : i === BREAK ? 9 : i < GAP ? 3.5 : i < BREAK ? 5 : 6;
+
+  const volFor = (i: number) => {
+    if (i < GAP) return 34 + rnd() * 12;
+    if (i === GAP) return 96;
+    if (i < BREAK) {
+      const t = (i - GAP) / (BREAK - GAP);
+      return 80 - t * 54 + rnd() * 4; // 80 → ~26 : volume décroissant
+    }
+    if (i === BREAK) return 92;
+    const t = (i - BREAK) / (closes.length - BREAK);
+    return 68 - t * 26 + rnd() * 6;
+  };
+
+  const m5: ScalpCandle[] = [];
+  let prev = 18404;
+  closes.forEach((c, i) => {
+    const o = i === 0 ? 18404 : i === GAP ? 18456 : prev;
+    const wick = wickFor(i);
+    const h = Math.max(o, c) + rnd() * wick;
+    const l = Math.min(o, c) - rnd() * wick;
+    m5.push({ o: r1(o), h: r1(h), l: r1(l), c: r1(c), v: Math.round(volFor(i)) });
+    prev = c;
+  });
+
+  const common = { rangeLow: 18450, rangeHigh: 18480 };
+  return [
+    { tf: "M5", candles: m5, gapIndex: 12, window: 24, ...common },
+    { tf: "M15", candles: aggregateCandles(m5, 3), gapIndex: 4, window: 16, ...common },
+    { tf: "H1", candles: aggregateCandles(m5, 12), gapIndex: 1, window: 5, ...common },
+  ];
+}
+
+const NAS100_SCENARIO: ScalpStaticChart = {
+  label: "NAS100 · Session New York",
+  views: buildNas100Views(),
 };
 
 export type ScalpingQuestion = {
@@ -229,37 +334,12 @@ export const SCALPING_QCM: ScalpingQuestion[] = [
       "Le NAS100 consolide dans un range de 30 points après un gap up. Le volume baisse. Quel scalp ?",
     symbol: "PEPPERSTONE:NAS100",
     interval: "5",
-    // Graphique dessiné (pas de live) : il montre le gap up, le range 18450–18480
-    // et le volume qui décroît — exactement la situation de l'énoncé.
-    staticChart: {
-      label: "NAS100 · 5min · Session New York",
-      rangeLow: 18450,
-      rangeHigh: 18480,
-      gapIndex: 4,
-      candles: [
-        // Pré-gap : le prix évolue plus bas, clôture ~18403
-        { o: 18400, h: 18408, l: 18392, c: 18398, v: 40 },
-        { o: 18398, h: 18405, l: 18390, c: 18402, v: 38 },
-        { o: 18402, h: 18409, l: 18396, c: 18400, v: 42 },
-        { o: 18400, h: 18406, l: 18394, c: 18403, v: 39 },
-        // Gap up + impulsion : ouverture 18455 (~+52 pts), fort volume
-        { o: 18455, h: 18478, l: 18452, c: 18474, v: 95 },
-        // Consolidation dans le range 18450–18480, volume décroissant
-        { o: 18474, h: 18480, l: 18465, c: 18470, v: 78 },
-        { o: 18470, h: 18478, l: 18458, c: 18463, v: 70 },
-        { o: 18463, h: 18472, l: 18453, c: 18468, v: 62 },
-        { o: 18468, h: 18479, l: 18460, c: 18472, v: 56 },
-        { o: 18472, h: 18480, l: 18462, c: 18466, v: 50 },
-        { o: 18466, h: 18475, l: 18455, c: 18461, v: 45 },
-        { o: 18461, h: 18470, l: 18452, c: 18467, v: 41 },
-        { o: 18467, h: 18478, l: 18460, c: 18463, v: 37 },
-        { o: 18463, h: 18474, l: 18456, c: 18469, v: 34 },
-        { o: 18469, h: 18480, l: 18461, c: 18465, v: 31 },
-        { o: 18465, h: 18477, l: 18458, c: 18470, v: 28 },
-      ],
-    },
+    // Graphique dessiné et interactif (pas de live) : il montre le gap up, le
+    // range 18450–18480 et le volume qui décroît — exactement la situation de
+    // l'énoncé. On peut le faire glisser et basculer entre M5 / M15 / H1.
+    staticChart: NAS100_SCENARIO,
     context:
-      "NAS100 5min — Session New York. Le NAS100 a ouvert en gap up et consolide dans un range serré autour de 18450-18480. Volume en baisse pendant la consolidation.",
+      "NAS100 — Session New York (bascule M5 / M15 / H1, glisse pour te déplacer). Le NAS100 a ouvert en gap up et consolide dans un range serré autour de 18450-18480. Volume en baisse pendant la consolidation.",
     options: [
       { label: "Acheter au milieu du range", correct: false },
       {
