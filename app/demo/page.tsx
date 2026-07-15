@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import MasterQCM from "@/components/MasterQCM";
 import InteractiveChartExercise from "@/components/InteractiveChartExercise";
+import ScalpingQCM from "@/components/ScalpingQCM";
 import Chat from "@/components/Chat";
 import FlipCard from "@/components/FlipCard";
 
@@ -53,10 +54,11 @@ export default function DemoPage() {
             Essaie la mécanique en live
           </h1>
           <p className="mt-4 text-base text-[var(--muted)]">
-            Quatre briques de la pédagogie Ask Amélie appliquées au{" "}
+            Cinq briques de la pédagogie Ask Amélie appliquées au{" "}
             <strong>Mastère</strong> : QCM réel issu des modules (avec graphique
             chandeliers japonais), tuteur IA, exercices interactifs où l’on agit
-            directement sur le graphique, et cartes flip de vocabulaire stratégie.
+            directement sur le graphique, QCM scalping sur vrais graphiques
+            TradingView, et cartes flip de vocabulaire stratégie.
           </p>
         </section>
 
@@ -84,9 +86,21 @@ export default function DemoPage() {
           <InteractiveChartExercise />
         </section>
 
-        {/* Bloc 4 */}
+        {/* Bloc 4 — QCM scalping sur graphiques TradingView réels */}
         <section className="mt-12">
-          <DemoLabel n="4" title="Cartes flip · vocabulaire stratégie" />
+          <DemoLabel n="4" title="QCM scalping · graphiques TradingView réels" />
+          <div className="mb-4 max-w-2xl text-sm text-[var(--muted)]">
+            10 setups de scalping (liquidités, breakout, sessions) sur les{" "}
+            <strong>vrais graphiques TradingView</strong> — Gold, NAS100, DAX,
+            BTC, EUR/USD. L’apprenant peut zoomer et naviguer, puis choisit la
+            bonne décision de trade.
+          </div>
+          <ScalpingQCM />
+        </section>
+
+        {/* Bloc 5 */}
+        <section className="mt-12">
+          <DemoLabel n="5" title="Cartes flip · vocabulaire stratégie" />
           <div className="rounded-3xl border border-[var(--border)] bg-white p-6 shadow-sm sm:p-8">
             <div className="flex items-center justify-between">
               <p className="text-sm text-[var(--muted)]">
