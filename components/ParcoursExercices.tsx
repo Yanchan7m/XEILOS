@@ -24,8 +24,10 @@ type Step =
 const lineExos = EXERCISES.filter(
   (e): e is LineExercise => e.kind === "line",
 );
-const chart1 = SCALPING_QCM.find((q) => q.id === "scalp-gold-hlhl")!;
-const chart2 = SCALPING_QCM.find((q) => q.id === "scalp-btc-flag")!;
+const chart1 = SCALPING_QCM.find(
+  (q) => q.id === "scalp-nas-gap-consolidation",
+)!;
+const chart2 = SCALPING_QCM.find((q) => q.id === "scalp-eurusd-crt")!;
 const domWall = ORDERBOOK_EXOS.find(
   (e) => e.id === "dom-bid-wall",
 ) as WallExercise;
