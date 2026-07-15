@@ -1,4 +1,4 @@
-# Quiz & Exercices — Xeilos × Ask Amélie
+# Quiz & Exercices — Xeilos
 
 Ce document décrit les deux briques pédagogiques « évaluation » de la démo :
 le **QCM** (choix de réponse) et les **Exercices interactifs** (action directe

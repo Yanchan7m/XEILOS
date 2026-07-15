@@ -22,7 +22,7 @@ export default function Home() {
             </div>
             <div>
               <div className="text-sm font-semibold tracking-wide text-[var(--ink)]">
-                Xeilos × Ask Amélie
+                Xeilos
               </div>
             </div>
           </div>
@@ -55,9 +55,9 @@ export default function Home() {
           <h1 className="text-4xl font-semibold leading-[1.1] tracking-tight text-[var(--ink)] sm:text-5xl md:text-6xl">
             Et si on adaptait{" "}
             <span className="bg-gradient-to-r from-[var(--accent)] to-[#7a0e12] bg-clip-text text-transparent">
-              Ask Amélie
+              l’IA pédagogique
             </span>{" "}
-            <br className="hidden sm:block" />à la pédagogie Xeilos ?
+            <br className="hidden sm:block" />à la méthode Xeilos ?
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-base text-[var(--muted)] sm:text-lg">
             Un tuteur IA conversationnel + des QCM dynamiques générés depuis
@@ -80,7 +80,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* WHAT IS ASK AMELIE */}
+        {/* LE CONCEPT */}
         <section id="concept" className="mt-24 sm:mt-28">
           <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
             <div>
@@ -88,19 +88,11 @@ export default function Home() {
                 Le concept
               </div>
               <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[var(--ink)] sm:text-4xl">
-                Ask Amélie, c’est quoi ?
+                Le concept, c’est quoi ?
               </h2>
               <p className="mt-4 text-base leading-relaxed text-[var(--muted-strong)]">
-                <a
-                  href="https://askamelie.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-[var(--accent)] underline-offset-2 hover:underline"
-                >
-                  Ask Amélie
-                </a>{" "}
-                est une plateforme française qui transforme un contenu
-                pédagogique (cours, support, vidéo) en plusieurs outils :
+                Une plateforme qui transforme un contenu pédagogique (cours,
+                support, vidéo) en plusieurs outils :
               </p>
               <ul className="mt-5 space-y-4">
                 <Bullet n="1" title="Un quiz progressif (QCM)">
@@ -344,7 +336,7 @@ export default function Home() {
               height={20}
               className="rounded-full"
             />
-            Xeilos × Ask Amélie.
+            Xeilos.
           </div>
           <div>© {new Date().getFullYear()} Xeilos Trading Academy</div>
         </footer>
