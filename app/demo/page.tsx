@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import MasterQCM from "@/components/MasterQCM";
+import InteractiveChartExercise from "@/components/InteractiveChartExercise";
 import Chat from "@/components/Chat";
 import FlipCard from "@/components/FlipCard";
 
@@ -52,10 +53,10 @@ export default function DemoPage() {
             Essaie la mécanique en live
           </h1>
           <p className="mt-4 text-base text-[var(--muted)]">
-            Trois briques de la pédagogie Ask Amélie appliquées au{" "}
-            <strong>Mastère</strong> : QCM réel issu des modules
-            (avec graphique chandeliers japonais sur la Q3), tuteur IA, et
-            cartes flip de vocabulaire stratégie.
+            Quatre briques de la pédagogie Ask Amélie appliquées au{" "}
+            <strong>Mastère</strong> : QCM réel issu des modules (avec graphique
+            chandeliers japonais), tuteur IA, exercices interactifs où l’on agit
+            directement sur le graphique, et cartes flip de vocabulaire stratégie.
           </p>
         </section>
 
@@ -71,9 +72,21 @@ export default function DemoPage() {
           </div>
         </section>
 
-        {/* Bloc 3 */}
+        {/* Bloc 3 — exercices interactifs sur graphique */}
         <section className="mt-12">
-          <DemoLabel n="3" title="Cartes flip · vocabulaire stratégie" />
+          <DemoLabel n="3" title="Exercices interactifs · lecture graphique" />
+          <div className="mb-4 max-w-2xl text-sm text-[var(--muted)]">
+            Ici l’apprenant ne choisit plus une réponse : il{" "}
+            <strong>agit directement sur le graphique</strong>. Fais glisser une
+            ligne de support / résistance, ou clique sur la bougie clé — l’app
+            corrige au pixel près et Yan analyse le résultat.
+          </div>
+          <InteractiveChartExercise />
+        </section>
+
+        {/* Bloc 4 */}
+        <section className="mt-12">
+          <DemoLabel n="4" title="Cartes flip · vocabulaire stratégie" />
           <div className="rounded-3xl border border-[var(--border)] bg-white p-6 shadow-sm sm:p-8">
             <div className="flex items-center justify-between">
               <p className="text-sm text-[var(--muted)]">
