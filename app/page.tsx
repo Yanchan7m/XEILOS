@@ -296,9 +296,9 @@ export default function Home() {
                   Essaie la mécanique sur une page dédiée
                 </h2>
                 <p className="mt-3 text-base text-[var(--muted-strong)]">
-                  Un QCM réel sur les modules du Mastère (avec graphique
-                  chandeliers japonais sur la Q3), Yan le tuteur IA, et
-                  7 cartes flip de vocabulaire stratégie.
+                  Un QCM réel de trading (avec graphiques chandeliers
+                  japonais), Yan le tuteur IA, et 7 cartes flip de vocabulaire
+                  stratégie.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link
