@@ -434,14 +434,14 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
   const clipId = `clip-${view.tf}`;
 
   return (
-    <div className="rounded-2xl border border-[var(--border)] bg-[#0b1120] p-4 text-white shadow-sm">
+    <div className="rounded-2xl border border-[var(--border)] bg-white p-4 text-[var(--ink)] shadow-sm">
       {/* En-tête : instrument + sélecteur de timeframe */}
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <span className="text-[10px] uppercase tracking-widest text-white/60">
+        <span className="text-[10px] uppercase tracking-widest text-[var(--muted)]">
           {chart.label}
         </span>
         <div
-          className="flex gap-1 rounded-full bg-white/5 p-0.5"
+          className="flex gap-1 rounded-full bg-[var(--surface-2)] p-0.5"
           role="group"
           aria-label="Choisir l'unité de temps"
         >
@@ -453,7 +453,7 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
               className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold transition ${
                 i === tfIdx
                   ? "bg-[var(--accent)] text-white"
-                  : "text-white/60 hover:text-white"
+                  : "text-[var(--muted)] hover:text-[var(--ink)]"
               }`}
             >
               {v.tf}
@@ -489,7 +489,7 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
               x2={SC.W - SC.PAD.r}
               y1={py(t)}
               y2={py(t)}
-              stroke="#1f2a3d"
+              stroke="#e5e7eb"
               strokeDasharray="2 4"
             />
             <text
@@ -510,16 +510,16 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
           y={py(rangeHigh)}
           width={innerW}
           height={py(rangeLow) - py(rangeHigh)}
-          fill="#38bdf8"
-          opacity="0.07"
+          fill="#0ea5e9"
+          opacity="0.08"
         />
         <line
           x1={SC.PAD.l}
           x2={SC.W - SC.PAD.r}
           y1={py(rangeHigh)}
           y2={py(rangeHigh)}
-          stroke="#f87171"
-          strokeOpacity="0.75"
+          stroke="#dc2626"
+          strokeOpacity="0.8"
           strokeDasharray="6 5"
           strokeWidth="1.3"
         />
@@ -527,7 +527,7 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
           x={SC.W - SC.PAD.r - 4}
           y={py(rangeHigh) - 4}
           fontSize="9"
-          fill="#f87171"
+          fill="#dc2626"
           textAnchor="end"
         >
           Haut du range {rangeHigh}
@@ -537,8 +537,8 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
           x2={SC.W - SC.PAD.r}
           y1={py(rangeLow)}
           y2={py(rangeLow)}
-          stroke="#22c55e"
-          strokeOpacity="0.7"
+          stroke="#16a34a"
+          strokeOpacity="0.8"
           strokeDasharray="6 5"
           strokeWidth="1.3"
         />
@@ -546,7 +546,7 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
           x={SC.W - SC.PAD.r - 4}
           y={py(rangeLow) + 11}
           fontSize="9"
-          fill="#22c55e"
+          fill="#16a34a"
           textAnchor="end"
         >
           Bas du range {rangeLow}
@@ -564,15 +564,15 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
                   x2={cx(gapIndex)}
                   y1={priceTop}
                   y2={volTop + SC.VOL_H}
-                  stroke="#facc15"
-                  strokeOpacity="0.35"
+                  stroke="#d97706"
+                  strokeOpacity="0.5"
                   strokeDasharray="3 3"
                 />
                 <text
                   x={cx(gapIndex)}
                   y={priceTop + 9}
                   fontSize="9"
-                  fill="#facc15"
+                  fill="#b45309"
                   textAnchor="middle"
                 >
                   Gap up
@@ -585,7 +585,7 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
             const i = vis0 + k;
             const x = cx(i);
             const isUp = d.c >= d.o;
-            const color = isUp ? "#22c55e" : "#ef4458";
+            const color = isUp ? "#16a34a" : "#dc2626";
             const bodyTop = py(Math.max(d.o, d.c));
             const bodyBottom = py(Math.min(d.o, d.c));
             const bodyH = Math.max(1.5, bodyBottom - bodyTop);
@@ -625,8 +625,8 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
                 y={vy(d.v)}
                 width={candleW}
                 height={Math.max(1, barH)}
-                fill={isUp ? "#22c55e" : "#ef4458"}
-                opacity="0.4"
+                fill={isUp ? "#16a34a" : "#dc2626"}
+                opacity="0.45"
                 rx="0.6"
               />
             );
@@ -658,7 +658,7 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
       </svg>
 
       {/* Contrôles de déplacement */}
-      <div className="mt-2 flex items-center justify-between text-[11px] text-white/55">
+      <div className="mt-2 flex items-center justify-between text-[11px] text-[var(--muted)]">
         <span>
           {maxOffset > 0
             ? "Glisse le graphique pour te déplacer dans la séance"
@@ -669,7 +669,7 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
             onClick={() => step(-4)}
             disabled={offset <= 0}
             aria-label="Reculer dans le temps"
-            className="rounded-md border border-white/20 px-2 py-0.5 text-white/80 transition hover:bg-white/10 disabled:opacity-30"
+            className="rounded-md border border-[var(--border)] px-2 py-0.5 text-[var(--muted)] transition hover:bg-[var(--surface-2)] disabled:opacity-30"
           >
             ◀
           </button>
@@ -677,7 +677,7 @@ function ScalpStaticChart({ chart }: { chart: ScalpStaticChartData }) {
             onClick={() => step(4)}
             disabled={offset >= maxOffset}
             aria-label="Avancer dans le temps"
-            className="rounded-md border border-white/20 px-2 py-0.5 text-white/80 transition hover:bg-white/10 disabled:opacity-30"
+            className="rounded-md border border-[var(--border)] px-2 py-0.5 text-[var(--muted)] transition hover:bg-[var(--surface-2)] disabled:opacity-30"
           >
             ▶
           </button>
