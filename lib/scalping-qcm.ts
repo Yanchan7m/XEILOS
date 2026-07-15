@@ -3,6 +3,33 @@ export type ScalpingOption = {
   correct: boolean;
 };
 
+/** Bougie avec volume, pour les graphiques statiques dessinés (pas de live). */
+export type ScalpCandle = {
+  o: number;
+  h: number;
+  l: number;
+  c: number;
+  /** Volume relatif de la bougie (échelle libre). */
+  v: number;
+};
+
+/**
+ * Scénario dessiné à la place d'un graphique live TradingView : le chart
+ * illustre exactement la situation décrite dans la question (gap, range,
+ * volume…), ce qu'un flux temps réel ne peut pas garantir.
+ */
+export type ScalpStaticChart = {
+  candles: ScalpCandle[];
+  /** Borne basse du range (ligne repère). */
+  rangeLow: number;
+  /** Borne haute du range (ligne repère). */
+  rangeHigh: number;
+  /** Index de la bougie de gap à annoter (optionnel). */
+  gapIndex?: number;
+  /** Libellé de l'instrument affiché en tête (ex. "NAS100 · 5min"). */
+  label: string;
+};
+
 export type ScalpingQuestion = {
   id: string;
   question: string;
@@ -12,6 +39,12 @@ export type ScalpingQuestion = {
   symbol2?: string;
   /** Timeframe TradingView : "1", "5", "15"… */
   interval: string;
+  /**
+   * Si présent, on dessine ce scénario statique au lieu d'un graphique live.
+   * Utile quand la question décrit une configuration précise (gap + range +
+   * volume) qu'un flux temps réel n'afficherait pas.
+   */
+  staticChart?: ScalpStaticChart;
   context: string;
   options: ScalpingOption[];
   explanation: string;
@@ -196,6 +229,35 @@ export const SCALPING_QCM: ScalpingQuestion[] = [
       "Le NAS100 consolide dans un range de 30 points après un gap up. Le volume baisse. Quel scalp ?",
     symbol: "PEPPERSTONE:NAS100",
     interval: "5",
+    // Graphique dessiné (pas de live) : il montre le gap up, le range 18450–18480
+    // et le volume qui décroît — exactement la situation de l'énoncé.
+    staticChart: {
+      label: "NAS100 · 5min · Session New York",
+      rangeLow: 18450,
+      rangeHigh: 18480,
+      gapIndex: 4,
+      candles: [
+        // Pré-gap : le prix évolue plus bas, clôture ~18403
+        { o: 18400, h: 18408, l: 18392, c: 18398, v: 40 },
+        { o: 18398, h: 18405, l: 18390, c: 18402, v: 38 },
+        { o: 18402, h: 18409, l: 18396, c: 18400, v: 42 },
+        { o: 18400, h: 18406, l: 18394, c: 18403, v: 39 },
+        // Gap up + impulsion : ouverture 18455 (~+52 pts), fort volume
+        { o: 18455, h: 18478, l: 18452, c: 18474, v: 95 },
+        // Consolidation dans le range 18450–18480, volume décroissant
+        { o: 18474, h: 18480, l: 18465, c: 18470, v: 78 },
+        { o: 18470, h: 18478, l: 18458, c: 18463, v: 70 },
+        { o: 18463, h: 18472, l: 18453, c: 18468, v: 62 },
+        { o: 18468, h: 18479, l: 18460, c: 18472, v: 56 },
+        { o: 18472, h: 18480, l: 18462, c: 18466, v: 50 },
+        { o: 18466, h: 18475, l: 18455, c: 18461, v: 45 },
+        { o: 18461, h: 18470, l: 18452, c: 18467, v: 41 },
+        { o: 18467, h: 18478, l: 18460, c: 18463, v: 37 },
+        { o: 18463, h: 18474, l: 18456, c: 18469, v: 34 },
+        { o: 18469, h: 18480, l: 18461, c: 18465, v: 31 },
+        { o: 18465, h: 18477, l: 18458, c: 18470, v: 28 },
+      ],
+    },
     context:
       "NAS100 5min — Session New York. Le NAS100 a ouvert en gap up et consolide dans un range serré autour de 18450-18480. Volume en baisse pendant la consolidation.",
     options: [
