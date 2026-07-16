@@ -297,7 +297,7 @@ export default function Home() {
                 </h2>
                 <p className="mt-3 text-base text-[var(--muted-strong)]">
                   Un QCM réel de trading (avec graphiques chandeliers
-                  japonais), Yan le tuteur IA, et 7 cartes flip de vocabulaire
+                  japonais), Xeilosia le tuteur IA, et 7 cartes flip de vocabulaire
                   stratégie.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">

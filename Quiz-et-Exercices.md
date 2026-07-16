@@ -23,7 +23,7 @@ C'est le format « je reconnais / je choisis ».
 ## 2. Exercices interactifs · lecture graphique  ← nouvelle feature
 
 Ici l'apprenant **ne choisit plus une réponse** : il agit directement sur le
-graphique. L'app corrige la position et Yan analyse le résultat.
+graphique. L'app corrige la position et Xeilosia analyse le résultat.
 
 - **Composant** : `components/InteractiveChartExercise.tsx`
 - **Données** : `lib/exercises.ts` (`EXERCISES`)
@@ -41,7 +41,7 @@ graphique. L'app corrige la position et Yan analyse le résultat.
 - **Révélation** : après validation, la bonne ligne (verte = support, rouge =
   résistance) ou la bonne bougie (halo vert) s'affiche à côté de la réponse de
   l'apprenant, avec l'écart mesuré.
-- **Score & feedback** : récap par exercice + analyse de Yan réutilisée du QCM.
+- **Score & feedback** : récap par exercice + analyse de Xeilosia réutilisée du QCM.
 
 ### Exercices livrés (`EXERCISES`)
 

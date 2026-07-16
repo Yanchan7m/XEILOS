@@ -99,7 +99,7 @@ export default function YanAnalysis({ wrongModules, score, total }: Props) {
           >
             <Image
               src="/agent-face.png"
-              alt="Yan, tuteur IA"
+              alt="Xeilosia, tuteur IA"
               width={48}
               height={48}
               className="h-full w-full object-cover"
@@ -108,7 +108,7 @@ export default function YanAnalysis({ wrongModules, score, total }: Props) {
           <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-[var(--surface)] bg-[var(--success)]" />
         </div>
         <div className="flex flex-col">
-          <div className="text-sm font-semibold text-[var(--ink)]">Yan</div>
+          <div className="text-sm font-semibold text-[var(--ink)]">Xeilosia</div>
           <div className="text-[11px] text-[var(--muted)]">
             {phase === "thinking"
               ? "analyse tes réponses…"
@@ -136,7 +136,7 @@ export default function YanAnalysis({ wrongModules, score, total }: Props) {
 function ThinkingDots() {
   return (
     <div className="flex items-center gap-2 text-[var(--muted)]">
-      <span className="text-xs italic">Yan réfléchit</span>
+      <span className="text-xs italic">Xeilosia réfléchit</span>
       <span className="inline-flex items-center gap-1">
         <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--muted)] [animation-delay:-0.3s]" />
         <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--muted)] [animation-delay:-0.15s]" />
