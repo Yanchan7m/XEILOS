@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { EXERCISES, type LineExercise } from "@/lib/exercises";
+import {
+  EXERCISES,
+  type LineExercise,
+  type PickExercise,
+} from "@/lib/exercises";
 import {
   SCALPING_QCM,
   type ScalpingQuestion,
@@ -22,6 +26,7 @@ import YanAnalysis from "@/components/YanAnalysis";
 
 type Step =
   | { type: "line"; cat: string; ex: LineExercise }
+  | { type: "pick"; cat: string; ex: PickExercise }
   | { type: "chart"; cat: string; q: ScalpingQuestion }
   | { type: "domWall"; cat: string; exo: WallExercise }
   | { type: "domBias"; cat: string; exo: BiasExercise };
@@ -29,10 +34,13 @@ type Step =
 const lineExos = EXERCISES.filter(
   (e): e is LineExercise => e.kind === "line",
 );
+const pickBy = (id: string) =>
+  EXERCISES.find((e): e is PickExercise => e.kind === "pick" && e.id === id)!;
+const eurusdReversal = pickBy("ex-eurusd-reversal");
+const eurusdBreak = pickBy("ex-eurusd-break");
 const chart1 = SCALPING_QCM.find(
   (q) => q.id === "scalp-nas-gap-consolidation",
 )!;
-const chart2 = SCALPING_QCM.find((q) => q.id === "scalp-eurusd-crt")!;
 const domWall = ORDERBOOK_EXOS.find(
   (e) => e.id === "dom-bid-wall",
 ) as WallExercise;
@@ -44,7 +52,8 @@ const STEPS: Step[] = [
   { type: "line", cat: "Support / Résistance", ex: lineExos[0] },
   { type: "line", cat: "Support / Résistance", ex: lineExos[1] },
   { type: "chart", cat: "Lecture graphique", q: chart1 },
-  { type: "chart", cat: "Lecture graphique", q: chart2 },
+  { type: "pick", cat: "Lecture graphique", ex: eurusdReversal },
+  { type: "pick", cat: "Lecture graphique", ex: eurusdBreak },
   { type: "domWall", cat: "Carnet d'ordre", exo: domWall },
   { type: "domBias", cat: "Carnet d'ordre", exo: domBias },
 ];
@@ -289,6 +298,210 @@ function LinePlacer({
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Graphique chandeliers « entoure la bougie » (lecture graphique)     */
+/*  - pas de flux live : la série illustre exactement l'énoncé          */
+/*  - l'apprenant clique une bougie → elle est entourée                 */
+/*  - à la validation, la bonne bougie est entourée en vert             */
+/* ------------------------------------------------------------------ */
+
+function pickRange(ex: PickExercise) {
+  const levels = [ex.guide?.support, ex.guide?.resistance].filter(
+    (v): v is number => v != null,
+  );
+  const allHigh = Math.max(...ex.data.map((d) => d.h), ...levels);
+  const allLow = Math.min(...ex.data.map((d) => d.l), ...levels);
+  const margin = (allHigh - allLow) * 0.15 || 1;
+  return { yMin: allLow - margin, yMax: allHigh + margin };
+}
+
+/** 4 décimales pour le forex (1.0800), 1 décimale pour les indices. */
+const fmtPrice = (v: number) => (v < 20 ? v.toFixed(4) : v.toFixed(1));
+
+function CandlePicker({
+  ex,
+  picked,
+  onPick,
+  validated,
+}: {
+  ex: PickExercise;
+  picked: number | null;
+  onPick: (i: number) => void;
+  validated: boolean;
+}) {
+  const { yMin, yMax } = pickRange(ex);
+  const slot = INNER_W / ex.data.length;
+  const candleW = Math.max(4, slot * 0.58);
+  const xFor = (i: number) => PAD.l + slot * (i + 0.5);
+  const yFor = (v: number) =>
+    PAD.t + (1 - (v - yMin) / (yMax - yMin)) * INNER_H;
+
+  const guideLine = (v: number, color: string, label: string) => (
+    <g>
+      <line
+        x1={PAD.l}
+        x2={W - PAD.r}
+        y1={yFor(v)}
+        y2={yFor(v)}
+        stroke={color}
+        strokeOpacity="0.8"
+        strokeDasharray="6 5"
+        strokeWidth="1.4"
+      />
+      <text
+        x={W - PAD.r - 4}
+        y={yFor(v) - 4}
+        fontSize="9"
+        fill={color}
+        textAnchor="end"
+      >
+        {label} {fmtPrice(v)}
+      </text>
+    </g>
+  );
+
+  const ring = (i: number, color: string, dashed: boolean) => {
+    const d = ex.data[i];
+    const top = yFor(d.h);
+    const bottom = yFor(d.l);
+    return (
+      <ellipse
+        cx={xFor(i)}
+        cy={(top + bottom) / 2}
+        rx={candleW * 0.9 + 6}
+        ry={(bottom - top) / 2 + 9}
+        fill="none"
+        stroke={color}
+        strokeWidth="2.4"
+        strokeDasharray={dashed ? "5 4" : "0"}
+      />
+    );
+  };
+
+  return (
+    <div className="rounded-2xl border border-[var(--border)] bg-white p-3 shadow-sm">
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        className="w-full select-none"
+        role="img"
+        aria-label="Graphique en chandeliers — entoure la bonne bougie"
+      >
+        {/* grille + échelle de prix */}
+        {Array.from({ length: 5 }, (_, i) => {
+          const v = yMin + ((yMax - yMin) * i) / 4;
+          return (
+            <g key={`g${i}`}>
+              <line
+                x1={PAD.l}
+                x2={W - PAD.r}
+                y1={yFor(v)}
+                y2={yFor(v)}
+                stroke="#e5e7eb"
+                strokeDasharray="2 4"
+              />
+              <text
+                x={PAD.l - 6}
+                y={yFor(v) + 3}
+                fontSize="9"
+                fill="#6b7689"
+                textAnchor="end"
+              >
+                {fmtPrice(v)}
+              </text>
+            </g>
+          );
+        })}
+
+        {/* niveaux de repère (liquidité / haut de range) */}
+        {ex.guide?.support != null &&
+          guideLine(ex.guide.support, "#16a34a", "Liquidité")}
+        {ex.guide?.resistance != null &&
+          guideLine(ex.guide.resistance, "#dc2626", "Haut de range")}
+
+        {/* bougies cliquables */}
+        {ex.data.map((d, i) => {
+          const cx = xFor(i);
+          const isUp = d.c >= d.o;
+          const color = isUp ? "#16a34a" : "#dc2626";
+          const bodyTop = yFor(Math.max(d.o, d.c));
+          const bodyBottom = yFor(Math.min(d.o, d.c));
+          const bodyH = Math.max(1.5, bodyBottom - bodyTop);
+          const isPicked = picked === i;
+          const isTarget = i === ex.targetIndex;
+          return (
+            <g
+              key={i}
+              onClick={() => !validated && onPick(i)}
+              className={validated ? "" : "cursor-pointer"}
+            >
+              {/* zone de clic large */}
+              <rect
+                x={cx - slot / 2}
+                y={PAD.t}
+                width={slot}
+                height={INNER_H}
+                fill="transparent"
+              />
+              {/* halo au survol de la sélection */}
+              {isPicked && !validated && ring(i, "#d92128", true)}
+              {/* révélation : bonne bougie en vert, erreur en accent */}
+              {validated && isTarget && ring(i, "#16a34a", false)}
+              {validated && isPicked && !isTarget && ring(i, "#d92128", false)}
+              <line
+                x1={cx}
+                x2={cx}
+                y1={yFor(d.h)}
+                y2={yFor(d.l)}
+                stroke={color}
+                strokeWidth="1.2"
+              />
+              <rect
+                x={cx - candleW / 2}
+                y={bodyTop}
+                width={candleW}
+                height={bodyH}
+                fill={color}
+                opacity={isUp ? 0.9 : 0.95}
+                rx="0.8"
+              />
+            </g>
+          );
+        })}
+
+        <line
+          x1={PAD.l}
+          x2={W - PAD.r}
+          y1={H - PAD.b}
+          y2={H - PAD.b}
+          stroke="#e5e7eb"
+        />
+
+        {/* étiquette de la bonne bougie révélée */}
+        {validated && (
+          <text
+            x={xFor(ex.targetIndex)}
+            y={yFor(ex.data[ex.targetIndex].h) - 16}
+            fontSize="9"
+            fontWeight="600"
+            fill="#16a34a"
+            textAnchor="middle"
+          >
+            Bonne bougie
+          </text>
+        )}
+      </svg>
+
+      <p className="mt-2 text-center text-[11px] text-[var(--muted)]">
+        {validated
+          ? "La bougie entourée en vert est la bonne réponse."
+          : picked != null
+            ? "Bougie entourée — valide ou choisis-en une autre."
+            : "👆 Clique sur la bougie pour l'entourer."}
+      </p>
     </div>
   );
 }
@@ -791,6 +1004,7 @@ function DomLadder({
 type Answer = {
   placed: number | null;
   selected: number | null;
+  pickedIndex: number | null;
   pickedPrice: number | null;
   pickedBias: "long" | "short" | null;
 };
@@ -798,6 +1012,7 @@ type Answer = {
 const emptyAnswer: Answer = {
   placed: null,
   selected: null,
+  pickedIndex: null,
   pickedPrice: null,
   pickedBias: null,
 };
@@ -903,19 +1118,19 @@ export default function ParcoursExercices() {
 
   // prompt / explication / hint selon le type
   const prompt =
-    current.type === "line"
+    current.type === "line" || current.type === "pick"
       ? current.ex.prompt
       : current.type === "chart"
         ? current.q.question
         : current.exo.prompt;
   const hint =
-    current.type === "line"
+    current.type === "line" || current.type === "pick"
       ? current.ex.hint
       : current.type === "chart"
         ? undefined
         : current.exo.hint;
   const explanation =
-    current.type === "line"
+    current.type === "line" || current.type === "pick"
       ? current.ex.explanation
       : current.type === "chart"
         ? current.q.explanation
@@ -925,17 +1140,26 @@ export default function ParcoursExercices() {
   const canValidate =
     current.type === "line"
       ? answer.placed != null
-      : current.type === "chart"
-        ? answer.selected != null
-        : current.type === "domWall"
-          ? answer.pickedPrice != null
-          : answer.pickedBias != null;
+      : current.type === "pick"
+        ? answer.pickedIndex != null
+        : current.type === "chart"
+          ? answer.selected != null
+          : current.type === "domWall"
+            ? answer.pickedPrice != null
+            : answer.pickedBias != null;
 
   function computeCorrect(): boolean {
     if (current.type === "line") {
       return (
         answer.placed != null &&
         Math.abs(answer.placed - current.ex.target) <= current.ex.tolerance
+      );
+    }
+    if (current.type === "pick") {
+      return (
+        answer.pickedIndex != null &&
+        Math.abs(answer.pickedIndex - current.ex.targetIndex) <=
+          (current.ex.tolerance ?? 0)
       );
     }
     if (current.type === "chart") {
@@ -997,6 +1221,15 @@ export default function ParcoursExercices() {
             onChange={(v) => setAnswer((a) => ({ ...a, placed: v }))}
             validated={validated}
             good={lastCorrect === true}
+          />
+        )}
+
+        {current.type === "pick" && (
+          <CandlePicker
+            ex={current.ex}
+            picked={answer.pickedIndex}
+            onPick={(i) => setAnswer((a) => ({ ...a, pickedIndex: i }))}
+            validated={validated}
           />
         )}
 
