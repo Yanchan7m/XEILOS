@@ -1,7 +1,7 @@
 type Reply = { match: RegExp; answer: string };
 
 /**
- * Yan est le tuteur IA du Mastère.
+ * Xeilosia est le tuteur IA du Mastère.
  * Il connaît les modules réels du Mastère : Stratégie d'entreprise,
  * Diagnostic de performance, Fonctions économiques, Parties prenantes,
  * Optimisation des processus, Planification, KPI, Structure & organigramme.

@@ -108,7 +108,7 @@ export default function AskYanInline({ module }: Props) {
             className="h-full w-full object-cover"
           />
         </span>
-        Demander à Yan plus de détails
+        Demander à Xeilosia plus de détails
         <span className="text-[var(--muted)]">↓</span>
       </button>
     );
@@ -127,7 +127,7 @@ export default function AskYanInline({ module }: Props) {
           />
         </span>
         <div className="flex flex-col">
-          <span className="text-xs font-semibold text-[var(--ink)]">Yan</span>
+          <span className="text-xs font-semibold text-[var(--ink)]">Xeilosia</span>
           <span className="text-[10px] text-[var(--muted)]">
             Tuteur IA · {module}
           </span>

@@ -21,7 +21,7 @@ const initial: State = {
 };
 
 /**
- * On n'affiche que les 3 premiers setups, puis Yan analyse. Les 10 restent
+ * On n'affiche que les 3 premiers setups, puis Xeilosia analyse. Les 10 restent
  * dans les données (Scalping-Technique.md) pour extension ultérieure.
  */
 const MAX_QUESTIONS = 3;

@@ -70,7 +70,7 @@ export default function DemoPage() {
             <MasterQCM />
           </div>
           <div className="lg:sticky lg:top-24 lg:self-start">
-            <DemoLabel n="2" title="Tuteur IA · Yan" />
+            <DemoLabel n="2" title="Tuteur IA · Xeilosia" />
             <Chat />
           </div>
         </section>
@@ -85,7 +85,7 @@ export default function DemoPage() {
             6 exercices interactifs : <strong>2 support / résistance</strong> à
             placer sur le graphique, <strong>2 lectures de graphique</strong>{" "}
             (décision de trade sur charts réels), et{" "}
-            <strong>2 sur le carnet d’ordre (DOM)</strong>. À la fin, Yan analyse
+            <strong>2 sur le carnet d’ordre (DOM)</strong>. À la fin, Xeilosia analyse
             tes 6 décisions.
           </div>
           <ParcoursExercices />

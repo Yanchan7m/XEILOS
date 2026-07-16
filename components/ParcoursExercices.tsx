@@ -1406,7 +1406,7 @@ export default function ParcoursExercices() {
             }}
             className="w-full rounded-full bg-[var(--ink)] px-5 py-3 text-sm font-medium text-white transition hover:bg-[var(--accent)] sm:w-auto sm:py-2"
           >
-            {step + 1 < total ? "Exercice suivant →" : "Voir l'analyse de Yan"}
+            {step + 1 < total ? "Exercice suivant →" : "Voir l'analyse de Xeilosia"}
           </button>
         )}
       </div>
