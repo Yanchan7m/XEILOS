@@ -115,6 +115,29 @@ const REVERSAL_CANDLES: Candle[] = [
   { o: 109, h: 112, l: 108, c: 111 },
 ];
 
+/**
+ * EUR/USD 5 min — scénario CRT (Candle Range Theory) sur session Londres.
+ * Le prix consolide dans un range 1.0800 (liquidité basse) / 1.0812 (haut de
+ * range). À l'index 7, une bougie balaie la liquidité sous 1.0800 (mèche à
+ * 1.0793) puis referme en vert dans le range : c'est le sweep + retournement
+ * (la bougie CRT). À l'index 9, une grande bougie clôture au-dessus du haut
+ * de range : c'est la cassure qui lance l'expansion haussière.
+ */
+const EURUSD_CRT_CANDLES: Candle[] = [
+  { o: 1.0806, h: 1.0812, l: 1.0802, c: 1.0808 },
+  { o: 1.0808, h: 1.0811, l: 1.0801, c: 1.0803 },
+  { o: 1.0803, h: 1.081, l: 1.08, c: 1.0807 },
+  { o: 1.0807, h: 1.0812, l: 1.0803, c: 1.0804 },
+  { o: 1.0804, h: 1.0809, l: 1.0801, c: 1.0808 },
+  { o: 1.0808, h: 1.0812, l: 1.0802, c: 1.0805 },
+  { o: 1.0805, h: 1.081, l: 1.0801, c: 1.0803 },
+  { o: 1.0803, h: 1.0808, l: 1.0793, c: 1.0807 }, // ← index 7 : sweep sous 1.0800 + retournement (CRT)
+  { o: 1.0807, h: 1.0812, l: 1.0805, c: 1.0811 },
+  { o: 1.0811, h: 1.0823, l: 1.081, c: 1.0821 }, // ← index 9 : cassure du haut de range
+  { o: 1.0821, h: 1.0829, l: 1.0819, c: 1.0827 },
+  { o: 1.0827, h: 1.0833, l: 1.0824, c: 1.0831 },
+];
+
 const MODULE = "Analyse technique · Trading";
 
 export const EXERCISES: Exercise[] = [
@@ -168,5 +191,33 @@ export const EXERCISES: Exercise[] = [
     tolerance: 1,
     explanation:
       "Le plus bas absolu (~100) marque la fin de la tendance baissière. Juste après, les creux et sommets repartent à la hausse : c'est le retournement. Attendre la confirmation (un higher low après le point bas) évite de « rattraper le couteau qui tombe ».",
+  },
+  {
+    kind: "pick",
+    id: "ex-eurusd-reversal",
+    module: MODULE,
+    prompt:
+      "EUR/USD balaie la liquidité sous 1.0800. Entoure la bougie de RETOURNEMENT (le sweep qui referme le CRT haussier).",
+    hint: "Cherche la bougie dont la mèche perce sous 1.0800 mais qui clôture en vert de retour dans le range.",
+    data: EURUSD_CRT_CANDLES,
+    targetIndex: 7,
+    tolerance: 0,
+    guide: { support: 1.08 },
+    explanation:
+      "La bougie 8 (index 7) plonge sa mèche jusqu'à 1.0793 pour prendre la liquidité sous 1.0800, puis referme en vert dans le range : c'est le sweep + retournement, la bougie CRT. On surveille alors une cassure haussière pour entrer, avec un SL sous la mèche du sweep (1.0793).",
+  },
+  {
+    kind: "pick",
+    id: "ex-eurusd-break",
+    module: MODULE,
+    prompt:
+      "Après le retournement, entoure la bougie qui CASSE le range (clôture au-dessus du haut de range).",
+    hint: "Repère la première grande bougie verte qui clôture franchement au-dessus de la ligne rouge (1.0812).",
+    data: EURUSD_CRT_CANDLES,
+    targetIndex: 9,
+    tolerance: 0,
+    guide: { support: 1.08, resistance: 1.0812 },
+    explanation:
+      "La bougie 10 (index 9) clôture à 1.0821, franchement au-dessus du haut de range (1.0812) : c'est la cassure qui valide le CRT. L'entrée scalp se fait sur cette clôture au-dessus de 1.0805/1.0812, SL sous la mèche du sweep, pour viser l'expansion haussière qui suit.",
   },
 ];
