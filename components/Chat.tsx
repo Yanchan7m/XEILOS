@@ -83,7 +83,7 @@ export default function Chat() {
         <div className="relative">
           <div className="agent-ring h-11 w-11 overflow-hidden rounded-full ring-2 ring-[var(--accent)]/40">
             <Image
-              src="/agent-face.png"
+              src="/xeilosia-avatar.png"
               alt="Xeilosia, tuteur IA du Mastère"
               width={64}
               height={64}
@@ -175,7 +175,7 @@ function Bubble({
       {!isUser && (
         <div className="h-8 w-8 shrink-0 overflow-hidden rounded-full ring-1 ring-[var(--border)]">
           <Image
-            src="/agent-face.png"
+            src="/xeilosia-avatar.png"
             alt=""
             width={32}
             height={32}
