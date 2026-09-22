@@ -187,6 +187,8 @@ export default function MasterQCM() {
             support={q.chart.support}
             resistance={q.chart.resistance}
             caption={q.chart.caption}
+            live={!state.validated}
+            symbol={q.chart.symbol}
           />
         </div>
       )}
