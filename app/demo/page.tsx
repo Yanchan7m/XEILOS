@@ -4,6 +4,7 @@ import MasterQCM from "@/components/MasterQCM";
 import ParcoursExercices from "@/components/ParcoursExercices";
 import ScalpingQCM from "@/components/ScalpingQCM";
 import Chat from "@/components/Chat";
+import TeacherDashboard from "@/components/TeacherDashboard";
 import FlipCard from "@/components/FlipCard";
 
 export const metadata = {
@@ -54,7 +55,7 @@ export default function DemoPage() {
             Essaie la mécanique en live
           </h1>
           <p className="mt-4 text-base text-[var(--muted)]">
-            Cinq briques de la pédagogie Xeilos appliquées au{" "}
+            Six briques de la pédagogie Xeilos appliquées au{" "}
             <strong>trading</strong> : QCM réel de trading (gestion du risque,
             structure de marché, scalping — avec graphique chandeliers japonais),
             tuteur IA, un parcours de 6 exercices interactifs (support/résistance,
@@ -72,13 +73,17 @@ export default function DemoPage() {
           <div className="lg:sticky lg:top-24 lg:self-start">
             <DemoLabel n="2" title="Tuteur IA · Xeilosia" />
             <Chat />
+            <div className="mt-8">
+              <DemoLabel n="3" title="Écran formateur · temps réel" />
+              <TeacherDashboard />
+            </div>
           </div>
         </section>
 
         {/* Bloc 3 — parcours d'exercices : que ferait-on dans cette situation ? */}
         <section className="mt-12">
           <DemoLabel
-            n="3"
+            n="4"
             title="Parcours d'exercices · que ferait-on dans cette situation ?"
           />
           <div className="mb-4 max-w-2xl text-sm text-[var(--muted)]">
@@ -93,7 +98,7 @@ export default function DemoPage() {
 
         {/* Bloc 4 — QCM scalping sur graphiques TradingView réels */}
         <section className="mt-12">
-          <DemoLabel n="4" title="QCM scalping · graphiques TradingView réels" />
+          <DemoLabel n="5" title="QCM scalping · graphiques TradingView réels" />
           <div className="mb-4 max-w-2xl text-sm text-[var(--muted)]">
             En complément : des setups de scalping (liquidités, breakout,
             sessions) sur de <strong>vrais graphiques TradingView</strong>{" "}
@@ -104,7 +109,7 @@ export default function DemoPage() {
 
         {/* Bloc 5 */}
         <section className="mt-12">
-          <DemoLabel n="5" title="Cartes flip · vocabulaire stratégie" />
+          <DemoLabel n="6" title="Cartes flip · vocabulaire stratégie" />
           <div className="rounded-3xl border border-[var(--border)] bg-white p-6 shadow-sm sm:p-8">
             <div className="flex items-center justify-between">
               <p className="text-sm text-[var(--muted)]">

@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { SCALPING_QCM, type ScalpingQuestion } from "@/lib/scalping-qcm";
 import YanAnalysis from "@/components/YanAnalysis";
+import { publishAnswer } from "@/lib/demo-events";
 
 type State = {
   step: number;
@@ -104,6 +105,11 @@ export default function ScalpingQCM() {
   function validate() {
     if (!q || state.selected === null) return;
     const isCorrect = q.options[state.selected]?.correct === true;
+    publishAnswer({
+      source: "Scalping",
+      module: "Scalping · graphiques réels",
+      correct: isCorrect,
+    });
     setState((s) => ({
       ...s,
       validated: true,

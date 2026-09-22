@@ -5,6 +5,8 @@ import { MASTER_QCM, type QcmQuestion } from "@/lib/master-qcm";
 import CandlestickChart from "@/components/CandlestickChart";
 import YanAnalysis from "@/components/YanAnalysis";
 import AskYanInline from "@/components/AskYanInline";
+import { publishAnswer } from "@/lib/demo-events";
+import BilanFinal from "@/components/BilanFinal";
 
 type State = {
   step: number;
@@ -61,6 +63,7 @@ export default function MasterQCM() {
     const isCorrect =
       correctIdx.length === state.selected.length &&
       correctIdx.every((i) => state.selected.includes(i));
+    publishAnswer({ source: "QCM", module: q.module, correct: isCorrect });
     setState((s) => ({
       ...s,
       validated: true,
@@ -127,6 +130,20 @@ export default function MasterQCM() {
           />
         </div>
 
+        <div className="mt-8">
+          <BilanFinal
+            title="Bilan de session · QCM trading"
+            score={state.score}
+            total={total}
+            subtitle="Xeilosia a analysé chaque réponse pour construire ton plan de révision."
+            competences={moduleStats.map((m) => ({
+              label: m.module,
+              correct: m.correct,
+              total: m.total,
+            }))}
+          />
+        </div>
+
         <ModulePerformanceChart stats={moduleStats} />
 
         <YanAnalysis
@@ -187,6 +204,8 @@ export default function MasterQCM() {
             support={q.chart.support}
             resistance={q.chart.resistance}
             caption={q.chart.caption}
+            live={!state.validated}
+            symbol={q.chart.symbol}
           />
         </div>
       )}

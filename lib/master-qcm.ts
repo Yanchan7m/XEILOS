@@ -7,6 +7,7 @@ export type Candle = { o: number; h: number; l: number; c: number };
 
 export type ChartSpec = {
   data: Candle[];
+  symbol?: string;
   support?: number;
   resistance?: number;
   caption?: string;
@@ -103,6 +104,7 @@ export const MASTER_QCM: QcmQuestion[] = [
       "Chaque sommet est plus haut que le précédent, et chaque creux est plus haut que le précédent : c’est la définition d’une tendance haussière (higher highs + higher lows). Stratégie classique : chercher les pullbacks pour entrer dans le sens de la tendance.",
     chart: {
       data: UPTREND_CANDLES,
+      symbol: "NAS100 · M1",
       caption: "Higher highs et higher lows : la tendance est ton amie.",
     },
   },
@@ -126,6 +128,7 @@ export const MASTER_QCM: QcmQuestion[] = [
       "Les 10 premières bougies forment une consolidation serrée sous une résistance vers 104. La 11ᵉ bougie casse nettement ce niveau avec impulsion, suivie d'une continuation : c'est un breakout. En scalping sur futures (NAS100, ES…), on entre dans le sens de la cassure, idéalement sur le retest de l'ancienne résistance devenue support, stop sous le range.",
     chart: {
       data: BREAKOUT_CANDLES,
+      symbol: "ES · M1",
       resistance: 104,
       caption: "Cassure nette + continuation = breakout à scalper.",
     },

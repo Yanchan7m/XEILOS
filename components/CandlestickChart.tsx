@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
 export type Candle = { o: number; h: number; l: number; c: number };
 
 type Props = {
@@ -7,14 +9,75 @@ type Props = {
   support?: number;
   resistance?: number;
   caption?: string;
+  /** Anime le graphique : la dernière bougie se forme en direct. */
+  live?: boolean;
+  /** Étiquette affichée à côté du point LIVE. */
+  symbol?: string;
 };
 
+const TICK_MS = 260;
+/** Nombre de ticks avant qu'une bougie se clôture et qu'une nouvelle s'ouvre. */
+const TICKS_PER_CANDLE = 7;
+
+/**
+ * Prolonge la série d'origine par une bougie qui se forme tick par tick, pour
+ * donner l'impression d'un flux de prix réel pendant que la question est posée.
+ */
+function useLiveCandles(data: Candle[], live: boolean) {
+  const [series, setSeries] = useState<Candle[]>(data);
+  const tick = useRef(0);
+
+  useEffect(() => {
+    setSeries(data);
+    tick.current = 0;
+  }, [data]);
+
+  useEffect(() => {
+    if (!live) return;
+
+    // Amplitude calée sur la volatilité de la série pour rester crédible.
+    const ranges = data.map((d) => d.h - d.l);
+    const vol = ranges.reduce((a, b) => a + b, 0) / Math.max(1, ranges.length);
+
+    const id = setInterval(() => {
+      setSeries((prev) => {
+        const next = prev.slice();
+        const last = next[next.length - 1];
+        const step = (Math.random() - 0.5) * vol * 0.7;
+        const c = Number((last.c + step).toFixed(2));
+
+        if (tick.current % TICKS_PER_CANDLE === TICKS_PER_CANDLE - 1) {
+          // La bougie se clôture : on en ouvre une nouvelle et on décale la fenêtre.
+          next.push({ o: c, h: c, l: c, c });
+          if (next.length > data.length) next.shift();
+        } else {
+          next[next.length - 1] = {
+            o: last.o,
+            h: Math.max(last.h, c),
+            l: Math.min(last.l, c),
+            c,
+          };
+        }
+        tick.current += 1;
+        return next;
+      });
+    }, TICK_MS);
+
+    return () => clearInterval(id);
+  }, [live, data]);
+
+  return series;
+}
+
 export default function CandlestickChart({
-  data,
+  data: rawData,
   support,
   resistance,
   caption,
+  live = false,
+  symbol = "XEILOS",
 }: Props) {
+  const data = useLiveCandles(rawData, live);
   const w = 560;
   const h = 240;
   const pad = { l: 38, r: 14, t: 14, b: 26 };
@@ -34,6 +97,9 @@ export default function CandlestickChart({
   const y = (v: number) =>
     pad.t + (1 - (v - yMin) / (yMax - yMin)) * innerH;
 
+  const lastCandle = data[data.length - 1];
+  const lastUp = lastCandle ? lastCandle.c >= lastCandle.o : true;
+
   const yTicks = 4;
   const ticks = Array.from({ length: yTicks + 1 }, (_, i) => {
     const v = yMin + ((yMax - yMin) * i) / yTicks;
@@ -44,7 +110,15 @@ export default function CandlestickChart({
     <div className="rounded-2xl border border-[var(--border)] bg-[#0b1120] p-4 text-white shadow-sm">
       <div className="mb-3 flex items-center justify-between text-[10px] uppercase tracking-widest text-white/60">
         <span>Chandeliers japonais · 20 dernières bougies</span>
-        <span className="rounded-full bg-white/10 px-2 py-0.5">XEILOS</span>
+        {live ? (
+          <span className="flex items-center gap-1.5 rounded-full bg-white/10 px-2 py-0.5">
+            <span className="live-dot h-1.5 w-1.5 rounded-full bg-[#22c55e]" />
+            <span className="text-[#22c55e]">Live</span>
+            <span className="text-white/40">· {symbol}</span>
+          </span>
+        ) : (
+          <span className="rounded-full bg-white/10 px-2 py-0.5">{symbol}</span>
+        )}
       </div>
       <svg
         viewBox={`0 0 ${w} ${h}`}
@@ -154,6 +228,40 @@ export default function CandlestickChart({
             </g>
           );
         })}
+
+        {/* prix courant : ligne + étiquette qui suivent la dernière bougie */}
+        {live && lastCandle && (
+          <g>
+            <line
+              x1={pad.l}
+              x2={w - pad.r}
+              y1={y(lastCandle.c)}
+              y2={y(lastCandle.c)}
+              stroke={lastUp ? "#22c55e" : "#ef4458"}
+              strokeOpacity="0.5"
+              strokeDasharray="3 3"
+              strokeWidth="1"
+            />
+            <rect
+              x={w - pad.r - 44}
+              y={y(lastCandle.c) - 8}
+              width="44"
+              height="16"
+              rx="3"
+              fill={lastUp ? "#22c55e" : "#ef4458"}
+            />
+            <text
+              x={w - pad.r - 22}
+              y={y(lastCandle.c) + 4}
+              fontSize="10"
+              fontWeight="600"
+              fill="#0b1120"
+              textAnchor="middle"
+            >
+              {lastCandle.c.toFixed(2)}
+            </text>
+          </g>
+        )}
 
         {/* X axis baseline */}
         <line
