@@ -92,7 +92,8 @@ export default function Chat({ weakModules = [] }: { weakModules?: string[] }) {
       }
     }
 
-    if (voiceOn) speak(acc);
+    // La voix ne doit pas lire les astérisques du Markdown.
+    if (voiceOn) speak(acc.replace(/\*+/g, ""));
     setBusy(false);
     setTimeout(() => inputRef.current?.focus(), 50);
   }
@@ -281,9 +282,30 @@ function Bubble({
             : "bg-[var(--surface-2)] text-[var(--foreground)]/90 border border-[var(--border)]"
         }`}
       >
-        {children}
+        {typeof children === "string" ? <RichText text={children} /> : children}
       </div>
     </div>
+  );
+}
+
+/**
+ * Le modèle écrit en Markdown léger : on rend au moins le gras (**…**) et
+ * l'italique (*…*) plutôt que d'afficher les astérisques.
+ */
+function RichText({ text }: { text: string }) {
+  const parts = text.split(/(\*\*[^*]+\*\*|\*[^*\n]+\*)/g);
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (part.startsWith("**") && part.endsWith("**")) {
+          return <strong key={i}>{part.slice(2, -2)}</strong>;
+        }
+        if (part.length > 2 && part.startsWith("*") && part.endsWith("*")) {
+          return <em key={i}>{part.slice(1, -1)}</em>;
+        }
+        return part;
+      })}
+    </>
   );
 }
 
