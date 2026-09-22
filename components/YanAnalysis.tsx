@@ -98,7 +98,7 @@ export default function YanAnalysis({ wrongModules, score, total }: Props) {
             }`}
           >
             <Image
-              src="/agent-face.png"
+              src="/xeilosia-avatar.png"
               alt="Xeilosia, tuteur IA"
               width={48}
               height={48}

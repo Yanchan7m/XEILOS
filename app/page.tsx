@@ -330,7 +330,7 @@ export default function Home() {
         <footer className="mt-24 flex flex-col items-center gap-2 border-t border-[var(--border)] pt-8 text-xs text-[var(--muted)]">
           <div className="flex items-center gap-2">
             <Image
-              src="/agent-face.png"
+              src="/xeilosia-avatar.png"
               alt=""
               width={20}
               height={20}

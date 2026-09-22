@@ -101,7 +101,7 @@ export default function AskYanInline({ module }: Props) {
       >
         <span className="relative inline-flex h-5 w-5 overflow-hidden rounded-full ring-1 ring-[var(--border)]">
           <Image
-            src="/agent-face.png"
+            src="/xeilosia-avatar.png"
             alt=""
             width={20}
             height={20}
@@ -119,7 +119,7 @@ export default function AskYanInline({ module }: Props) {
       <div className="flex items-center gap-2 border-b border-[var(--border)] bg-[var(--surface)] px-3 py-2">
         <span className="relative inline-flex h-6 w-6 overflow-hidden rounded-full ring-1 ring-[var(--accent)]/40">
           <Image
-            src="/agent-face.png"
+            src="/xeilosia-avatar.png"
             alt=""
             width={24}
             height={24}
