@@ -88,8 +88,10 @@ export default function BilanFinal({
 
       {subtitle && <p className="mt-3 text-sm text-white/60">{subtitle}</p>}
 
-      <div className="mt-8 grid gap-8 sm:grid-cols-[220px_1fr] sm:items-center">
-        <Radar competences={competences} active={radarIn} color={niveau.color} />
+      <div className="mt-8 space-y-8">
+        <div className="mx-auto w-full max-w-[320px]">
+          <Radar competences={competences} active={radarIn} color={niveau.color} />
+        </div>
 
         <div>
           <div className="text-xs uppercase tracking-[0.2em] text-white/40">
@@ -144,7 +146,7 @@ function Radar({
   const size = 220;
   const cx = size / 2;
   const cy = size / 2;
-  const r = 82;
+  const r = 66;
   const n = Math.max(3, competences.length);
 
   const angle = (i: number) => (Math.PI * 2 * i) / n - Math.PI / 2;
@@ -159,7 +161,7 @@ function Radar({
     .join(" ");
 
   return (
-    <svg viewBox={`0 0 ${size} ${size}`} width="100%" role="img" aria-label="Radar de compétences">
+    <svg viewBox={`-58 -6 ${size + 116} ${size + 12}`} width="100%" role="img" aria-label="Radar de compétences">
       {[0.25, 0.5, 0.75, 1].map((g) => (
         <polygon
           key={g}
@@ -191,18 +193,18 @@ function Radar({
       />
 
       {competences.map((c, i) => {
-        const [lx, ly] = point(i, 1.16);
+        const [lx, ly] = point(i, 1.3);
         return (
           <text
             key={c.label}
             x={lx}
             y={ly}
-            fontSize="8"
+            fontSize="9"
             fill="#ffffff"
             fillOpacity={0.6}
             textAnchor={lx > cx + 4 ? "start" : lx < cx - 4 ? "end" : "middle"}
           >
-            {c.label.length > 18 ? `${c.label.slice(0, 17)}…` : c.label}
+            {c.label.length > 20 ? `${c.label.slice(0, 19)}…` : c.label}
           </text>
         );
       })}
