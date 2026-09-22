@@ -19,6 +19,8 @@ import {
   type DomLevel,
 } from "@/lib/orderbook";
 import YanAnalysis from "@/components/YanAnalysis";
+import { publishAnswer } from "@/lib/demo-events";
+import BilanFinal from "@/components/BilanFinal";
 
 /* ------------------------------------------------------------------ */
 /*  Séquence : 2 support/résistance + 2 graphiques + 2 carnet d'ordre  */
@@ -1095,6 +1097,24 @@ export default function ParcoursExercices() {
           ))}
         </div>
 
+        <div className="mt-8">
+          <BilanFinal
+            title="Bilan de session · parcours d'exercices"
+            score={score}
+            total={total}
+            subtitle="Support/résistance, lecture de graphique et carnet d'ordre."
+            competences={Array.from(
+              STEPS.reduce((acc, s, i) => {
+                const cur = acc.get(s.cat) ?? { correct: 0, total: 0 };
+                cur.total += 1;
+                if (results[i]) cur.correct += 1;
+                acc.set(s.cat, cur);
+                return acc;
+              }, new Map<string, { correct: number; total: number }>()),
+            ).map(([label, v]) => ({ label, ...v }))}
+          />
+        </div>
+
         <YanAnalysis wrongModules={wrongModules} score={score} total={total} />
 
         <button
@@ -1176,8 +1196,10 @@ export default function ParcoursExercices() {
 
   function validate() {
     if (validated || !canValidate) return;
+    const correct = computeCorrect();
+    publishAnswer({ source: "Parcours", module: current.cat, correct });
     setValidated(true);
-    setResults((r) => [...r, computeCorrect()]);
+    setResults((r) => [...r, correct]);
   }
 
   const lastCorrect = validated ? results[results.length - 1] : undefined;
