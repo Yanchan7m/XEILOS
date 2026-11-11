@@ -108,3 +108,22 @@ body {
 .live-dot {
   animation: livePulse 1.4s ease-in-out infinite;
 }
+
+/* Tableau de bord, versions (11/11/2026) : bandeau de trades qui défile, courbe qui se trace. */
+@keyframes defile {
+  to { transform: translateX(-50%); }
+}
+
+.defile {
+  animation: defile 28s linear infinite;
+}
+
+.trace-courbe {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: drawLine 2.2s cubic-bezier(.2, .8, .2, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .defile, .trace-courbe { animation: none; stroke-dashoffset: 0; }
+}

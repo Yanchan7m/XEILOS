@@ -21,10 +21,12 @@ export default function PerformancePanel({
   points,
   startCapital,
   stats,
+  trace = false,
 }: {
   points: EquityPoint[];
   startCapital: number;
   stats: TradeStats;
+  trace?: boolean;
 }) {
   const [tab, setTab] = useState<"evolution" | "stats">("evolution");
 
@@ -67,7 +69,7 @@ export default function PerformancePanel({
 
       <div className="mt-8 sm:mt-10">
         {tab === "evolution" ? (
-          <EquityChart points={points} startCapital={startCapital} />
+          <EquityChart points={points} startCapital={startCapital} trace={trace} />
         ) : (
           <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.07] sm:grid-cols-4">
             {tiles.map((t) => (
