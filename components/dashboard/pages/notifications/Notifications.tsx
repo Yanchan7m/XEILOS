@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { sb, SUPER_ADMIN, URL_SUPABASE, VAPID_PUBLIC_KEY } from "@/lib/supabase";
+import FenetreCompteRendu from "@/components/scalping/FenetreCompteRendu";
+import type { SessionScalp } from "@/lib/sessions-scalping";
 import { LISTES, PHRASES_DEFAUT, RYTHMES, type Liste, type PhrasesScalp } from "@/lib/phrases-scalping";
 
 /* NOTIFICATIONS XEILOS (25/11/2026)
@@ -214,6 +216,7 @@ function ModeScalping({ userId }: { userId: string }) {
   const [saisie, setSaisie] = useState<Resultat | null>(null);
   const [montant, setMontant] = useState("");
   const [message, setMessage] = useState("");
+  const [finie, setFinie] = useState<SessionScalp | null>(null); // compte rendu à faire
 
   const lire = useCallback(async () => {
     const { data } = await sb().from("journal_axone_docs").select("data").eq("user_id", userId).eq("coll", "settings").eq("doc_id", "scalp").maybeSingle();
@@ -257,7 +260,9 @@ function ModeScalping({ userId }: { userId: string }) {
     }
     const { error } = await ecrire(next);
     setOccupe(false);
-    if (error) void lire(); else setSc(next);
+    if (error) { void lire(); return; }
+    setSc(next);
+    if (on) setFinie((next.sessions as SessionScalp[])[0]);
   };
 
   /* « Je viens d'avoir une perte / un gain » : avec un montant, c'est un vrai trade du journal
@@ -329,6 +334,10 @@ function ModeScalping({ userId }: { userId: string }) {
         </div>
       )}
       {message && <div className="mt-3 text-[12.5px] text-white/60">{message}</div>}
+      {finie && (
+        <FenetreCompteRendu userId={userId} session={finie}
+          onFerme={(ok) => { setFinie(null); setMessage(ok ? "📝 Compte rendu enregistré : tu le retrouves dans Mes sessions." : "Tu pourras faire ton compte rendu plus tard dans Mes sessions."); }} />
+      )}
     </div>
   );
 }

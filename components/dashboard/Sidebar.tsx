@@ -31,6 +31,7 @@ const SECTIONS: { title?: string; items: NavItem[] }[] = [
       { label: "Exercices", href: "/dashboard/exercices", icon: "cible" },
       { label: "Lexique", href: "/dashboard/lexique", icon: "lexique" },
       { label: "Notifications", href: "/dashboard/notifications", icon: "bell" },
+      { label: "Mes sessions", href: "/dashboard/sessions", icon: "heart" },
     ],
   },
 ];
