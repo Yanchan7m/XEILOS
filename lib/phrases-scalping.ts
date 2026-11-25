@@ -3,6 +3,7 @@
    c4march). Une liste vide chez l'élève = ces phrases-là. */
 
 export type PhrasesScalp = {
+  pourTous?: boolean; // super-admin seulement (lu par scalp-rappel)
   ouverture?: string;
   perte?: string[];
   gain?: string[];

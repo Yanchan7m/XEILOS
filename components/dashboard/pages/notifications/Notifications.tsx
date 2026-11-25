@@ -72,7 +72,7 @@ export default function Notifications() {
           <button className="underline hover:text-white/70" onClick={() => void sb().auth.signOut()}>se déconnecter</button>
         </div>
       </div>
-      <MesPhrases userId={session.user.id} />
+      <MesPhrases userId={session.user.id} admin={admin} />
     </div>
   );
 }
@@ -258,10 +258,11 @@ function ModeScalping({ userId }: { userId: string }) {
 
 /* ------------------------------------------------------------------ */
 
-function MesPhrases({ userId }: { userId: string }) {
+function MesPhrases({ userId, admin }: { userId: string; admin: boolean }) {
   const [textes, setTextes] = useState<Record<Liste, string> | null>(null);
   const [ouverture, setOuverture] = useState("");
   const [respiration, setRespiration] = useState(true);
+  const [pourTous, setPourTous] = useState(false);
   const [occupe, setOccupe] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -272,6 +273,7 @@ function MesPhrases({ userId }: { userId: string }) {
       setTextes({ calme: versTexte(p.calme), perte: versTexte(p.perte), gain: versTexte(p.gain), souffles: versTexte(p.souffles) });
       setOuverture(p.ouverture ?? "");
       setRespiration(p.respiration !== false);
+      setPourTous(p.pourTous === true);
     })();
   }, [userId]);
 
@@ -283,6 +285,7 @@ function MesPhrases({ userId }: { userId: string }) {
       ouverture: ouverture.trim().slice(0, 200) || undefined,
       calme: versListe(textes.calme), perte: versListe(textes.perte), gain: versListe(textes.gain), souffles: versListe(textes.souffles),
       respiration,
+      ...(admin ? { pourTous } : {}),
     };
     const { error } = await sb().from("journal_axone_docs").upsert(
       { user_id: userId, coll: "settings", doc_id: "scalp_phrases", data, updated_at: new Date().toISOString() },
@@ -332,6 +335,16 @@ function MesPhrases({ userId }: { userId: string }) {
           </label>
         );
       })}
+
+      {admin && (
+        <label className="flex items-start gap-2.5 rounded-xl border border-[var(--accent)]/30 p-3">
+          <input type="checkbox" checked={pourTous} onChange={(e) => setPourTous(e.target.checked)} className="mt-0.5 accent-[var(--accent)]" />
+          <span>
+            <span className="block text-[13px] font-medium text-white/85">Utiliser mes phrases pour tout le monde</span>
+            <span className="block text-[12px] text-white/45">Les élèves qui n&apos;ont pas écrit leurs phrases reçoivent les tiennes (case par case). Ceux qui ont écrit les leurs les gardent. Pense à enregistrer.</span>
+          </span>
+        </label>
+      )}
 
       <div className="flex flex-wrap gap-2">
         <button className={bouton} onClick={() => void enregistrer()} disabled={occupe}>Enregistrer mes phrases</button>
