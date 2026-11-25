@@ -9,16 +9,25 @@ import { listenOnce, micSupported, speak, speechSupported, stopSpeaking } from "
 type Message = ChatMessage;
 
 const SUGGESTIONS = [
-  "Explique-moi l'analyse SWOT",
-  "Différence entre PESTEL et 5 Forces de Porter ?",
-  "À quoi sert le Balanced Scorecard ?",
-  "Quels sont les modules du Mastère ?",
+  "Par où je commence ?",
+  "C'est quoi un stop loss ?",
+  "Combien risquer par trade ?",
+  "Comment marche un challenge prop firm ?",
 ];
 
 /** D'où vient la dernière réponse : vraie IA ou script de démo. */
 type Mode = "unknown" | "ia" | "script";
 
-export default function Chat({ weakModules = [] }: { weakModules?: string[] }) {
+export default function Chat({
+  weakModules = [],
+  question,
+  hauteur = "h-[640px]",
+}: {
+  weakModules?: string[];
+  /** Question envoyée automatiquement à l'ouverture (ex. depuis le briefing). */
+  question?: string;
+  hauteur?: string;
+}) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -31,6 +40,7 @@ export default function Chat({ weakModules = [] }: { weakModules?: string[] }) {
   const stopListening = useRef<(() => void) | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const questionEnvoyee = useRef(false);
 
   // Les API vocales n'existent qu'au navigateur : on teste après montage.
   useEffect(() => {
@@ -40,7 +50,7 @@ export default function Chat({ weakModules = [] }: { weakModules?: string[] }) {
   }, []);
 
   const intro =
-    "Salut 👋 Je suis Xeilosia, le tuteur IA du Mastère. Je connais tous les modules : stratégie, KPI, parties prenantes, optimisation des processus… Demande-moi une explication, une révision ou un QCM.";
+    "Bonjour 👋 Je suis Xeilosia, ta tutrice en trading. Gestion du risque, graphiques, carnet d'ordres, prop firms : pose-moi ta question, même la plus simple. Je t'explique la méthode, je ne te dirai jamais quoi acheter.";
 
   const suggestions = SUGGESTIONS;
 
@@ -50,6 +60,13 @@ export default function Chat({ weakModules = [] }: { weakModules?: string[] }) {
       behavior: "smooth",
     });
   }, [messages, busy]);
+
+  useEffect(() => {
+    if (!question || questionEnvoyee.current) return;
+    questionEnvoyee.current = true;
+    send(question);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [question]);
 
   async function send(text: string) {
     const trimmed = text.trim();
@@ -131,13 +148,13 @@ export default function Chat({ weakModules = [] }: { weakModules?: string[] }) {
   }
 
   return (
-    <div className="flex h-[640px] flex-col overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
+    <div className={`flex ${hauteur} flex-col overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]`}>
       <header className="flex items-center gap-3 border-b border-[var(--border)] px-5 py-4">
         <div className="relative">
           <div className="agent-ring h-11 w-11 overflow-hidden rounded-full ring-2 ring-[var(--accent)]/40">
             <Image
               src="/xeilosia-avatar.png"
-              alt="Xeilosia, tuteur IA du Mastère"
+              alt="Xeilosia, tutrice IA en trading"
               width={64}
               height={64}
               className="h-full w-full object-cover"
@@ -148,7 +165,7 @@ export default function Chat({ weakModules = [] }: { weakModules?: string[] }) {
         </div>
         <div>
           <div className="text-sm font-semibold">Xeilosia</div>
-          <div className="text-xs text-[var(--muted)]">Tuteur IA · Mastère</div>
+          <div className="text-xs text-[var(--muted)]">Tutrice IA · Trading</div>
         </div>
         <div className="ml-auto flex items-center gap-2">
           {canSpeak && (
@@ -173,7 +190,7 @@ export default function Chat({ weakModules = [] }: { weakModules?: string[] }) {
                 : "bg-[var(--surface-2)] text-[var(--muted)]"
             }`}
           >
-            {mode === "ia" ? "IA en direct" : mode === "script" ? "Démo" : "Live"}
+            {mode === "ia" ? "IA en direct" : mode === "script" ? "Réponses enregistrées" : "IA"}
           </div>
         </div>
       </header>
@@ -245,7 +262,7 @@ export default function Chat({ weakModules = [] }: { weakModules?: string[] }) {
         <button
           type="submit"
           disabled={busy || !input.trim()}
-          className="flex h-11 items-center gap-2 rounded-2xl bg-[var(--accent)] px-4 text-sm font-medium text-[#04141d] transition hover:bg-[var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex h-11 items-center gap-2 rounded-2xl bg-[var(--accent)] px-4 text-sm font-medium text-white transition hover:bg-[var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {busy ? "…" : "Envoyer"}
         </button>

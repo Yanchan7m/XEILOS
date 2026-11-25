@@ -26,9 +26,12 @@ const fmtDay = (iso: string) =>
 export default function EquityChart({
   points,
   startCapital,
+  trace = false,
 }: {
   points: EquityPoint[];
   startCapital: number;
+  /** La courbe se trace à l'affichage (version 2 du tableau de bord). */
+  trace?: boolean;
 }) {
   const [range, setRange] = useState<RangeKey>("Tout");
   const [hover, setHover] = useState<number | null>(null);
@@ -148,7 +151,7 @@ export default function EquityChart({
           Capital de départ · {fmt(startCapital)} $
         </text>
 
-        <path d={line} fill="none" stroke="#fff" strokeWidth={1.6} strokeLinejoin="round" />
+        <path d={line} fill="none" stroke="#fff" strokeWidth={1.6} strokeLinejoin="round" pathLength={trace ? 1 : undefined} className={trace ? "trace-courbe" : undefined} />
 
         <line x1={x(active)} x2={x(active)} y1={0} y2={plotH} stroke="#fff" strokeOpacity={0.12} />
         <circle cx={x(active)} cy={y(visible[active].balance)} r={7} fill="#0b0b0d" stroke="#fff" strokeOpacity={0.5} />
