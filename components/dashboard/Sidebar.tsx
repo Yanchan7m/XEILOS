@@ -2,7 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useVisiteur } from "@/components/Profil";
+import { PRENOM } from "@/lib/profil";
 
 type NavItem = { label: string; href: string; icon: keyof typeof ICONS; badge?: number };
 
@@ -11,19 +14,22 @@ const SECTIONS: { title?: string; items: NavItem[] }[] = [
   {
     title: "Outils",
     items: [
-      { label: "Xeilosia, ta tutrice", href: "/demo#chat", icon: "spark" },
-      { label: "Contexte de marché", href: "#", icon: "gem" },
-      { label: "Terminal", href: "#", icon: "terminal" },
-      { label: "Journal de trading", href: "#", icon: "book" },
+      // Xeilosia n'est plus dans le menu : elle est en assistante, en bas à droite (components/dashboard/Assistante.tsx).
+      { label: "Contexte de marché", href: "/dashboard/contexte", icon: "gem" },
+      { label: "Terminal", href: "/dashboard/terminal", icon: "terminal" },
+      // Journal de trading retiré du menu pour l'instant (la page /dashboard/journal existe toujours).
     ],
   },
   {
     title: "Accompagnement",
     items: [
-      { label: "Calendrier", href: "#", icon: "calendar" },
-      { label: "Mon suivi", href: "#", icon: "heart", badge: 4 },
-      { label: "Communauté", href: "#", icon: "chat" },
-      { label: "Formation", href: "/demo", icon: "cap" },
+      { label: "Live", href: "/dashboard/live", icon: "live" },
+      { label: "Calendrier", href: "/dashboard/calendrier", icon: "calendar" },
+      { label: "Mon suivi", href: "/dashboard/suivi", icon: "heart", badge: 4 },
+      { label: "Communauté", href: "/dashboard/communaute", icon: "chat" },
+      { label: "Formation", href: "/dashboard/formation", icon: "cap" },
+      { label: "Exercices", href: "/dashboard/exercices", icon: "cible" },
+      { label: "Lexique", href: "/dashboard/lexique", icon: "lexique" },
     ],
   },
 ];
@@ -38,6 +44,9 @@ const ICONS = {
   heart: "M12 20s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.5-7 10-7 10z",
   chat: "M4 5h12v9H8l-4 3zM16 9h4v9l-3-2h-6v-2",
   cap: "M2 9l10-5 10 5-10 5zM6 11v5c3 2 9 2 12 0v-5",
+  live: "M12 13a1 1 0 100-2 1 1 0 000 2zM8.5 15.5a5 5 0 010-7M15.5 8.5a5 5 0 010 7M5.6 18.4a9 9 0 010-12.8M18.4 5.6a9 9 0 010 12.8",
+  cible: "M12 21a9 9 0 100-18 9 9 0 000 18zM12 16a4 4 0 100-8 4 4 0 000 8zM12 12h.01",
+  lexique: "M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3zM5 17a3 3 0 013-3h11M9 8h6M9 11h4",
   menu: "M4 7h16M4 12h16M4 17h10",
   close: "M6 6l12 12M18 6L6 18",
   collapse: "M4 4h16v16H4zM9 4v16M15 10l-2 2 2 2",
@@ -122,6 +131,8 @@ function Panel({
   setCollapsed?: (v: boolean) => void;
   onClose?: () => void;
 }) {
+  const pathname = usePathname();
+  const visiteur = useVisiteur();
   return (
     <>
       <div className="flex items-center justify-between px-5 pt-6">
@@ -173,7 +184,7 @@ function Panel({
             )}
             <ul className="space-y-0.5">
               {s.items.map((item) => {
-                const active = item.href === "/dashboard";
+                const active = item.href === pathname;
                 return (
                   <li key={item.label}>
                     <Link
@@ -205,16 +216,16 @@ function Panel({
 
       <div className="mx-3 mb-4 flex items-center gap-3 border-t border-white/[0.06] px-2 pt-4">
         <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-sm text-white">
-          Y
+          {visiteur ? "👋" : PRENOM[0]}
           <span className="absolute bottom-0 left-0 h-2.5 w-2.5 rounded-full border-2 border-[#0d0d10] bg-emerald-400" />
         </div>
         {!collapsed && (
           <>
             <div className="min-w-0 flex-1">
-              <div className="truncate text-[13px] text-white">Yanis</div>
-              <div className="text-[11px] text-white/45">Élève · Xeilos</div>
+              <div className="truncate text-[13px] text-white">{visiteur ? "Bonjour" : PRENOM}</div>
+              <div className="text-[11px] text-white/45">{visiteur ? "Visiteur · Xeilos" : "Élève · Xeilos"}</div>
             </div>
-            <button className="text-white/40 hover:text-white" aria-label="Paramètres">
+            <button disabled title="Paramètres : bientôt" className="cursor-not-allowed text-white/25" aria-label="Paramètres (bientôt)">
               <Icon name="settings" />
             </button>
           </>

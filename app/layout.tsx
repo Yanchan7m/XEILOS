@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { cookies } from "next/headers";
+import { ProfilProvider } from "@/components/Profil";
+import { COOKIE_VISITEUR } from "@/lib/profil";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,17 +21,20 @@ export const metadata: Metadata = {
     "Découvre quel type de trader tu es et discute avec ton coach IA Xeilos pour trouver la formation qui te correspond.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const visiteur = (await cookies()).get(COOKIE_VISITEUR)?.value === "1";
   return (
     <html
       lang="fr"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ProfilProvider visiteur={visiteur}>{children}</ProfilProvider>
+      </body>
     </html>
   );
 }

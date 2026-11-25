@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { Salut } from "@/components/Profil";
 import Countdown from "./Countdown";
 import { COACH, FORMATION } from "@/lib/dashboard-demo";
 
@@ -31,7 +32,15 @@ const pct = (n: number) =>
 export function Balance({ balance, pnl, pnlPct, chiffre }: { balance: number; pnl: number; pnlPct: number; chiffre?: ReactNode }) {
   return (
     <div>
-      <Libelle>Balance</Libelle>
+      <div className="flex flex-wrap items-center gap-3">
+        <Libelle>Balance</Libelle>
+        <span
+          className="rounded-full border border-white/15 px-2.5 py-0.5 text-[11px] text-white/60"
+          title="Ce compte d'entraînement est un exemple : les montants sont fictifs."
+        >
+          Compte démo · chiffres d’exemple
+        </span>
+      </div>
       <div className="mt-2 flex items-end gap-2">
         <span className="bg-gradient-to-b from-white to-white/55 bg-clip-text text-6xl font-light tracking-tight text-transparent tabular-nums sm:text-8xl">
           {chiffre ?? balance.toLocaleString("fr-FR")}
@@ -67,14 +76,14 @@ export function NoteCoach({ serifClass, alignDroite = true, nu = false }: { seri
       <Libelle>Note du coach</Libelle>
       <div className={`mt-4 flex items-center gap-3 sm:mt-5 ${alignDroite ? "sm:justify-end" : ""}`}>
         <Stars value={COACH.rating} />
-        <span className={`${serifClass} text-5xl italic`}>
+        <span className={`${serifClass} text-5xl font-semibold`}>
           {COACH.rating.toLocaleString("fr-FR", { minimumFractionDigits: 1 })}
         </span>
         <span className="self-end pb-1 text-sm text-white/50">/5</span>
       </div>
       <div className="mt-2 text-[13px] text-white/60">{COACH.notedTrades} trades notés</div>
-      <Link href="#" className="mt-2 inline-block text-[13px] text-white/75 hover:text-white">
-        Voir les retours du coach ↗
+      <Link href="/dashboard/suivi" className="mt-2 inline-block text-[13px] text-white/75 hover:text-white">
+        Voir les retours du coach →
       </Link>
     </div>
   );
@@ -88,7 +97,7 @@ export function Accompagnement() {
         Dernier message de Xeilosia · Aujourd’hui à 13:37
       </div>
       <p className="mt-3 line-clamp-3 text-[15px] leading-relaxed text-white/90">
-        Salut Yanis 👋 Ton dernier trade sur le NASDAQ respectait ton plan, mais ton stop était trop serré par
+        <Salut /> 👋 Ton dernier trade sur le NASDAQ respectait ton plan, mais ton stop était trop serré par
         rapport à la volatilité de l’ouverture. On en parle ?
       </p>
       <dl className="mt-6 space-y-3 text-sm">
@@ -96,7 +105,7 @@ export function Accompagnement() {
         <Row label="Envois en attente" value="0" />
         <Row label="À retravailler" value="2" />
       </dl>
-      <ArrowLink href="/demo#chat">Ouvrir mon suivi</ArrowLink>
+      <ArrowLink href="/dashboard/suivi">Ouvrir mon suivi</ArrowLink>
     </>
   );
 }
@@ -113,7 +122,7 @@ export function Formation({ formationPct }: { formationPct: number }) {
       </div>
       <div className="mt-6 text-[13px] text-white/60">Prochaine vidéo · {FORMATION.nextBlock}</div>
       <div className="mt-1 text-[15px] text-white">{FORMATION.nextVideo}</div>
-      <ArrowLink href="/demo">Continuer la formation</ArrowLink>
+      <ArrowLink href="/dashboard/formation">Continuer la formation</ArrowLink>
     </>
   );
 }
@@ -149,7 +158,7 @@ export function TonEspace({ serifClass, formationPct, avant }: { serifClass: str
   return (
     <aside className="md:grid md:grid-cols-2 md:gap-x-10 xl:block xl:border-l xl:border-white/[0.08] xl:pl-12">
       <h2 className="mb-8 text-3xl text-white md:col-span-2">
-        Ton <span className={`${serifClass} italic`}>espace</span>
+        Ton <span className={`${serifClass} font-semibold`}>espace</span>
       </h2>
       {avant}
       <Section title="Accompagnement">
@@ -171,7 +180,7 @@ export function TonEspace({ serifClass, formationPct, avant }: { serifClass: str
 export function BulleXeilosia() {
   return (
     <Link
-      href="/demo#chat"
+      href="/dashboard/tutrice"
       aria-label="Parler à Xeilosia"
       className="agent-ring fixed bottom-4 right-4 z-20 h-14 w-14 overflow-hidden rounded-full border border-white/20 bg-black sm:bottom-6 sm:right-6"
     >

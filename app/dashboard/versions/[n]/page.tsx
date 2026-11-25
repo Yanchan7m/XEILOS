@@ -6,12 +6,13 @@ import Sidebar from "@/components/dashboard/Sidebar";
 import PerformancePanel from "@/components/dashboard/PerformancePanel";
 import { Today } from "@/components/dashboard/Countdown";
 import {
-  Accompagnement, Balance, BulleXeilosia, Fond, Formation, Libelle, NoteCoach, Nouveautes, ProchainCall, TonEspace,
+  Accompagnement, Balance, Fond, Formation, Libelle, NoteCoach, Nouveautes, ProchainCall, TonEspace,
 } from "@/components/dashboard/Blocs";
 import {
-  BandeauTrades, BriefingXeilosia, ChecklistTrade, ChiffreAnime, EnDirect, HeatmapPnl, ObjectifFunded, SessionsMarche,
+  BandeauTrades, ChecklistTrade, ChiffreAnime, EnDirect, HeatmapPnl, ObjectifFunded, SessionsMarche,
 } from "@/components/dashboard/variantes/Effets";
-import { CHALLENGE, START_CAPITAL, STATS, pnlParJour, resume, serieGagnante, seuilRentabilite } from "@/lib/dashboard-demo";
+import { CHALLENGE, START_CAPITAL, STATS, pnlParJour, resume, serieGagnante } from "@/lib/dashboard-demo";
+import BriefingDuJour from "@/components/dashboard/BriefingDuJour";
 import { VERSIONS } from "../versions";
 
 // LES 6 VERSIONS DU TABLEAU DE BORD (11/11/2026). Toutes gardent les éléments
@@ -44,7 +45,6 @@ export default async function VersionPage({ params }: { params: Promise<{ n: str
       <Fond />
       <Sidebar />
       <main className="relative min-w-0 flex-1 pt-14 pb-24 lg:pt-0">{contenu}</main>
-      <BulleXeilosia />
       <Selecteur actuelle={v.n} />
     </div>
   );
@@ -163,21 +163,7 @@ const v4 = (r: R) => {
 };
 
 // 5 · Xeilosia en tête : le briefing du jour, écrit à partir de ses chiffres.
-const v5 = (r: R) => {
-  const seuil = seuilRentabilite(STATS);
-  const ratio = STATS.avgWin / STATS.avgLoss;
-  const f1 = (x: number) => x.toLocaleString("fr-FR", { maximumFractionDigits: 1 });
-  const f2 = (x: number) => x.toLocaleString("fr-FR", { maximumFractionDigits: 2 });
-  const texte =
-    `Salut Yanis. Ton compte est à ${r.pnl >= 0 ? "+" : "−"}${Math.abs(r.pnl).toLocaleString("fr-FR")} $ depuis le départ, ta méthode tient. ` +
-    `Un seul point avant la séance de New York : tu coupes tes gagnants trop tôt. Aujourd’hui, laisse courir un trade jusqu’à 1:${f1(STATS.avgRR)}.`;
-  const constats = [
-    { titre: "Méthode rentable", detail: `${f1(STATS.winRate)} % de réussite pour un seuil de rentabilité à ${f1(seuil)} %.`, ton: "vert" as const },
-    { titre: "Gagnants coupés tôt", detail: `Gain moyen = ${f2(ratio)} × la perte moyenne, alors que ton plan vise 1:${f1(STATS.avgRR)}.`, ton: "orange" as const },
-    { titre: "Risque maîtrisé", detail: `Drawdown max ${f1(STATS.maxDrawdown)} % : loin de la limite de 10 % d’un challenge.`, ton: "vert" as const },
-  ];
-  return <Classique r={r} enHaut={<div className="mb-12"><BriefingXeilosia texte={texte} constats={constats} /></div>} />;
-};
+const v5 = (r: R) => <Classique r={r} enHaut={<div className="mb-12"><BriefingDuJour pnl={r.pnl} /></div>} />;
 
 // 6 · Séance du jour : sessions de marché en direct et checklist avant de trader.
 const v6 = (r: R) => (

@@ -45,7 +45,7 @@ export function Today({ serifClass }: { serifClass: string }) {
   const day = now.toLocaleDateString("fr-FR", { weekday: "long" });
   return (
     <div className="flex items-center gap-4">
-      <span className={`${serifClass} text-2xl italic text-white/85`}>
+      <span className={`${serifClass} text-2xl font-semibold text-white/85`}>
         {day.charAt(0).toUpperCase() + day.slice(1)}
       </span>
       <span className="h-px w-6 bg-white/25" />

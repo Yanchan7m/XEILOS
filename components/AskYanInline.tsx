@@ -7,38 +7,30 @@ import { scriptedReply } from "@/lib/scripted-chat";
 type Message = { role: "user" | "assistant"; content: string };
 
 const SUGGESTIONS_BY_MODULE: Record<string, string[]> = {
-  "Stratégie d'entreprise": [
-    "Donne un exemple concret de SWOT",
-    "Différence avec PESTEL ?",
-    "Quand utiliser les 5 Forces de Porter ?",
+  "Gestion du risque": [
+    "Combien risquer par trade ?",
+    "Où placer mon stop loss ?",
+    "C'est quoi le levier ?",
   ],
-  "Optimisation des processus": [
-    "DMAIC vs PDCA en pratique ?",
-    "Donne un cas Lean concret",
-    "C'est quoi les 7 mudas ?",
-  ],
-  "Parties prenantes": [
-    "Comment classer une partie prenante ?",
-    "Exemple matrice influence × intérêt",
-  ],
-  "Diagnostic de performance": [
-    "Détaille les 4 perspectives du Balanced Scorecard",
-    "Différence KPI financier vs opérationnel ?",
-  ],
-  "KPI & pilotage": [
-    "Explique SMART avec un exemple",
-    "Quels outils pour suivre des KPI ?",
-  ],
-  "Analyse technique · Trading": [
-    "Comment trader une consolidation ?",
+  "Analyse technique": [
     "Différence range vs tendance ?",
-    "C'est quoi un breakout fiable ?",
+    "C'est quoi un support ?",
+    "Comment repérer une vraie cassure ?",
+  ],
+  "Scalping & futures": [
+    "C'est quoi le scalping ?",
+    "Quelles heures éviter ?",
+    "Combien vaut un tick sur le NQ ?",
+  ],
+  "Psychologie de trading": [
+    "Comment éviter de vouloir me refaire ?",
+    "À quoi sert un journal de trading ?",
   ],
 };
 
 const FALLBACK_SUGGESTIONS = [
   "Donne-moi un exemple concret",
-  "Comment l'appliquer en entreprise ?",
+  "Par où je commence ?",
 ];
 
 type Props = {

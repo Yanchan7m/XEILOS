@@ -6,11 +6,12 @@ import ScalpingQCM from "@/components/ScalpingQCM";
 import Chat from "@/components/Chat";
 import TeacherDashboard from "@/components/TeacherDashboard";
 import FlipCard from "@/components/FlipCard";
+import AvertissementRisque from "@/components/AvertissementRisque";
 
 export const metadata = {
   title: "Démo · Xeilos",
   description:
-    "QCM réel, tuteur IA et cartes flip : la pédagogie Xeilos appliquée au Mastère.",
+    "QCM, tutrice IA, exercices sur graphiques et cartes flip : la pédagogie Xeilos appliquée au trading.",
 };
 
 export default function DemoPage() {
@@ -18,7 +19,7 @@ export default function DemoPage() {
     <div className="flex flex-1 flex-col">
       {/* NAV */}
       <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-white/85 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white p-1 ring-1 ring-[var(--border)] transition group-hover:ring-[var(--accent)]/40">
               <Image
@@ -40,15 +41,15 @@ export default function DemoPage() {
             </div>
           </Link>
           <Link
-            href="/"
-            className="rounded-full border border-[var(--border)] bg-white px-3 py-1.5 text-xs font-medium text-[var(--ink)] transition hover:border-[var(--ink)]"
+            href="/dashboard"
+            className="flex min-h-10 items-center rounded-full border border-[var(--border)] bg-white px-3 py-1.5 text-xs font-medium text-[var(--ink)] transition hover:border-[var(--ink)]"
           >
-            ← Retour à la présentation
+            ← Mon tableau de bord
           </Link>
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-12 sm:py-16">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-12 sm:px-6 sm:py-16">
         {/* HERO DEMO */}
         <section className="mx-auto max-w-2xl text-center">
           <h1 className="text-3xl font-semibold leading-tight tracking-tight text-[var(--ink)] sm:text-4xl md:text-5xl">
@@ -58,20 +59,20 @@ export default function DemoPage() {
             Six briques de la pédagogie Xeilos appliquées au{" "}
             <strong>trading</strong> : QCM réel de trading (gestion du risque,
             structure de marché, scalping — avec graphique chandeliers japonais),
-            tuteur IA, un parcours de 6 exercices interactifs (support/résistance,
-            lecture de graphique et carnet d’ordre), un QCM scalping sur vrais
-            graphiques TradingView, et cartes flip de vocabulaire stratégie.
+            tutrice IA, un parcours de 7 exercices interactifs (support/résistance,
+            lecture de graphique et carnet d’ordres), un QCM scalping, et des
+            cartes flip de vocabulaire de trading.
           </p>
         </section>
 
         {/* Bloc 1 + 2 */}
-        <section className="mt-12 grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:gap-8">
-          <div>
+        <section className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-[1.1fr_1fr] lg:gap-8">
+          <div id="qcm" className="scroll-mt-24">
             <DemoLabel n="1" title="QCM réel · trading & scalping" />
             <MasterQCM />
           </div>
-          <div className="lg:sticky lg:top-24 lg:self-start">
-            <DemoLabel n="2" title="Tuteur IA · Xeilosia" />
+          <div id="chat" className="scroll-mt-24 lg:sticky lg:top-24 lg:self-start">
+            <DemoLabel n="2" title="Tutrice IA · Xeilosia" />
             <Chat />
             <div className="mt-8">
               <DemoLabel n="3" title="Écran formateur · temps réel" />
@@ -81,23 +82,23 @@ export default function DemoPage() {
         </section>
 
         {/* Bloc 3 — parcours d'exercices : que ferait-on dans cette situation ? */}
-        <section className="mt-12">
+        <section id="exercices" className="mt-12 scroll-mt-24">
           <DemoLabel
             n="4"
             title="Parcours d'exercices · que ferait-on dans cette situation ?"
           />
           <div className="mb-4 max-w-2xl text-sm text-[var(--muted)]">
-            6 exercices interactifs : <strong>2 support / résistance</strong> à
-            placer sur le graphique, <strong>2 lectures de graphique</strong>{" "}
-            (décision de trade sur charts réels), et{" "}
-            <strong>2 sur le carnet d’ordre (DOM)</strong>. À la fin, Xeilosia analyse
-            tes 6 décisions.
+            7 exercices interactifs : <strong>2 support / résistance</strong> à
+            placer sur le graphique, <strong>3 lectures de graphique</strong>{" "}
+            (que ferais-tu dans cette situation ?), et{" "}
+            <strong>2 sur le carnet d’ordres</strong>. À la fin, Xeilosia analyse
+            tes 7 décisions.
           </div>
           <ParcoursExercices />
         </section>
 
         {/* Bloc 4 — QCM scalping sur graphiques TradingView réels */}
-        <section className="mt-12">
+        <section id="scalping" className="mt-12 scroll-mt-24">
           <DemoLabel n="5" title="QCM scalping · graphiques TradingView réels" />
           <div className="mb-4 max-w-2xl text-sm text-[var(--muted)]">
             En complément : des setups de scalping (liquidités, breakout,
@@ -108,67 +109,81 @@ export default function DemoPage() {
         </section>
 
         {/* Bloc 5 */}
-        <section className="mt-12">
-          <DemoLabel n="6" title="Cartes flip · vocabulaire stratégie" />
+        <section id="cartes" className="mt-12 scroll-mt-24">
+          <DemoLabel n="6" title="Cartes flip · vocabulaire de trading" />
           <div className="rounded-3xl border border-[var(--border)] bg-white p-6 shadow-sm sm:p-8">
             <div className="flex items-center justify-between">
               <p className="text-sm text-[var(--muted)]">
-                Clique sur une carte pour révéler la réponse. L’IA programme
+                Touche une carte pour révéler la réponse. L’IA programme
                 ensuite le bon intervalle de rappel selon ta performance.
               </p>
               <span className="hidden rounded-full bg-[var(--surface)] px-3 py-1 text-[10px] uppercase tracking-widest text-[var(--muted)] sm:inline">
-                Module Stratégie & KPI
+                Les mots de base
               </span>
             </div>
             <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <FlipCard
-                question="Que signifie SWOT ?"
-                answer="Strengths, Weaknesses, Opportunities, Threats. Outil d’analyse stratégique croisant facteurs internes et externes."
+                question="Stop loss ?"
+                answer="L’ordre qui coupe ta position automatiquement si le prix va contre toi. Tu le places avant d’entrer, là où ton idée devient fausse."
               />
               <FlipCard
-                question="PESTEL, c’est quoi ?"
-                answer="Politique, Économique, Social, Technologique, Environnemental, Légal. Analyse du macro-environnement externe."
+                question="La règle du 1 % ?"
+                answer="Ne jamais risquer plus de 1 % de ton compte sur un trade. Sur 10 000 $, c’est 100 $ maximum entre l’entrée et le stop."
               />
               <FlipCard
-                question="Que veut dire DMAIC ?"
-                answer="Define, Measure, Analyze, Improve, Control. Méthode structurante de Six Sigma pour optimiser un processus."
+                question="Le levier ?"
+                answer="Il te permet une position plus grosse que ton capital. Il multiplie les gains ET les pertes : c’est le premier piège du débutant."
               />
               <FlipCard
-                question="KPI : critères SMART ?"
-                answer="Spécifique, Mesurable, Atteignable, Pertinent, Temporellement défini. Cadre de conception d’un bon indicateur."
+                question="Support et résistance ?"
+                answer="Des zones où le prix s’est déjà arrêté : les acheteurs sous le prix (support), les vendeurs au-dessus (résistance)."
               />
               <FlipCard
-                question="5 Forces de Porter ?"
-                answer="Rivalité concurrents, pouvoir clients, pouvoir fournisseurs, menace nouveaux entrants, menace produits de substitution. Mesure l’intensité concurrentielle d’un secteur."
+                question="Range ou tendance ?"
+                answer="Tendance : des sommets et des creux de plus en plus hauts (ou bas). Range : des allers-retours entre deux bornes."
               />
               <FlipCard
-                question="Balanced Scorecard ?"
-                answer="Tableau de bord de Kaplan & Norton qui évalue la performance selon 4 perspectives : Financière, Clients, Processus internes, Apprentissage & croissance."
+                question="Carnet d’ordres ?"
+                answer="La liste des ordres en attente : à l’achat (bid) sous le prix, à la vente (ask) au-dessus. Un gros bloc peut freiner le prix… ou disparaître."
               />
               <FlipCard
-                question="Cycle PDCA ?"
-                answer="Plan, Do, Check, Act. Cycle d’amélioration continue (Lean / Kaizen) : planifier, exécuter, vérifier, ajuster, puis recommencer."
+                question="Drawdown ?"
+                answer="La baisse de ton compte depuis son plus haut. En challenge prop firm, le dépasser (souvent 10 %) fait échouer le challenge."
+              />
+              <FlipCard
+                question="Revenge trading ?"
+                answer="Reprendre un trade tout de suite pour « se refaire » après une perte. La règle : après 2 pertes d’affilée, on arrête pour la journée."
               />
             </div>
           </div>
         </section>
 
-        {/* CTA back */}
+        {/* CTA retour */}
         <section className="mt-16 flex flex-col items-center gap-3 rounded-3xl border border-[var(--border)] bg-[var(--surface)] px-6 py-10 text-center">
           <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-            Tu veux comprendre la méthode ?
+            Et maintenant ?
           </div>
           <p className="max-w-md text-sm text-[var(--muted-strong)]">
-            Reviens à la présentation pour voir le concept, l’étude
-            scientifique sur l’effet de test et le plan de déploiement Xeilos.
+            Reprends ta formation là où tu en étais, ou entraîne-toi à lire un
+            marché avant de décider.
           </p>
-          <Link
-            href="/"
-            className="rounded-full bg-[var(--ink)] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[var(--accent)]"
-          >
-            ← Retour à la présentation
-          </Link>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link
+              href="/dashboard/formation"
+              className="rounded-full bg-[var(--ink)] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[var(--accent)]"
+            >
+              Ma formation
+            </Link>
+            <Link
+              href="/dashboard/contexte"
+              className="rounded-full border border-[var(--border)] bg-white px-5 py-2.5 text-sm font-medium text-[var(--ink)] transition hover:border-[var(--ink)]"
+            >
+              Contexte de marché
+            </Link>
+          </div>
         </section>
+
+        <AvertissementRisque />
 
         <footer className="mt-16 flex flex-col items-center gap-2 border-t border-[var(--border)] pt-8 text-xs text-[var(--muted)]">
           <div className="flex items-center gap-2">

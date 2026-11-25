@@ -1,3 +1,6 @@
+/** Envoyé par /api/tutor à la place d'une réponse quand le modèle échoue (clé refusée…). */
+export const ERREUR = "\u0000XEILOSIA_ERREUR";
+
 export type ChatMessage = { role: "user" | "assistant"; content: string };
 
 /**
@@ -33,6 +36,8 @@ export async function streamTutor(
     const { done, value } = await reader.read();
     if (done) break;
     const text = decoder.decode(value, { stream: true });
+    // Le modèle a échoué avant d'écrire quoi que ce soit : repli scripté.
+    if (!received && text.startsWith(ERREUR)) return false;
     if (text) {
       received = true;
       onChunk(text);

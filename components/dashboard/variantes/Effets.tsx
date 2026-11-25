@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
+import { useVisiteur } from "@/components/Profil";
+import { salut } from "@/lib/profil";
 
 // Les ajouts « effet waw » des versions 2 à 6 du tableau de bord.
 // Tous respectent « réduire les animations » du système : le résultat final
@@ -271,7 +273,9 @@ export function HeatmapPnl({ jours, serie }: { jours: { date: string; pnl: numbe
 
 // ─── V5 · LE BRIEFING DE XEILOSIA ─────────────────────────────────────────
 
-export function BriefingXeilosia({ texte, constats }: { texte: string; constats: { titre: string; detail: string; ton: "vert" | "orange" | "rouge" }[] }) {
+export function BriefingXeilosia({ texte: brut, constats }: { texte: string; constats: { titre: string; detail: string; ton: "vert" | "orange" | "rouge" }[] }) {
+  // « {salut} » : « Salut Yanis » pour l'élève, « Bonjour » pour un visiteur.
+  const texte = brut.replace("{salut}", salut(useVisiteur()));
   const [n, setN] = useState(0);
   useEffect(() => {
     if (animationsReduites()) {
@@ -311,7 +315,7 @@ export function BriefingXeilosia({ texte, constats }: { texte: string; constats:
       </div>
       <div className="relative mt-6 flex flex-wrap gap-2">
         {["Pourquoi mon stop était trop serré ?", "Fais-moi réviser le Bloc 2", "Analyse ma semaine"].map((q) => (
-          <a key={q} href="/demo#chat" className="rounded-full border border-white/15 px-4 py-2 text-[13px] text-white/80 transition hover:border-white/40 hover:text-white">
+          <a key={q} href={`/dashboard/tutrice?q=${encodeURIComponent(q)}`} className="rounded-full border border-white/15 px-4 py-2 text-[13px] text-white/80 transition hover:border-white/40 hover:text-white">
             {q}
           </a>
         ))}

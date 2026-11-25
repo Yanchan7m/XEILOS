@@ -180,7 +180,7 @@ export const SCALPING_QCM: ScalpingQuestion[] = [
       { label: "Attendre un retour à 4205 pour acheter", correct: false },
     ],
     explanation:
-      "Trade réel #18 : Buy @4221, SL @4214, TP1 4225 / TP2 4228 / TP3 4235. +140 pips. En scalping continuation HH/HL, on entre sur la confirmation du nouveau HH avec le SL sous le dernier HL.",
+      "En tendance haussière (HH/HL : sommets et creux de plus en plus hauts), on attend la confirmation d'un nouveau sommet pour acheter, avec le stop sous le dernier creux (4214 ici). Le stop est placé avant d'entrer, et la taille de position se calcule pour ne risquer que 1 % du compte. Même un bon setup peut perdre : c'est le respect du plan qui compte, pas un trade isolé.",
   },
   {
     id: "scalp-nas-liquidity",

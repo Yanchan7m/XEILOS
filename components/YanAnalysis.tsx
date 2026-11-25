@@ -4,18 +4,16 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const MODULE_HINTS: Record<string, string> = {
-  "Stratégie d'entreprise":
-    "revoir la SWOT (interne + externe), le PESTEL (macro externe) et les 5 Forces de Porter (concurrentiel)",
-  "Optimisation des processus":
-    "creuser la différence DMAIC (Six Sigma) vs PDCA (Lean) et revoir les 7 mudas",
-  "Parties prenantes":
-    "réviser la classification interne/externe et la matrice influence × intérêt",
-  "Diagnostic de performance":
-    "approfondir le Balanced Scorecard et ses 4 perspectives (Financière, Clients, Processus, Apprentissage)",
+  "Gestion du risque":
+    "revoir la règle du 1 % par trade, le placement du stop avant l'entrée et le calcul de la taille de position",
+  "Analyse technique":
+    "retravailler la lecture des structures de prix : range, tendance, support, résistance, cassure",
+  "Scalping & futures":
+    "revoir les heures actives du marché et la valeur d'un tick, et refaire les situations de Contexte de marché",
+  "Psychologie de trading":
+    "reprendre la règle des 2 pertes et l'usage du journal de trading pour repérer tes réflexes",
   "Analyse technique · Trading":
     "retravailler la lecture des structures de prix : range, tendance, breakout",
-  "KPI & pilotage":
-    "consolider les critères SMART et les types de KPI (financiers, opérationnels, processus, stratégiques)",
 };
 
 function buildAnalysisText(

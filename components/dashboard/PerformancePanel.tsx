@@ -34,7 +34,7 @@ export default function PerformancePanel({
     { label: "Trades", value: String(stats.trades) },
     { label: "Taux de réussite", value: `${stats.winRate.toLocaleString("fr-FR")} %` },
     { label: "Profit factor", value: stats.profitFactor.toLocaleString("fr-FR") },
-    { label: "R:R moyen", value: `1:${stats.avgRR.toLocaleString("fr-FR")}` },
+    { label: "R:R visé (plan)", value: `1:${stats.avgRR.toLocaleString("fr-FR")}` },
     { label: "Gain moyen", value: money(stats.avgWin), tone: "text-emerald-400" },
     { label: "Perte moyenne", value: money(-stats.avgLoss), tone: "text-[var(--accent)]" },
     { label: "Drawdown max", value: `${stats.maxDrawdown.toLocaleString("fr-FR")} %` },

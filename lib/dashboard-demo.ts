@@ -21,16 +21,40 @@ export function demoEquity(): EquityPoint[] {
   });
 }
 
-export const STATS: TradeStats = {
-  trades: 64,
-  winRate: 56.3,
-  profitFactor: 1.62,
-  avgWin: 118,
-  avgLoss: 92,
-  maxDrawdown: 3.4,
-  bestDay: 412,
-  avgRR: 1.8,
-};
+// Les statistiques sont calculées à partir de la courbe, pour rester cohérentes
+// entre elles (P&L = gains − pertes, meilleure journée, drawdown) : un testeur
+// vérifiait les calculs et trouvait +1 670 $ au lieu des +1 107 $ affichés.
+const TRADES = 64;
+const GAGNANTS = 36;
+const PERTE_MOYENNE = 92;
+
+function calculerStats(): TradeStats {
+  const points = demoEquity();
+  const pnl = points[points.length - 1].balance - START_CAPITAL;
+  const perdants = TRADES - GAGNANTS;
+  const gainMoyen = Math.round((pnl + perdants * PERTE_MOYENNE) / GAGNANTS);
+  let sommet = START_CAPITAL;
+  let ddMax = 0;
+  let meilleurJour = 0;
+  points.forEach((p, i) => {
+    sommet = Math.max(sommet, p.balance);
+    ddMax = Math.max(ddMax, ((sommet - p.balance) / sommet) * 100);
+    if (i > 0) meilleurJour = Math.max(meilleurJour, p.balance - points[i - 1].balance);
+  });
+  return {
+    trades: TRADES,
+    winRate: Math.round((GAGNANTS / TRADES) * 1000) / 10,
+    profitFactor: Math.round(((GAGNANTS * gainMoyen) / (perdants * PERTE_MOYENNE)) * 100) / 100,
+    avgWin: gainMoyen,
+    avgLoss: PERTE_MOYENNE,
+    maxDrawdown: Math.round(ddMax * 10) / 10,
+    bestDay: meilleurJour,
+    /** Le ratio visé par le plan de trading (pas le ratio obtenu). */
+    avgRR: 1.8,
+  };
+}
+
+export const STATS: TradeStats = calculerStats();
 
 export const COACH = { rating: 4.2, notedTrades: 12 };
 export const FORMATION = { watched: 18, total: 109, nextBlock: "Bloc 1", nextVideo: "Les règles des prop firms" };
