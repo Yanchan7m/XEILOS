@@ -30,6 +30,7 @@ const SECTIONS: { title?: string; items: NavItem[] }[] = [
       { label: "Formation", href: "/dashboard/formation", icon: "cap" },
       { label: "Exercices", href: "/dashboard/exercices", icon: "cible" },
       { label: "Lexique", href: "/dashboard/lexique", icon: "lexique" },
+      { label: "Notifications", href: "/dashboard/notifications", icon: "bell" },
     ],
   },
 ];
@@ -47,6 +48,7 @@ const ICONS = {
   live: "M12 13a1 1 0 100-2 1 1 0 000 2zM8.5 15.5a5 5 0 010-7M15.5 8.5a5 5 0 010 7M5.6 18.4a9 9 0 010-12.8M18.4 5.6a9 9 0 010 12.8",
   cible: "M12 21a9 9 0 100-18 9 9 0 000 18zM12 16a4 4 0 100-8 4 4 0 000 8zM12 12h.01",
   lexique: "M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3zM5 17a3 3 0 013-3h11M9 8h6M9 11h4",
+  bell: "M6 16V11a6 6 0 0112 0v5l2 2H4zM10 20a2 2 0 004 0",
   menu: "M4 7h16M4 12h16M4 17h10",
   close: "M6 6l12 12M18 6L6 18",
   collapse: "M4 4h16v16H4zM9 4v16M15 10l-2 2 2 2",
